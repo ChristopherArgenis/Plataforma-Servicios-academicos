@@ -1,0 +1,23 @@
+from flask import Flask
+from controllers.register_login import reg_log
+from models import db
+from config import Config
+
+app = Flask(__name__)
+
+# Load the configuration from the Config class
+app.config.from_object(Config)
+
+app.secret_key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyMTI1IiwibmFtZSI6IkNocmlzdG9waGVyIiwiaWF0IjoxNTE2MjM5MDIyfQ.gO-NHsNnr7YWX_WpO6GM4U6ykuDDyhn38F0T_FrYUl8'
+
+# Initialize the database
+db.init_app(app)
+
+# Create tables if they don't exist
+with app.app_context():
+    db.create_all()
+
+app.register_blueprint(reg_log)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=3000, debug=False)
