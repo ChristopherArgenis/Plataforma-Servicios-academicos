@@ -1,5 +1,6 @@
 from flask import Flask
 from controllers.register_login import reg_log
+from controllers.panel import panel_general
 from models import db
 from config import Config
 
@@ -18,6 +19,7 @@ with app.app_context():
     db.create_all()
 
 app.register_blueprint(reg_log)
+app.register_blueprint(panel_general)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000, debug=False)

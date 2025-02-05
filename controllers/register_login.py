@@ -37,8 +37,8 @@ def login():
     user = user_service.login(username, email, password)
     # # If successful, add user.id to session and redirect to the list page
     if user:
-        session['user_id'] = user.id
-        return redirect(url_for('user.auth_page'))
+        session['user'] = user.username
+        return redirect(url_for('panel.panel_view'))
     # If it fails, add failure flash message and redirect to auth page
     else:
         return redirect(url_for('user.auth_page'))

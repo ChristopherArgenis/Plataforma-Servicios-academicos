@@ -1,0 +1,86 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    background-color: #f0f0f0; /* Un fondo claro */
+    color: #002855; /* Azul marino para el texto general */
+}
+
+nav {
+    background: linear-gradient(to right, #003f87, #002855); /* Degradado de azul */
+    color: #FFD800; /* Dorado para el texto del navbar */
+    padding: 6px;
+    display: flex; /* Habilitar Flexbox en el navbar */
+    justify-content: space-between; /* Distribuir elementos: izquierda y derecha */
+    align-items: center; /* Alinear verticalmente los elementos */
+    text-align: center; /* Centrar el texto del navbar */
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center; /* Alinear verticalmente los elementos */
+}
+
+nav li {
+    margin: 0 20px;
+}
+
+.logout-button {
+    background-color: #FFD800; /* Dorado */
+    color: #002855; /* Azul marino */
+    border: none;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px;
+    cursor: pointer;
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background-color 0.3s ease; /* Transición suave al pasar el mouse */
+    margin-left: auto; /* Empuja el botón Logout hacia la derecha */
+}
+
+.logout-button:hover {
+    background-color: #997a00; /* Dorado más oscuro al pasar el mouse */
+}
+
+nav a {
+    color: #FFD800; /* Dorado para los enlaces del navbar */
+    text-decoration: none;
+    font-weight: bold; /* Texto más grueso */
+}
+
+.container {
+    display: flex;
+    padding: 20px;
+}
+
+aside {
+    width: 200px; /* Ancho fijo para la sección de servicios */
+    height: 820px;
+    background-color: #FFD800; /* Dorado para el fondo de la sección de servicios */
+    padding: 20px;
+}
+
+aside h2 {
+    color: #002855; /* Azul marino para el título de la sección de servicios */
+}
+
+aside ul {
+    list-style: none;
+    padding: 0;
+}
+
+aside li a {
+    color: #002855; /* Azul marino para los enlaces de servicios */
+    text-decoration: none;
+}
+
+main {
+    flex: 1; /* Ocupa el espacio restante */
+    background-color: white; /* Fondo blanco para la sección principal */
+    padding: 20px;
+}
