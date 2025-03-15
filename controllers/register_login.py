@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for
 from services.user_service import UserService
+from models.QM import Query_Manager
 
 # Instance of User Service
 user_service = UserService()
@@ -17,6 +18,11 @@ def register():
     username = request.form['username']
     email = request.form['email']
     password = request.form['password']
+
+    # Instance of Query Manager
+    if username:
+        query_Manager = Query_Manager(username)
+
     # Try to register the user using the provided username and password
     user = user_service.register(username, email, password)
     # If successful, add successful flash message and redirect to auth page
