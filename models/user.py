@@ -20,3 +20,15 @@ class User(db.Model):
     # Method to compare given password with the hashed one
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+class Articles_Keys(db.Model):
+    __tablename__ = 'Articles'
+
+    # Define the primary key for the User table
+    id = db.Column(db.Integer, primary_key=True)
+    # Define a column for title, ensuring it's not unique and cannot be null
+    title = db.Column(db.String(150), unique=False, nullable=False)
+    # Define a column for id_Articles, ensuring it's unique and cannot be null
+    id_Articles = db.Column(db.String(100), unique=True, nullable=False)
+    # Define a column to store the year and cannot be null
+    year = db.Column(db.String(5), nullable=False)  

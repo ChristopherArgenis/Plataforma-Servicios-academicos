@@ -1,4 +1,4 @@
-from models.user import User, db
+from models.user import User, Articles_Keys, db
 
 class UserService:
     @staticmethod
@@ -32,3 +32,11 @@ class UserService:
             return user
         # Return None if login fails due to invalid credentials
         return None
+
+class UserArticles:
+    @staticmethod
+    def Store(title, id_Articles, year):
+      new_articles = Articles_Keys(title=title, id_Articles=id_Articles, year=year)
+      db.session.add(new_articles)
+      db.session.commit()
+      return new_articles 
