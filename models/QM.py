@@ -64,7 +64,7 @@ class Router:
             title.append(array[i]["title"])
             citation_id.append(array[i]["citation_id"])
             year.append(array[i]["year"])
-        return {"title": title, "citation_id": citation_id, "year": year}
+        return {"title": title, "id_Articles": citation_id, "year": year}
 
     @staticmethod
     def get_df(array):
