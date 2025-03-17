@@ -2,7 +2,7 @@ from models import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model):
-    __tablename__ = 'users'
+    __tablename__ = 'Users'
 
     # Define the primary key for the User table
     id = db.Column(db.Integer, primary_key=True)
@@ -12,6 +12,12 @@ class User(db.Model):
     email = db.Column(db.String(150), unique=True, nullable=False)
     # Define a column to store the hashed password, not storing it as plain text
     password_hash = db.Column(db.String(200), nullable=False)
+    # Define a column for profile_id, cannot be null
+    profile_id = db.Column(db.String(150), nullable=False)
+    # Define a column for affiliations, cannot be null
+    affiliations = db.Column(db.String(150), nullable=False)
+    # Define a column for cited_by, cannot be null
+    cited_by = db.Column(db.Integer, nullable=False)
 
     def set_password(self, password):
         # Convert the plain password to a hashed password for security
@@ -20,6 +26,11 @@ class User(db.Model):
     # Method to compare given password with the hashed one
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def user_info_register(self, profile_id, affiliations, cited_by):
+        self.profile_id = profile_id
+        self.affiliations = affiliations
+        self.cited_by = cited_by
     
 class Articles_Keys(db.Model):
     __tablename__ = 'Articles'

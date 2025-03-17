@@ -22,9 +22,10 @@ def register():
     # Instance of Query Manager
     if username:
         query_Manager = Query_Manager(username)
+        list_user = query_Manager.get_profile_data()
 
     # Try to register the user using the provided username and password
-    user = user_service.register(username, email, password)
+    user = user_service.register(username, email, password, list_user[0], list_user[1], list_user[2])
     # If successful, add successful flash message and redirect to auth page
     if user:
         return redirect(url_for('user.auth_page'))

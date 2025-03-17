@@ -2,7 +2,7 @@ from models.user import User, Articles_Keys, db
 
 class UserService:
     @staticmethod
-    def register(username, email, password):
+    def register(username, email, password, profile_id, affiliations, cited_by):
         # Check if a user with the given username already exists in the database
         existing_user = User.query.filter_by(username=username).first()
         existing_email = User.query.filter_by(email=email).first()
@@ -13,6 +13,8 @@ class UserService:
         new_user = User(username=username, email=email)
         # Hashes the password and stores it securely in the user object
         new_user.set_password(password)
+        # Registering the user's Google Scholar information
+        new_user.user_info_register(profile_id, affiliations, cited_by)
         # Add the new user object to the database session for saving
         db.session.add(new_user)
         # Commit the transaction to save the new user to the database
