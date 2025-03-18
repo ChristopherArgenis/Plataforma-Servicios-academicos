@@ -30,7 +30,8 @@ class Query:
         params = {
             "engine": Query.engine,
             "author_id": author_id,
-            "api_key": Query.api_key
+            "api_key": Query.api_key,
+            "num": 100
         }
         articles = Query.get_dict("articles", params)
         return articles
@@ -67,9 +68,10 @@ class Router:
         return {"title": title, "id_Articles": citation_id, "year": year}
 
     @staticmethod
-    def get_df(array):
+    def get_df(array, profile_id):
         df = pd.DataFrame(Router.get_pairs(array))
         df['year'] = pd.to_numeric(df['year'])
+        df['profile_id'] = profile_id
         return df
     
 # Manejador de Consultas
@@ -98,4 +100,4 @@ class Query_Manager:
 
   # DataBase -> Article's Table
   def get_dataframe(self):
-    return self.router.get_df(self.Article_Array) # DataFrame
+    return self.router.get_df(self.Article_Array, self.profile_id) # DataFrame

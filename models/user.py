@@ -42,4 +42,6 @@ class Articles_Keys(db.Model):
     # Define a column for id_Articles, ensuring it's unique and cannot be null
     id_Articles = db.Column(db.String(100), unique=False, nullable=False)
     # Define a column to store the year and cannot be null
-    year = db.Column(db.String(5), nullable=False)
+    year = db.Column(db.Integer, nullable=True, default=0)
+    # Define a column for profile_id, cannot be null
+    profile_id = db.Column(db.String(150), nullable=False)

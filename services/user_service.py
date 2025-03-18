@@ -1,14 +1,8 @@
-from models.user import User, Articles_Keys, db
+from models.user import User, db
 
 class UserService:
     @staticmethod
     def register(username, email, password, profile_id, affiliations, cited_by):
-        # Check if a user with the given username already exists in the database
-        existing_user = User.query.filter_by(username=username).first()
-        existing_email = User.query.filter_by(email=email).first()
-        if existing_user or existing_email:
-            # If user exists, return None indicating registration failure
-            return None
         # Create and setup a new User object with the provided username
         new_user = User(username=username, email=email)
         # Hashes the password and stores it securely in the user object
@@ -34,11 +28,11 @@ class UserService:
             return user
         # Return None if login fails due to invalid credentials
         return None
-
-class UserArticles:
+    
     @staticmethod
-    def Store(title, id_Articles, year):
-      new_articles = Articles_Keys(title=title, id_Articles=id_Articles, year=year)
-      db.session.add(new_articles)
-      db.session.commit()
-      return new_articles 
+    def check_user(username, email):
+        existing_user = User.query.filter_by(username=username).first()
+        existing_email = User.query.filter_by(email=email).first()
+        if existing_user or existing_email:
+            return True
+        return None
