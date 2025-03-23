@@ -35,6 +35,7 @@ def register():
         user = user_service.register(username, email, password, list_user[0], list_user[1], list_user[2])
 
         # Try to register the rows of Articles's Table.
+        dataframe_Articles.sort_values(by=['year'], ascending=False, inplace=True)
         df_A = dataframe_Articles.to_sql('Articles', con=db.engine, if_exists='append', index=False)
 
         # If successful, add successful flash message and redirect to auth page

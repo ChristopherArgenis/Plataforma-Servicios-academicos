@@ -44,7 +44,6 @@ class Query:
         if len(articles) < 100:
           break
         start += 100
-      print(f"Se encontraron {len(all_articles)} artículos.")
       return all_articles
 
     @staticmethod
