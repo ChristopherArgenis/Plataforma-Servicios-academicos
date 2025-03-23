@@ -27,14 +27,25 @@ class Query:
 
     @staticmethod
     def articles(author_id):
+      all_articles = []
+      start = 0
+      while True:
         params = {
             "engine": Query.engine,
             "author_id": author_id,
             "api_key": Query.api_key,
+            "start": start,
             "num": 100
         }
         articles = Query.get_dict("articles", params)
-        return articles
+        if not articles:
+          break
+        all_articles.extend(articles)
+        if len(articles) < 100:
+          break
+        start += 100
+      print(f"Se encontraron {len(all_articles)} artículos.")
+      return all_articles
 
     @staticmethod
     def article(citation_id):
