@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session, redirect, url_for
+from flask import Blueprint, render_template, request, session, redirect, url_for, flash
 from services.user_service import UserService
 from models.QM import Query_Manager
 from models import db
@@ -24,6 +24,7 @@ def register():
 
     if check:
         # If it fails, add failure flash message and redirect to auth page
+        flash("Registro Fallido: Ya se capturaron estos datos.", "warning")
         return redirect(url_for('user.auth_page'))
     else:
         # Instance of Query Manager
@@ -40,8 +41,10 @@ def register():
 
         # If successful, add successful flash message and redirect to auth page
         if user and df_A:
+            flash("El Registro ha sido Exitoso", "success")
             return redirect(url_for('user.auth_page'))
         else:
+            flash("Registro Fallido: Error en captura de datos", "danger")
             return redirect(url_for('user.auth_page'))
 
 # Route for handling login

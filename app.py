@@ -1,12 +1,12 @@
 from flask import Flask
-from flask_bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap5
 from controllers.register_login import reg_log
 from controllers.panel import panel_general
 from models import db
 from config import Config
 
 app = Flask(__name__)
-Bootstrap(app)
+bootstrap = Bootstrap5(app)
 
 # Load the configuration from the Config class
 app.config.from_object(Config)
