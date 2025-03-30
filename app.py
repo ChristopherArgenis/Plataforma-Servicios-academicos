@@ -2,6 +2,8 @@ from flask import Flask
 from flask_bootstrap import Bootstrap5
 from controllers.register_login import reg_log
 from controllers.panel import panel_general
+from middlewares.authentication_middleware import require_login_middleware
+from middlewares.request_timing_logger import request_timing_logger
 from models import db
 from config import Config
 
@@ -19,6 +21,9 @@ db.init_app(app)
 # Create tables if they don't exist
 with app.app_context():
     db.create_all()
+
+request_timing_logger(app)
+require_login_middleware(app)
 
 app.register_blueprint(reg_log)
 app.register_blueprint(panel_general)
