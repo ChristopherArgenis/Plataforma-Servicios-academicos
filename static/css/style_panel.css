@@ -1,86 +1,61 @@
-body {
-    font-family: sans-serif;
-    margin: 0;
-    background-color: #f0f0f0; /* Un fondo claro */
-    color: #002855; /* Azul marino para el texto general */
-}
-
-nav {
-    background: linear-gradient(to right, #003f87, #002855); /* Degradado de azul */
-    color: #FFD800; /* Dorado para el texto del navbar */
-    padding: 6px;
-    display: flex; /* Habilitar Flexbox en el navbar */
-    justify-content: space-between; /* Distribuir elementos: izquierda y derecha */
-    align-items: center; /* Alinear verticalmente los elementos */
-    text-align: center; /* Centrar el texto del navbar */
-}
-
-nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center; /* Alinear verticalmente los elementos */
-}
-
-nav li {
-    margin: 0 20px;
-}
-
 .logout-button {
-    background-color: #FFD800; /* Dorado */
-    color: #002855; /* Azul marino */
+    color: #002855;
+    background-color: #FFD800;
     border: none;
-    padding: 8px 16px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
     cursor: pointer;
-    border-radius: 5px; /* Bordes redondeados */
-    transition: background-color 0.3s ease; /* Transición suave al pasar el mouse */
-    margin-left: auto; /* Empuja el botón Logout hacia la derecha */
+    font-size: 1rem;
+    line-height: 1.5;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-
 .logout-button:hover {
-    background-color: #997a00; /* Dorado más oscuro al pasar el mouse */
+    background-color: #FFC300;
+    color: #002855;
 }
-
-nav a {
-    color: #FFD800; /* Dorado para los enlaces del navbar */
-    text-decoration: none;
-    font-weight: bold; /* Texto más grueso */
+.navbar-unam {
+    background-color: #002855;
 }
-
-.container {
+.service-button {
+    color: #002855;
+    border: none;
+    margin-bottom: 1rem;
+    width: 100%;
+    text-align: left;
+}
+.service-button:hover {
+    background-color: #002855;
+    color: #fff;
+}
+#vbtn-radio1 {
+    font-size: 0.9rem;
+}
+body {
     display: flex;
-    padding: 20px;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
 }
-
-aside {
-    width: 200px; /* Ancho fijo para la sección de servicios */
-    height: 820px;
-    background-color: #FFD800; /* Dorado para el fondo de la sección de servicios */
-    padding: 20px;
-}
-
-aside h2 {
-    color: #002855; /* Azul marino para el título de la sección de servicios */
-}
-
-aside ul {
-    list-style: none;
+.container-fluid {
+    display: flex;
+    flex: 1;
     padding: 0;
 }
-
-aside li a {
-    color: #002855; /* Azul marino para los enlaces de servicios */
-    text-decoration: none;
+.row {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    margin-left: 0;
+    margin-right: 0;
 }
-
-main {
-    flex: 1; /* Ocupa el espacio restante */
-    background-color: white; /* Fondo blanco para la sección principal */
-    padding: 20px;
+.col-md-3, .col-md-9 {
+    padding-left: 0;
+    padding-right: 0;
+}
+main.col-md-9 {
+    flex-grow: 1;
+    padding-left: 1rem;
+}
+aside.col-md-2 {
+    background-color: #FFD800;
 }

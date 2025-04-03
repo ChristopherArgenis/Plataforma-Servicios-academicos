@@ -4,35 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Servicios UNAM</title>
+    {{ bootstrap.load_css() }}    
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style_panel.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="#">Inicio</a></li>
-            <li><a href="#">Servicios</a></li>
-            <li><a href="#">Contacto</a></li>
-            <form action="{{ url_for('user.logout') }}" method="POST" style="display: inline;">
-                <button type="submit" class="logout-button">Logout</button>
-            </form>
-        </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-unam">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"> <!-- Space --> </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contacto</a>
+                    </li>
+                </ul>
+                <form action="{{ url_for('user.logout') }}" method="POST" class="d-flex">
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+                <ul> <!-- Space --> </ul>
+            </div>
+        </div>
     </nav>
-
-    <div class="container">
-        <aside aria-label="Servicios disponibles">
-            <h2>Servicios</h2>
-            <ul>
-                <li><i class="bi bi-download"></i>  <a href="#">Adquisicion de Reportes</a></li>
-                <li><a href="#">Servicio 2</a></li>
-                <li><a href="#">Servicio 3</a></li>
-            </ul>
-        </aside>
-
-        <main aria-label="Contenido principal">
-            <h1>Bienvenido al Panel de Servicios</h1>
-            <p>Aquí encontrarás información sobre los servicios ofrecidos.</p>
-        </main>
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="col-md-2">
+                <h2 class="mt-4">Servicios</h2>
+                <div class="d-flex flex-column">
+                    <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio1" autocomplete="off" checked>
+                    <label class="btn btn-outline-primary service-button" for="vbtn-radio1">Adquisicion de Articulos</label>
+                    <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio2" autocomplete="off">
+                    <label class="btn btn-outline-primary service-button" for="vbtn-radio2">Servicio 2</label>
+                    <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio3" autocomplete="off">
+                    <label class="btn btn-outline-primary service-button" for="vbtn-radio3">Servicio 3</label>
+                </div>
+            </aside>
+            <main class="col-md-9">
+                <h1 class="mt-4">Bienvenido al Panel de Servicios</h1>
+                <p>Aquí encontrarás información sobre los servicios ofrecidos.</p>
+            </main>
+        </div>
     </div>
+    {{ bootstrap.load_js() }}
 </body>
 </html>
