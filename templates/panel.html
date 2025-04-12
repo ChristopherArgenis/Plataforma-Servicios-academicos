@@ -1,3 +1,5 @@
+{% from "macros.jinja2" import prueba %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -44,31 +46,52 @@
                     <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio1" autocomplete="off" checked>
                     <label class="btn btn-outline-primary service-button" for="vbtn-radio1">Adquisicion de Articulos</label>
                     <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio2" autocomplete="off">
-                    <label class="btn btn-outline-primary service-button" for="vbtn-radio2">Servicio 2</label>
+                    <label class="btn btn-outline-primary service-button" for="vbtn-radio2">Reporte</label>
                     <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio3" autocomplete="off">
-                    <label class="btn btn-outline-primary service-button" for="vbtn-radio3">Servicio 3</label>
+                    <label class="btn btn-outline-primary service-button" for="vbtn-radio3">Setting</label>
                 </div>
             </aside>
             <main class="col-md-9">
                 <h1 class="mt-4">Bienvenido al Panel de Servicios</h1>
                 <p>Aquí encontrarás información sobre los servicios ofrecidos.</p>
+                <div id="Adquisicion" style="display: none;">{{ prueba() }} A</div>
+                <div id="Report" style="display: none;">{{ prueba() }} R</div>
+                <div id="Setting" style="display: none;">{{ prueba() }} S</div>
             </main>
         </div>
     </div>
     {{ bootstrap.load_js() }}
-    <script src="">
-        /*
-        const texto_id = document.getElementById('texto')
+    <script>
+        
+        const adquisicion = document.getElementById('Adquisicion');
+        const report = document.getElementById('Report');
+        const settings = document.getElementById('Setting');
+
+        const radio1 = document.getElementById("vbtn-radio1");
+        const radio2 = document.getElementById("vbtn-radio2");
+        const radio3 = document.getElementById("vbtn-radio3");
+
         function Adquisicion() {
-            texto_id.innerText = "Cambio -> Adquisicion";
+            adquisicion.style.display = "block";
+            report.style.display = "none";
+            settings.style.display = "none";
         }
 
         function Reports() {
-            texto_id.innerText = "Cambio -> Report"
+            adquisicion.style.display = "none";
+            report.style.display = "block";
+            settings.style.display = "none";
         }
 
-        document.getElementById("vbtn-radio1").addEventListener('click', Adquisicion)
-        document.getElementById("vbtn-radio2").addEventListener('click', Reports) */
+        function setting() {
+            adquisicion.style.display = "none";
+            report.style.display = "none";
+            settings.style.display = "block";
+        }
+
+        radio1.addEventListener('click', Adquisicion);
+        radio2.addEventListener('click', Reports);
+        radio3.addEventListener('click', setting);
     </script>
 </body>
 </html>
