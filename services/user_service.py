@@ -1,4 +1,4 @@
-from models.user import User, db
+from models.user import User, Articles_Keys, db
 
 class UserService:
     @staticmethod
@@ -36,3 +36,9 @@ class UserService:
         if existing_user or existing_email:
             return True
         return None
+    
+class ArticlesKey_Service:
+    @staticmethod
+    def get_all():
+        # Query all Todo entries from the database
+        return Articles_Keys.query.all()
