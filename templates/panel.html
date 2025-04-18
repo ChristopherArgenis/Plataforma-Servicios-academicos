@@ -1,5 +1,6 @@
 {% from "macros.jinja2" import prueba %}
-{% from 'bootstrap4/table.html' import render_table %}
+<!-- {% from 'bootstrap4/table.html' import render_table %} -->
+{% from 'macros.jinja2' import table_articles %}
 
 <!DOCTYPE html>
 <html lang="es">
@@ -56,7 +57,7 @@
                 <h1 class="mt-4">Bienvenido al Panel de Servicios</h1>
                 <p>Aquí encontrarás información sobre los servicios ofrecidos.</p>
                 <div id="Adquisicion" style="display: none;">
-                    {{ render_table(data, responsive=True) }}
+                    {{ table_articles(df) }}
                 </div>
                 <div id="Report" style="display: none;">
                     {{ prueba() }} R
