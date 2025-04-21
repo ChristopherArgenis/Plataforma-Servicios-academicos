@@ -1,7 +1,8 @@
 import pandas as pd
+from models import db
 
 class Table_Maganer():
-  def __init__(self, db):
+  def __init__(self):
     self.db = db
     self.array_query = ['SELECT title, year FROM Articles WHERE profile_id']
 

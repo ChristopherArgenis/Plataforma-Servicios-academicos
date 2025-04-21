@@ -1,11 +1,10 @@
 from flask import Blueprint, render_template, session
 # from services.user_service import ArticlesKey_Service
 from services.table_maganer import Table_Maganer
-from models import db
 
 # Instance of User Service
 # Article_Keys = ArticlesKey_Service()
-table_maganer = Table_Maganer(db)
+table_maganer = Table_Maganer()
 
 panel_general = Blueprint('panel', __name__)
 
