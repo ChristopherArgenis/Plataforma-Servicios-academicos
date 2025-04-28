@@ -1,6 +1,7 @@
 {% from "macros.jinja2" import prueba %}
 <!-- {% from 'bootstrap4/table.html' import render_table %} -->
 {% from 'macros.jinja2' import table_articles %}
+{% from 'macros.jinja2' import search %}
 
 <!DOCTYPE html>
 <html lang="es">
@@ -54,9 +55,11 @@
                 </div>
             </aside>
             <main class="col-md-9">
-                <h1 class="mt-4">Bienvenido al Panel de Servicios</h1>
+                <h2 class="mt-4">Panel de Servicios</h2>
+                <h1 class="mt-2">Bienvenido {{ user }}</h1>
                 <p>Aquí encontrarás información sobre los servicios ofrecidos.</p>
-                <div id="Adquisicion" style="display: none;">
+                <div id="Adquisicion">
+                    {{ search() }} <!-- Space -->
                     {{ table_articles(df) }}
                 </div>
                 <div id="Report" style="display: none;">

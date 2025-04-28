@@ -29,10 +29,14 @@
 {% macro search() %}
     <nav class="navbar bg-body-tertiary">
         <div class="container-fluid">
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="T&iacutetulo" aria-label="Search" name="titulo">
-                <button class="btn btn-outline-success" type="submit" formaction="{{ url_for('panel.filtrado') }}">Buscar</button>
+            <form method="POST" class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Título" aria-label="Search" name="titulo">
+                <button class="btn btn-outline-success" type="submit">Buscar</button>
             </form>
         </div>
+        <form method="GET" action={{ url_for('panel.panel_view') }}>
+            <button class="btn btn-outline-secondary" type="submit">Reiniciar</button>
+        </form>
+        <ul></ul>
     </nav>
 {% endmacro %}
