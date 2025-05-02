@@ -15,4 +15,4 @@ def panel_view():
     if request.method == "POST":
         title = request.form.get("titulo")
         dataframe = table_maganer.filter_title(title)
-    return render_template('panel.html', df=dataframe, user=session['user_id'])
+    return render_template('panel.html', df=dataframe, user=session['user_id'], id_articles=range(len(dataframe)))
