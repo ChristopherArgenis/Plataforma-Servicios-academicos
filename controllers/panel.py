@@ -11,8 +11,8 @@ panel_general = Blueprint('panel', __name__)
 @panel_general.route('/Panel', methods=["GET", "POST"])
 def panel_view():
     profile_id = session['profile_id']
-    dataframe = table_maganer.get_df_table(profile_id)
+    dataframe, column_art = table_maganer.get_df_table(profile_id)
     if request.method == "POST":
         title = request.form.get("titulo")
-        dataframe = table_maganer.filter_title(title)
-    return render_template('panel.html', df=dataframe, user=session['user_id'], id_articles=range(len(dataframe)))
+        dataframe, column_art = table_maganer.filter_title(title)
+    return render_template('panel.html', df=dataframe, user=session['user_id'], id_articles=column_art.values)
