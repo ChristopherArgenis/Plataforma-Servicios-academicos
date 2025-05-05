@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for, flash
 from services.user_service import UserService
-from models.QM import Query_Manager
+# from models.QM import Query_Manager
+from services.query_maganer import Query_Manager
 from models import db
 
 # Instance of User Service
