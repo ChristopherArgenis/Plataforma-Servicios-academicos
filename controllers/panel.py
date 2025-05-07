@@ -14,5 +14,21 @@ def panel_view():
     dataframe, column_art = table_maganer.get_df_table(profile_id)
     if request.method == "POST":
         title = request.form.get("titulo")
-        dataframe, column_art = table_maganer.filter_title(title)
-    return render_template('panel.html', df=dataframe, user=session['user_id'], id_articles=column_art.values)
+        year = request.form.get('year')
+        if title and year:
+            try:
+                year = int(year)
+                dataframe, column_art = table_maganer.filter(title, year)
+            except:
+                pass
+        elif title:
+            dataframe, column_art = table_maganer.filter_title(title)
+        elif year:
+            try:
+                year = int(year)
+                dataframe, column_art = table_maganer.filter_year(year)
+            except:
+                pass
+        else:
+            art_seleccionados = request.form.getlist('keys[]')
+    return render_template('panel.html', df=dataframe, user=session['user_id'], id_articles=column_art.values, years=dataframe.dropna(subset=['year'])["year"].unique().tolist())

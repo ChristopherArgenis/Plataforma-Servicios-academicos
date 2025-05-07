@@ -19,3 +19,15 @@ class Table_Maganer():
     dataframe_f['year'] = pd.to_numeric(dataframe_f['year'], errors='coerce').astype('Int64')
     column_articles_f = pd.read_sql(f'{self.array_query[1]} == "{self.profile_id}" AND title LIKE "{title}%"', self.db.engine)
     return dataframe_f, column_articles_f
+  
+  def filter_year(self, year):
+    dataframe_f = pd.read_sql(f'{self.array_query[0]} == "{self.profile_id}" AND year == {year}', self.db.engine)
+    dataframe_f['year'] = pd.to_numeric(dataframe_f['year'], errors='coerce').astype('Int64')
+    column_articles_f = pd.read_sql(f'{self.array_query[1]} == "{self.profile_id}" AND year == {year}', self.db.engine)
+    return dataframe_f, column_articles_f
+  
+  def filter(self, title, year):
+    dataframe_f = pd.read_sql(f'{self.array_query[0]} == "{self.profile_id}" AND year == {year} AND title LIKE "{title}%"', self.db.engine)
+    dataframe_f['year'] = pd.to_numeric(dataframe_f['year'], errors='coerce').astype('Int64')
+    column_articles_f = pd.read_sql(f'{self.array_query[1]} == "{self.profile_id}" AND year == {year} AND title LIKE "{title}%"', self.db.engine)
+    return dataframe_f, column_articles_f

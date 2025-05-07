@@ -1,0 +1,22 @@
+{% macro contentInfoGeneral() %}
+    <h6>Este es el contenido de la sección de Información General. Puedes agregar aquí los detalles que necesites mostrar.</h6>
+{% endmacro %}
+
+{% macro accordion() %}
+    <div class="container mt-5">
+        <div class="accordion" id="miAcordeon">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingGeneral">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGeneral" aria-expanded="true" aria-controls="collapseGeneral">
+                    Información General
+                </button>
+                </h2>
+                <div id="collapseGeneral" class="accordion-collapse collapse show" aria-labelledby="headingGeneral" data-bs-parent="#miAcordeon">
+                    <div class="accordion-body">
+                        {{ contentInfoGeneral() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}

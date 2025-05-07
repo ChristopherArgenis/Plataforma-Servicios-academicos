@@ -1,7 +1,6 @@
-{% from "macros.jinja2" import prueba %}
 <!-- {% from 'bootstrap4/table.html' import render_table %} -->
-{% from 'macros.jinja2' import table_articles %}
-{% from 'macros.jinja2' import search %}
+{% from 'components/table.jinja2' import prueba, table_articles, search %}
+{% from 'components/report.jinja2' import accordion %}
 
 <!DOCTYPE html>
 <html lang="es">
@@ -59,14 +58,14 @@
                 <h1 class="mt-2">Bienvenido {{ user }}</h1>
                 <p>Aquí encontrarás información sobre los servicios ofrecidos.</p>
                 <div id="Adquisicion">
-                    {{ search() }} <!-- Space -->
+                    {{ search(years) }} <!-- Space -->
                     {{ table_articles(df, id_articles) }}
                 </div>
                 <div id="Report" style="display: none;">
-                    {{ prueba() }} R
+                    {{ accordion() }}
                 </div>
                 <div id="Setting" style="display: none;">
-                    {{ prueba() }} S
+                    {{ prueba() }}
                 </div>
             </main>
         </div>
