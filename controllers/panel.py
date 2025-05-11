@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session, request
+from flask import Blueprint, render_template, redirect, session, request
 # from services.user_service import ArticlesKey_Service
 from services.table_maganer import Table_Maganer
 
@@ -29,6 +29,9 @@ def panel_view():
                 dataframe, column_art = table_maganer.filter_year(year)
             except:
                 pass
-        else:
-            art_seleccionados = request.form.getlist('keys[]')
     return render_template('panel.html', df=dataframe, user=session['user_id'], id_articles=column_art.values, years=dataframe.dropna(subset=['year'])["year"].unique().tolist())
+
+@panel_general.route('/Panel/adquirir', methods=["POST"])
+def get_articles():
+    art_seleccionados = request.form.getlist('keys[]')
+    return redirect('/Panel')
