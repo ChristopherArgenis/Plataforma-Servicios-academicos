@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Barra de progreso</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .stepper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 50px auto;
+      max-width: 600px;
+      position: relative;
+    }
+
+    .step {
+      text-align: center;
+      position: relative;
+      flex: 1;
+    }
+
+    .step::after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      width: 100%;
+      height: 4px;
+      background-color: #d3eafc;
+      z-index: -1;
+    }
+
+    .step:last-child::after {
+      content: none;
+    }
+
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      background-color: #d3eafc;
+      border-radius: 50%;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .step.active .step-circle {
+      background-color: #007bff;
+      color: white;
+      border: 3px solid #66b2ff;
+    }
+
+    .step.completed .step-circle {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .step.completed .step-circle::before {
+      content: "✓";
+    }
+
+    .step-label {
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+
+    .step.active .step-label {
+      color: #007bff;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<div class="stepper">
+  <div class="step completed">
+    <div class="step-circle">✓</div>
+    <div class="step-label">Paso 1</div>
+  </div>
+  <div class="step completed">
+    <div class="step-circle"></div>
+    <div class="step-label">Paso 2</div>
+  </div>
+  <div class="step active">
+    <div class="step-circle">3</div>
+    <div class="step-label">Paso actual</div>
+  </div>
+  <div class="step">
+    <div class="step-circle">4</div>
+    <div class="step-label">Siguiente paso</div>
+  </div>
+</div>
+
+</body>
+</html>
