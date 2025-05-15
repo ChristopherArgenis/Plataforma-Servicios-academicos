@@ -2,7 +2,7 @@ from serpapi import GoogleSearch
 
 # Clase de Consulta
 class Query:
-    api_key = "17f3094e233931a4b2d2d2a0fb5f957c0dfd63af173422a6ae794fd50266b222"
+    api_key = "3f62fef4ad5848514d7e963ac925d6dafd02a1092a91dc3021f35610e2e52834"
     engine = "google_scholar_author"
 
     @staticmethod
