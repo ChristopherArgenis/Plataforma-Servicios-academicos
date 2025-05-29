@@ -11,7 +11,7 @@ A medida que se desarrolla, se integrarán funcionalidades como gestión de usua
 
 Sigue los siguientes pasos para instalar y ejecutar el proyecto localmente:
 
-### 1. Clona este repositorio
+## 1. Clona este repositorio
 
 ```bash
 git clone https://github.com/ChristopherArgenis/Plataforma-Servicios-academicos.git
@@ -22,7 +22,7 @@ cd Plataforma-Servicios-academicos
 pip install -r requirements.txt
 ```
 
-# 3. Una vez instaladas las dependencias, puedes iniciar la aplicación ejecutando el archivo principal del proyecto.
+# 3. Con lo anterior, puedes iniciar la aplicación ejecutando el archivo principal del proyecto.
 ```
 python app.py
 ```
