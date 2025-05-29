@@ -1,0 +1,82 @@
+<!-- {% from 'bootstrap4/table.html' import render_table %} -->
+{% from 'components/table.jinja2' import prueba, table_articles, search %}
+{% from 'components/report.jinja2' import accordion, steps_report, inputs_report, button_report %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Servicios UNAM</title>
+    {{ bootstrap.load_css() }}    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_panel.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_steps.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-unam">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"> <!-- Space --> </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contacto</a>
+                    </li>
+                </ul>
+                <form action="{{ url_for('user.logout') }}" method="POST" class="d-flex">
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+                <ul> <!-- Space --> </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="col-md-2">
+                <h2 class="mt-4" style="color: #fff;">Servicios</h2>
+                <div class="d-flex flex-column">
+                    <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio1" autocomplete="off" checked>
+                    <label class="btn btn-outline-primary service-button" for="vbtn-radio1">Adquisicion de Articulos</label>
+                    <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio2" autocomplete="off">
+                    <label class="btn btn-outline-primary service-button" for="vbtn-radio2">Reporte</label>
+                    <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio3" autocomplete="off">
+                    <label class="btn btn-outline-primary service-button" for="vbtn-radio3">Setting</label>
+                </div>
+            </aside>
+            <main class="col-md-9">
+                <h2 class="mt-4">Panel de Servicios</h2>
+                <h1 class="mt-2">Bienvenido {{ user }}</h1>
+                <p>Aquí encontrarás información sobre los servicios ofrecidos.</p>
+                <div id="Adquisicion">
+                    {{ search(years) }} <!-- Space -->
+                    {{ table_articles(df, id_articles) }}
+                </div>
+                <div id="Report" style="display: none;">
+                    {{ accordion() }}
+                    <hr>
+                    {{ steps_report() }}
+                    {{ inputs_report() }}
+                    {{ button_report() }}
+                </div>
+                <div id="Setting" style="display: none;">
+                    {{ prueba() }}
+                </div>
+            </main>
+        </div>
+    </div>
+    {{ bootstrap.load_js() }}
+    <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/steps.js') }}"></script>
+</body>
+</html>

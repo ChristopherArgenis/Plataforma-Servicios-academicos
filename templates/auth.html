@@ -1,0 +1,30 @@
+{% from 'bootstrap5/utils.html' import render_messages %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Register</title>
+    {{ bootstrap.load_css() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    {{ render_messages() }}
+    <br>
+    <header><h2 style="font-family:'Times New Roman', Times, serif">Login or Register</h2></header>
+    <!-- Form for registration and login -->
+    <form method="POST">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <!-- Buttons to either register or login -->
+        <button type="submit" formaction="{{ url_for('user.login') }}">Login</button>
+        <button type="submit" formaction="{{ url_for('user.register') }}">Register</button>
+    </form>
+    {{ bootstrap.load_js() }}
+</body>
+</html>
