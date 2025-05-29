@@ -17,14 +17,14 @@
     background-color: #002855;
 }
 .service-button {
-    color: #002855;
+    color: #fff;
     border: none;
     margin-bottom: 1rem;
     width: 100%;
     text-align: left;
 }
 .service-button:hover {
-    background-color: #002855;
+    background-color: #fff;
     color: #fff;
 }
 #vbtn-radio1 {
@@ -57,5 +57,5 @@ main.col-md-9 {
     padding-left: 1rem;
 }
 aside.col-md-2 {
-    background-color: #FFD800;
+    background-color: #999999;
 }
