@@ -22,7 +22,7 @@ cd Plataforma-Servicios-academicos
 pip install -r requirements.txt
 ```
 
-# 3. Con lo anterior, puedes iniciar la aplicación ejecutando el archivo principal del proyecto.
+# 3. Iniciar la aplicación ejecutando el archivo principal del proyecto.
 ```
 python app.py
 ```
