@@ -11,7 +11,7 @@ reg_log = Blueprint('user', __name__)
 
 @reg_log.route('/', methods=["GET"])
 def auth_page():
-    return render_template('auth.html')
+    return render_template('auth1.html')
 
 # Route for handling Register
 @reg_log.route('/register', methods=['POST'])
@@ -52,11 +52,10 @@ def register():
 @reg_log.route('/login', methods=['POST'])
 def login():
     # Retrieve username and password from the registration form
-    username = request.form['username']
     email = request.form['email']
     password = request.form['password']
     # Try to login the user using the provided username and password
-    user = user_service.login(username, email, password)
+    user = user_service.login(email, password)
     # # If successful, add user.id to session and redirect to the list page
     if user:
         session['user_id'] = user.username
@@ -64,6 +63,7 @@ def login():
         return redirect(url_for('panel.panel_view'))
     # If it fails, add failure flash message and redirect to auth page
     else:
+        flash("Error: Verificar correo y contraseña", "danger")
         return redirect(url_for('user.auth_page'))
     
 # Route for handling logout

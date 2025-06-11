@@ -18,14 +18,13 @@ class UserService:
     
     # Login method
     @staticmethod
-    def login(username, email, password):
+    def login(email, password):
         # Retrieve user instance using its username
-        user = User.query.filter_by(username=username).first()
         email = User.query.filter_by(email=email).first()
         # Use the check_password method to compare the passwords
-        if user and user.check_password(password) and email:
+        if email and email.check_password(password):
             # Return the user object if login is successful
-            return user
+            return email
         # Return None if login fails due to invalid credentials
         return None
     

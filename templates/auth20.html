@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Inicio de Sesión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/auth1.css">
+</head>
+
+<body>
+    <div class="text-center mt-5">
+        <h2><strong>¡Bienvenido!</strong></h2>
+        <p>Inicia sesión o crea una cuenta nueva</p>
+    </div>
+
+    <div class="card">
+        <div class="tab-switch btn-group" role="group">
+            <button type="button" class="btn btn-light active" id="loginTab">Iniciar Sesión</button>
+            <button type="button" class="btn btn-light" id="registerTab">Registrarse</button>
+        </div>
+
+        <!-- Formulario de inicio de sesión -->
+        <div id="loginForm">
+            <h4 class="mb-3">Iniciar Sesión</h4>
+            <p class="text-muted">Ingresa tus credenciales para acceder</p>
+            <form>
+                <div class="mb-3">
+                    <label for="loginEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="loginEmail" placeholder="tu@email.com" required>
+                </div>
+                <div class="mb-3">
+                    <label for="loginPassword" class="form-label">Contraseña</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="loginPassword">
+                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('loginPassword')">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="loginConfirmPassword" class="form-label">Confirmar Contraseña</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="loginConfirmPassword">
+                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('loginConfirmPassword')">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                    <small class="text-danger d-none" id="loginMismatch">Las contraseñas no coinciden</small>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 disabled-btn" id="loginButton">
+                    <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                </button>
+            </form>
+        </div>
+
+        <!-- Formulario de registro -->
+        <div id="registerForm" style="display: none;">
+            <h4 class="mb-3">Registrarse</h4>
+            <p class="text-muted">Crea tu cuenta ingresando la información requerida</p>
+            <form>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="name" placeholder="Tu nombre">
+                </div>
+                <div class="mb-3">
+                    <label for="registerEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="registerEmail" placeholder="tu@email.com">
+                </div>
+                <div class="mb-3">
+                    <label for="registerPassword" class="form-label">Contraseña</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="registerPassword">
+                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('registerPassword')">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="registerConfirmPassword" class="form-label">Confirmar Contraseña</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="registerConfirmPassword">
+                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('registerConfirmPassword')">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                    <small class="text-danger d-none" id="registerMismatch">Las contraseñas no coinciden</small>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 disabled-btn" id="registerButton">
+                    <i class="bi bi-person-plus"></i> Crear Cuenta
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/js/view_&_confirm_password.js"></script>
+</body>
+
+</html>
