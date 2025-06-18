@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for, flash
 from services.user_service import UserService
 # from models.QM import Query_Manager
-from services.query_maganer import Query_Manager
+from services.query_manager import QueryManager
 from models import db
 
 # Instance of User Service
@@ -29,23 +29,37 @@ def register():
         return redirect(url_for('user.auth_page'))
     else:
         # Instance of Query Manager
-        query_Manager = Query_Manager(username)
-        list_user = query_Manager.get_profile_data()
-        dataframe_Articles = query_Manager.get_dataframe()
-        
-        # Try to register the user using the provided username and password
-        user = user_service.register(username, email, password, list_user[0], list_user[1], list_user[2])
+        query_manager = QueryManager() # Nueva instanciación
 
-        # Try to register the rows of Articles's Table.
-        dataframe_Articles.sort_values(by=['year'], ascending=False, inplace=True)
-        df_A = dataframe_Articles.to_sql('Articles', con=db.engine, if_exists='append', index=False)
-
-        # If successful, add successful flash message and redirect to auth page
-        if user and df_A:
-            flash("El Registro ha sido Exitoso", "success")
+        try:
+            list_user = query_manager.get_profile_data(username) # Nueva llamada
+        except ValueError as e:
+            flash(f"Error al obtener perfil: {str(e)}", "danger")
             return redirect(url_for('user.auth_page'))
-        else:
-            flash("Registro Fallido: Error en captura de datos", "danger")
+
+        # El author_id es el primer elemento de list_user
+        if not list_user or not list_user[0]:
+            flash("Error: No se pudo obtener el ID del perfil del autor.", "danger")
+            return redirect(url_for('user.auth_page'))
+
+        author_id_for_articles = list_user[0]
+        dataframe_articles = query_manager.get_articles_dataframe(author_id_for_articles) # Nueva llamada
+
+        # Try to register the user using the provided username and password
+        # Asegurarse que list_user tiene suficientes elementos si se accede por índice directamente
+        # Pass the dataframe_articles to the register method
+        try:
+            user = user_service.register(username, email, password, list_user[0], list_user[1], list_user[2], dataframe_articles)
+            if user: # Check if user object is returned (implies success)
+                flash("El Registro ha sido Exitoso", "success")
+                return redirect(url_for('user.auth_page'))
+            else:
+                # This case might occur if register returns None explicitly without an exception
+                flash("Registro Fallido: No se pudo crear el usuario.", "danger")
+                return redirect(url_for('user.auth_page'))
+        except Exception as e:
+            # Catch exceptions from user_service.register (e.g., database errors during commit)
+            flash(f"Error durante el registro: {str(e)}", "danger")
             return redirect(url_for('user.auth_page'))
 
 # Route for handling login
@@ -69,7 +83,8 @@ def login():
 # Route for handling logout
 @reg_log.route('/logout', methods=['POST'])
 def logout():
-    # Remove 'user_id' from session to log out the user
+    # Remove 'user_id' and 'profile_id' from session to log out the user
     session.pop('user_id', None)
+    session.pop('profile_id', None)
     # Redirect the user to the authentication page after logging out
     return redirect(url_for('user.auth_page'))

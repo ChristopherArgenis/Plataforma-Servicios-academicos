@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Clase de Enturamiento
-class Router:
+class ScholarDataUtils:
 
     @staticmethod
     def get_profile(profile):
@@ -22,7 +22,7 @@ class Router:
 
     @staticmethod
     def get_df(array, profile_id):
-        df = pd.DataFrame(Router.get_pairs(array))
+        df = pd.DataFrame(ScholarDataUtils.get_pairs(array))
         df['year'] = pd.to_numeric(df['year'])
         df['profile_id'] = profile_id
         return df

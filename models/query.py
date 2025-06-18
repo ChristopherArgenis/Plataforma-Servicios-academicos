@@ -1,8 +1,8 @@
 from serpapi import GoogleSearch
+from flask import current_app
 
 # Clase de Consulta
 class Query:
-    api_key = "3f62fef4ad5848514d7e963ac925d6dafd02a1092a91dc3021f35610e2e52834"
     engine = "google_scholar_author"
 
     @staticmethod
@@ -16,7 +16,7 @@ class Query:
         params = {
             "engine": "google_scholar_profiles",
             "mauthors": author,
-            "api_key": Query.api_key
+            "api_key": current_app.config['SERPAPI_API_KEY']
         }
         profile = Query.get_dict("profiles", params)
         return profile
@@ -29,7 +29,7 @@ class Query:
         params = {
             "engine": Query.engine,
             "author_id": author_id,
-            "api_key": Query.api_key,
+            "api_key": current_app.config['SERPAPI_API_KEY'],
             "start": start,
             "num": 100
         }
@@ -48,7 +48,7 @@ class Query:
             "engine": Query.engine,
             "view_op": "view_citation",
             "citation_id": citation_id,
-            "api_key": Query.api_key
+            "api_key": current_app.config['SERPAPI_API_KEY']
         }
         article = Query.get_dict("citation", params)
         return article
