@@ -31,7 +31,29 @@ class User(db.Model):
         self.profile_id = profile_id
         self.affiliations = affiliations
         self.cited_by = cited_by
-    
+
+class Cliente(db.Model):
+    __tablename__ = 'Cliente'
+
+    # Idenficador unico del Cliente
+    id = db.Column(db.Integer, primary_key=True)
+    # Rol del Cliente al registrarse
+    rol = db.Column(db.Integer, default=0)
+    # Nombre del Cliente
+    nombre = db.Column(db.String(150), unique=True, nullable=False)
+    # Correo electronico del Cliente
+    email = db.Column(db.String(150), unique=True, nullable=False)
+    # Contraseña del Cliente
+    password_hash = db.Column(db.String(200), nullable=False)
+
+    def set_password(self, password):
+        # Convert the plain password to a hashed password for security
+        self.password_hash = generate_password_hash(password)
+
+    # Method to compare given password with the hashed one
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
 class Articles_Keys(db.Model):
     __tablename__ = 'Articles'
 

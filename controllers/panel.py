@@ -10,7 +10,7 @@ panel_general = Blueprint('panel', __name__)
 
 @panel_general.route('/Panel', methods=["GET", "POST"])
 def panel_view():
-    profile_id = session['profile_id']
+    profile_id = "XOnxqzYAAAAJ"
     dataframe, column_art = table_maganer.get_df_table(profile_id)
     if request.method == "POST":
         title = request.form.get("titulo")

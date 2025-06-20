@@ -4,9 +4,6 @@ from services.user_service import UserService
 from services.query_maganer import Query_Manager
 from models import db
 
-# Instance of User Service
-user_service = UserService()
-
 reg_log = Blueprint('user', __name__)
 
 @reg_log.route('/', methods=["GET"])
@@ -28,20 +25,11 @@ def register():
         flash("Registro Fallido: Ya se capturaron estos datos.", "warning")
         return redirect(url_for('user.auth_page'))
     else:
-        # Instance of Query Manager
-        query_Manager = Query_Manager(username)
-        list_user = query_Manager.get_profile_data()
-        dataframe_Articles = query_Manager.get_dataframe()
-        
         # Try to register the user using the provided username and password
-        user = user_service.register(username, email, password, list_user[0], list_user[1], list_user[2])
-
-        # Try to register the rows of Articles's Table.
-        dataframe_Articles.sort_values(by=['year'], ascending=False, inplace=True)
-        df_A = dataframe_Articles.to_sql('Articles', con=db.engine, if_exists='append', index=False)
+        user = UserService.register(username, email, password)
 
         # If successful, add successful flash message and redirect to auth page
-        if user and df_A:
+        if user:
             flash("El Registro ha sido Exitoso", "success")
             return redirect(url_for('user.auth_page'))
         else:
@@ -55,12 +43,14 @@ def login():
     email = request.form['email']
     password = request.form['password']
     # Try to login the user using the provided username and password
-    user = user_service.login(email, password)
+    user = UserService.login(email, password)
     # # If successful, add user.id to session and redirect to the list page
-    if user:
-        session['user_id'] = user.username
-        session['profile_id'] = user.profile_id
+    if user and user.rol != 0:
+        session['user_id'] = user.nombre
         return redirect(url_for('panel.panel_view'))
+    elif user.rol == 0:
+        flash("Acceso Denegado: No tiene permisos de usuario", "warning")
+        return redirect(url_for('user.auth_page'))
     # If it fails, add failure flash message and redirect to auth page
     else:
         flash("Error: Verificar correo y contraseña", "danger")
