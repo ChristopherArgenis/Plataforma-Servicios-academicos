@@ -7,6 +7,6 @@ def require_login_middleware(app):
         # Check if the current endpoint is not in the allowed list
         if request.endpoint not in ['user.auth_page', 'user.register', 'user.login', 'static']:
             # Verify if 'user_id' is in the session; if not, the user is not logged in
-            if 'user_id' not in session:
+            if 'username' not in session:
                 # Redirect unauthenticated users to the authentication page
                 return redirect(url_for('user.auth_page'))

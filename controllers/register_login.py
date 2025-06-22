@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for, flash
-from services.user_service import UserService
+from services.user_service import LobbyService, UserService
 # from models.QM import Query_Manager
 from services.query_maganer import Query_Manager
 from models import db
@@ -10,6 +10,31 @@ reg_log = Blueprint('user', __name__)
 def auth_page():
     return render_template('auth1.html')
 
+@reg_log.route('/Key', methods=["GET"])
+def key_view():
+    return render_template("claveScholar.html")
+
+@reg_log.route('/Access', methods=["POST"])
+def access_key():
+    # Obtener la Clave
+    key = request.form['scholarKey']
+    # Checar si clave se repite
+    repeat = UserService.checkRepeat(key)
+    if key == "":
+        flash("Por favor, ingrese su Clave.", "danger")
+        return redirect(url_for('user.key_view'))
+    elif repeat:
+        flash("Esta clave ya esta registrada", "warning")
+        return redirect(url_for('user.key_view'))
+    else:
+        session['scholarKey'] = key
+        id = session["userID"]
+        # Registrar al nuevo usuario
+        user = UserService.registerUser(id, key)
+        # Si se registro exitosamente
+        if user:
+            return redirect(url_for('panel.panel_get'))
+
 # Route for handling Register
 @reg_log.route('/register', methods=['POST'])
 def register():
@@ -18,7 +43,7 @@ def register():
     email = request.form['email']
     password = request.form['password']
 
-    check = UserService.check_user(username, email)
+    check = LobbyService.checkCustomer(username, email)
 
     if check:
         # If it fails, add failure flash message and redirect to auth page
@@ -26,7 +51,7 @@ def register():
         return redirect(url_for('user.auth_page'))
     else:
         # Try to register the user using the provided username and password
-        user = UserService.register(username, email, password)
+        user = LobbyService.register(username, email, password)
 
         # If successful, add successful flash message and redirect to auth page
         if user:
@@ -43,12 +68,18 @@ def login():
     email = request.form['email']
     password = request.form['password']
     # Try to login the user using the provided username and password
-    user = UserService.login(email, password)
+    customer = LobbyService.login(email, password)
     # # If successful, add user.id to session and redirect to the list page
-    if user and user.rol != 0:
-        session['user_id'] = user.nombre
-        return redirect(url_for('panel.panel_view'))
-    elif user.rol == 0:
+    if customer: # and user.rol != 0:
+        session['username'] = customer.nombre
+        user = UserService.checkUser(customer.id)
+        if user:
+            session['scholarKey'] = user.profile_id
+            return redirect(url_for('panel.panel_get'))
+        else:
+            session["userID"] = customer.id
+            return redirect(url_for('user.key_view'))
+    elif customer.rol == 0:
         flash("Acceso Denegado: No tiene permisos de usuario", "warning")
         return redirect(url_for('user.auth_page'))
     # If it fails, add failure flash message and redirect to auth page
