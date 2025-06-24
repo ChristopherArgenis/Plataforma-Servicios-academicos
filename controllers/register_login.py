@@ -70,16 +70,17 @@ def login():
     # Try to login the user using the provided username and password
     customer = LobbyService.login(email, password)
     # # If successful, add user.id to session and redirect to the list page
-    if customer: # and user.rol != 0:
+    if customer and customer.rol != 0:
         session['username'] = customer.nombre
         user = UserService.checkUser(customer.id)
         if user:
             session['scholarKey'] = user.profile_id
+            session['CustomerRol'] = customer.rol
             return redirect(url_for('panel.panel_get'))
         else:
             session["userID"] = customer.id
             return redirect(url_for('user.key_view'))
-    elif customer.rol == 0:
+    elif customer and customer.rol == 0:
         flash("Acceso Denegado: No tiene permisos de usuario", "warning")
         return redirect(url_for('user.auth_page'))
     # If it fails, add failure flash message and redirect to auth page
@@ -91,6 +92,6 @@ def login():
 @reg_log.route('/logout', methods=['POST'])
 def logout():
     # Remove 'user_id' from session to log out the user
-    session.pop('user_id', None)
+    session.pop('username', None)
     # Redirect the user to the authentication page after logging out
     return redirect(url_for('user.auth_page'))

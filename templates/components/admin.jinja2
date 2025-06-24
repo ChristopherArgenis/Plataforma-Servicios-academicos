@@ -1,0 +1,213 @@
+{% from 'bootstrap5/utils.html' import render_messages %}
+
+{% macro selectTable() %}
+    <div id="card-selection-screen" class="container mt-4 p-4 bg-white rounded shadow" style="max-width: 900px;">
+        <h1 class="text-center mb-5">Selecciona una Tabla</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm border-primary">
+                    <div class="card-body text-center d-flex flex-column">
+                        <h5 class="card-title fs-4 mb-3 text-primary">Cliente</h5>
+                        <p class="card-text text-muted mb-4">Gestiona la información de los clientes en el sistema.</p>
+                        <form action="{{ url_for('panel.admin_read') }}" method="GET">
+                            <input type="hidden" name="table" value="Cliente">
+                            <button type="submit" class="btn btn-primary mt-auto rounded-pill">Administrar Clientes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm border-info">
+                    <div class="card-body text-center d-flex flex-column">
+                        <h5 class="card-title fs-4 mb-3 text-info">Usuario</h5>
+                        <p class="card-text text-muted mb-4">Administra los datos de los usuario en el sistema.</p>
+                        <form action="{{ url_for('panel.admin_read') }}" method="GET">
+                            <input type="hidden" name="table" value="Usuario">
+                            <button type="submit" class="btn btn-info mt-auto text-white rounded-pill">Administrar Productos</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro create(name) %}
+    <div id="add" class="tab-content pt-4 pb-4" style="display:none"> <!-- Mayor padding interno -->
+        <!-- Add User Section: Form for creating new entries -->
+        <div class="card p-4 rounded-lg shadow-sm mx-auto" style="max-width: 600px;"> <!-- Usando card para el formulario, con max-width y centrado -->
+        <h3 class="text-center mb-4 text-success">Añadir Nuevo {{ name }}</h3>
+            <form action="{{ url_for('panel.admin_create') }}" method="POST">
+                {{ inputs(name) }}
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success rounded-pill px-4 py-2 shadow-sm">
+                        <i class="material-icons align-middle me-1">add_circle_outline</i> Añadir {{ name }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro read(name, table) %}
+    <div id="view" class="tab-content show pt-4 pb-4">
+        {{ render_messages() }}
+        <h3 class="text-center mb-4 text-dark">Ver Datos de {{ name }}s</h3> <!-- Title added for this section -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        {{ header(name) }}
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ rows(name, table) }}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro update(name) %}
+    <div id="update" class="tab-content pt-4 pb-4" style="display:none">
+        <div class="card p-4 rounded-lg shadow-sm mx-auto" style="max-width: 600px;">
+            <h3 class="text-center mb-4 text-warning">Actualizar Datos de {{ name }}</h3>
+            <form action="{{ url_for('panel.admin_update') }}" method="POST">
+                <div class="mb-3 w-75 mx-auto">
+                    <label for="update-id" class="form-label visually-hidden">ID del {{ name }}</label>
+                    <input type="number" id="update-id" class="form-control rounded" placeholder="ID del {{ name }} a actualizar" name="update-id" required>
+                </div>
+                {{ changes(name) }}
+                <div class="text-center">
+                    <button type="submit" class="btn btn-warning rounded-pill px-4 py-2 shadow-sm text-white">
+                        <i class="material-icons align-middle me-1">update</i> Actualizar Rol
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro delete(name) %}
+    <div id="delete" class="tab-content pt-4 pb-4" style="display:none">
+        <div class="card p-4 rounded-lg shadow-sm mx-auto" style="max-width: 600px;">
+            <h3 class="text-center mb-4 text-danger">Eliminar {{ name }}</h3>
+            <form action="{{ url_for('panel.admin_delete') }}" method="POST">
+                <div class="mb-4 w-75 mx-auto">
+                    <label for="delete-id" class="form-label visually-hidden">ID del {{ name }}</label>
+                    <input type="number" id="delete-id" class="form-control rounded" placeholder="ID del {{ name }} a eliminar" name="delete-id" required>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 py-2 shadow-sm">
+                        <i class="material-icons align-middle me-1">delete_forever</i> Eliminar {{ name }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro changes(name) %}
+    {% if name == "Cliente" %}
+        <div class="mb-3 w-75 mx-auto">
+            <label for="update-rol" class="form-label visually-hidden">Nuevo rol</label>
+            <select id="update-rol" class="form-select rounded" name="rol">
+                <option value="" disabled selected>Selecciona un rol</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+        </div>
+    {% elif name == "Usuario" %}
+
+    {% endif %}
+
+{% endmacro %}
+
+{% macro inputs(name) %}
+    {% if name == "Cliente" %}
+        <div class="mb-4 w-75 mx-auto">
+            <label for="add-rol" class="form-label visually-hidden">Rol</label>
+            <input type="text" id="add-rol" class="form-control rounded" placeholder="Rol" name="rol" required>
+        </div>
+        <div class="mb-3 w-75 mx-auto"> <!-- Ancho y centrado para campos de formulario -->
+            <label for="add-nombre" class="form-label visually-hidden">Nombre</label>
+            <input type="text" id="add-nombre" class="form-control rounded" placeholder="Nombre" name="name" required>
+        </div>
+        <div class="mb-3 w-75 mx-auto">
+            <label for="add-email" class="form-label visually-hidden">Email</label>
+            <input type="email" id="add-email" class="form-control rounded" placeholder="Email" name="email" required>
+        </div>
+        <div class="mb-4 w-75 mx-auto">
+            <label for="add-rol" class="form-label visually-hidden">contraseña</label>
+            <input type="text" id="add-rol" class="form-control rounded" placeholder="contraseña" name="password" required>
+        </div>
+
+    {% elif name == "Usuario" %}
+        <div class="mb-4 w-75 mx-auto">
+            <label for="add-rol" class="form-label visually-hidden">ID</label>
+            <input type="number" id="add-rol" class="form-control rounded" placeholder="ID" name="create-id" required>
+        </div>
+        <div class="mb-4 w-75 mx-auto">
+            <label for="add-rol" class="form-label visually-hidden">Clave</label>
+            <input type="text" id="add-rol" class="form-control rounded" placeholder="Clave Google Scholar" name="key" required>
+        </div>
+        <div class="mb-4 w-75 mx-auto">
+            <label for="add-rol" class="form-label visually-hidden">Citas</label>
+            <input type="number" id="add-rol" class="form-control rounded" placeholder="Cantidad de citas" name="cites" required>
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro navbar() %}
+    <ul class="nav nav-tabs border-0 mb-5 justify-content-center">
+        <li class="nav-item">
+            <!-- "Ver" is now the first tab -->
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#view" onclick="openTab('view')">Ver</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add" onclick="openTab('add')">Añadir</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#update" onclick="openTab('update')">Actualizar</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#delete" onclick="openTab('delete')">Eliminar</button>
+        </li>
+    </ul>
+{% endmacro %}
+
+{% macro header(name) %}
+    {% if name == "Cliente" %}
+        <th class="rounded-top-left py-3">ID</th>
+        <th class="py-3">Rol</th>
+        <th class="py-3">Nombre</th>
+        <th class="rounded-top-right py-3">Email</th>
+    {% elif name == "Usuario" %}
+        <th class="rounded-top-left py-3">ID</th>
+        <th class="py-3">Clave</th>
+        <th class="rounded-top-right py-3">Cited_by</th>
+    {% endif %}
+{% endmacro %}
+
+{% macro rows(name, table) %}
+    {% if name == "Cliente" %}
+        {% for customer in table %}
+            <tr>
+                <td>{{ customer.id }}</td>
+                <td>{{ customer.rol }}</td>
+                <td>{{ customer.nombre }}</td>
+                <td>{{ customer.email }}</td>
+            </tr>
+        {% endfor %}
+    {% elif name == "Usuario" %}
+        {% for user in table %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.profile_id }}</td>
+                <td>{{ user.cited_by }}</td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+{% endmacro %}

@@ -1,6 +1,7 @@
 <!-- {% from 'bootstrap4/table.html' import render_table %} -->
 {% from 'components/table.jinja2' import prueba, table_articles, search %}
 {% from 'components/report.jinja2' import accordion, steps_report, inputs_report, button_report %}
+{% from 'components/admin.jinja2' import selectTable %}
 
 <!DOCTYPE html>
 <html lang="es">
@@ -50,8 +51,10 @@
                     <label class="btn btn-outline-primary service-button" for="vbtn-radio1">Adquisicion de Articulos</label>
                     <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio2" autocomplete="off">
                     <label class="btn btn-outline-primary service-button" for="vbtn-radio2">Reporte</label>
-                    <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio3" autocomplete="off">
-                    <label class="btn btn-outline-primary service-button" for="vbtn-radio3">Setting</label>
+                    {% if rol == 2 %}
+                        <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio3" autocomplete="off">
+                        <label class="btn btn-outline-primary service-button" for="vbtn-radio3">Administracion</label>
+                    {% endif %}
                 </div>
             </aside>
             <main class="col-md-9">
@@ -70,7 +73,7 @@
                     {{ button_report() }}
                 </div>
                 <div id="Setting" style="display: none;">
-                    {{ prueba() }}
+                    {{ selectTable() }}
                 </div>
             </main>
         </div>

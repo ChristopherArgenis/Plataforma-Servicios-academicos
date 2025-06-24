@@ -60,8 +60,68 @@ class UserService:
             return True
         return None
     
-class ArticlesKey_Service:
+class Tables_Service:
+    # Seccion "Create" - Crear
     @staticmethod
-    def get_all():
-        # Query all Todo entries from the database
+    def createCustomer(rol, name, email, password):
+        new_customer = Cliente(rol=rol, nombre=name, email=email)
+        new_customer.set_password(password)
+        db.session.add(new_customer)
+        db.session.commit()
+        return new_customer
+    
+    @staticmethod
+    def createUser(id, profile_id, cited_by):
+        EqualID = Cliente.query.filter_by(id=id).first()
+        EqualKey = Usuario.query.filter_by(profile_id=profile_id).first()
+        if EqualKey:
+            return "Existent"
+        elif EqualID:
+            new_user = Usuario(id=id, profile_id=profile_id, cited_by=cited_by)
+            db.session.add(new_user)
+            db.session.commit()
+            return "Success"
+        else:
+            return None
+    
+    # Seccion "Update" - Actualizar
+    @staticmethod
+    def updateCustomerRol(id, rol):
+        customer = Cliente.query.get(id)
+        customer.rol = rol
+        db.session.commit()
+        return customer
+    
+    # Seccion "Read" - Leer
+    @staticmethod
+    def getCustomer():
+        return Cliente.query.all()
+    
+    @staticmethod
+    def getUsers():
+        return Usuario.query.all()
+    
+    @staticmethod
+    def getArticleskeys():
         return Articles_Keys.query.all()
+
+    # Seccion "Delete" - Eliminar
+    @staticmethod
+    def deleteCustomer(id):
+        customer = Cliente.query.get(id)
+        if customer:
+            db.session.delete(customer)
+            db.session.commit()
+            return customer
+        else:
+            return None
+        
+    @staticmethod
+    def deleteUser(id):
+        user = Usuario.query.get(id)
+        if user:
+            db.session.delete(user)
+            db.session.commit()
+            return user
+        else:
+            return None
