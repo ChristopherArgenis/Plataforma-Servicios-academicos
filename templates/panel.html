@@ -50,10 +50,12 @@
                     <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio1" autocomplete="off" checked>
                     <label class="btn btn-outline-primary service-button" for="vbtn-radio1">Adquisicion de Articulos</label>
                     <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio2" autocomplete="off">
-                    <label class="btn btn-outline-primary service-button" for="vbtn-radio2">Reporte</label>
+                    <label class="btn btn-outline-primary service-button" for="vbtn-radio2">Información</label>
+                    <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio3" autocomplete="off">
+                    <label class="btn btn-outline-primary service-button" for="vbtn-radio3">Reporte</label>
                     {% if rol == 2 %}
-                        <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio3" autocomplete="off">
-                        <label class="btn btn-outline-primary service-button" for="vbtn-radio3">Administracion</label>
+                        <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio4" autocomplete="off">
+                        <label class="btn btn-outline-primary service-button" for="vbtn-radio4">Administracion</label>
                     {% endif %}
                 </div>
             </aside>
@@ -65,6 +67,9 @@
                     {{ search(years) }} <!-- Space -->
                     {{ table_articles(df, id_articles) }}
                 </div>
+                <div id="Information" style="display: none;">
+                    <p>información Necesaria</p>
+                </div>
                 <div id="Report" style="display: none;">
                     {{ accordion() }}
                     <hr>
@@ -72,7 +77,7 @@
                     {{ inputs_report() }}
                     {{ button_report() }}
                 </div>
-                <div id="Setting" style="display: none;">
+                <div id="Tables" style="display: none;">
                     {{ selectTable() }}
                 </div>
             </main>
