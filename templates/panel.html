@@ -2,6 +2,7 @@
 {% from 'components/table.jinja2' import prueba, table_articles, search %}
 {% from 'components/report.jinja2' import accordion, steps_report, inputs_report, button_report %}
 {% from 'components/admin.jinja2' import selectTable %}
+{% from 'components/info.jinja2' import selectForm %}
 
 <!DOCTYPE html>
 <html lang="es">
@@ -68,7 +69,7 @@
                     {{ table_articles(df, id_articles) }}
                 </div>
                 <div id="Information" style="display: none;">
-                    <p>información Necesaria</p>
+                    {{ selectForm() }}
                 </div>
                 <div id="Report" style="display: none;">
                     {{ accordion() }}

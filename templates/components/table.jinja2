@@ -21,9 +21,13 @@
             </form>
         </div>
         <form method="GET" action={{ url_for('panel.panel_get') }}>
-            <button class="btn btn-outline-secondary" type="submit">Reiniciar</button>
+            <button class="btn btn-outline-primary" type="submit">Reiniciar</button>
         </form>
-        <ul></ul>
+        <div class="p-2"></div>
+        <form method="PUT" action={{ url_for('panel.panel_get') }}>
+            <button class="btn btn-outline-dark" type="submit">Actualizar</button>
+        </form>
+        <div class="p-2"></div>
     </nav>
 {% endmacro %}
 
@@ -56,7 +60,7 @@
                 </tbody>
             </thead>
         </table>
-        <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-end mb-3">
             <button type="submit" class="btn btn-outline-danger">Adquirir</button>
             <ul></ul>
         </div>
