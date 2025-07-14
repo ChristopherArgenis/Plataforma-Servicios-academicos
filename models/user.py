@@ -8,8 +8,10 @@ class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     # Define a column for profile_id, cannot be null
     profile_id = db.Column(db.String(50), nullable=False)
+    # Define a column for afflition, can be null
+    affilition = db.Column(db.String(150), nullable=True)
     # Define a column for cited_by, cannot be null
-    cited_by = db.Column(db.Integer, nullable=True, default=0)
+    cited_by = db.Column(db.Integer, nullable=False, default=0)
 
 class Cliente(db.Model):
     __tablename__ = 'Cliente'

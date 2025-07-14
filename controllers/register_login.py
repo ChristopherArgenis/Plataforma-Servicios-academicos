@@ -29,10 +29,14 @@ def access_key():
     else:
         session['scholarKey'] = key
         id = session["userID"]
+        query_Manager = Query_Manager(key)
+        affilition, cited_by = query_Manager.get_profile_data()
         # Registrar al nuevo usuario
-        user = UserService.registerUser(id, key)
+        user = UserService.registerUser(id, key, affilition, cited_by)
         # Si se registro exitosamente
         if user:
+            dataframe_Articles = query_Manager.get_dataframe()
+            df_A = dataframe_Articles.to_sql('Articles', con=db.engine, if_exists='append', index=False)
             return redirect(url_for('panel.panel_get'))
 
 # Route for handling Register

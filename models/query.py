@@ -1,25 +1,26 @@
-from serpapi import GoogleSearch
+from serpapi import GoogleScholarSearch
 
-# Clase de Consulta
 class Query:
     api_key = "3f62fef4ad5848514d7e963ac925d6dafd02a1092a91dc3021f35610e2e52834"
     engine = "google_scholar_author"
 
     @staticmethod
-    def get_dict(type: str, params: dict):
-        search = GoogleSearch(params)
+    def get_dict(types: str, params: dict):
+        search = GoogleScholarSearch(params)
         results = search.get_dict()
-        return results[type]
+        return results[types]
 
     @staticmethod
-    def authors(author):
+    def authors(authorID):
         params = {
-            "engine": "google_scholar_profiles",
-            "mauthors": author,
-            "api_key": Query.api_key
+            "engine": "google_scholar_author",
+            "author_id": authorID,
+            "api_key": Query.api_key,
+            "hl": "es"
         }
-        profile = Query.get_dict("profiles", params)
-        return profile
+        author = Query.get_dict("author", params)
+        cited_by = Query.get_dict("cited_by", params)
+        return author, cited_by
 
     @staticmethod
     def articles(author_id):

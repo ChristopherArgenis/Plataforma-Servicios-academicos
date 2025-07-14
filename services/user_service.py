@@ -36,9 +36,9 @@ class LobbyService:
 
 class UserService:
     @staticmethod
-    def registerUser(id, key):
+    def registerUser(id, key, affilition, cited_by):
         # Create and setup a new User object with the provided username
-        new_user = Usuario(id=id, profile_id=key)
+        new_user = Usuario(id=id, profile_id=key, affilition=affilition, cited_by=cited_by)
         # Add the new user object to the database session for saving
         db.session.add(new_user)
         # Commit the transaction to save the new user to the database
@@ -59,7 +59,7 @@ class UserService:
         if EqualKey:
             return True
         return None
-    
+
 class Tables_Service:
     # Seccion "Create" - Crear
     @staticmethod

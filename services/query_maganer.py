@@ -3,24 +3,18 @@ from models.router import Router
 
 # Manejador de Consultas
 class Query_Manager:
-  def __init__(self, Name):
+  def __init__(self, clave):
     # Datos Iniciales
-    self.name = Name
+    self.profile_id = clave
     self.query = Query() # Class Static
     self.router = Router() # Class Static
     # Datos Consultados
-    self.Author_Dict = self.query.authors(self.name)
-    # Datos Procesados
-    self.profile_id = self.get_profile_id()
-    # Datos Consultados
+    self.Author_Dict = self.query.authors(self.profile_id) # Two Variable
     self.Article_Array = self.get_articles()
 
   # DataBase -> User's Table
   def get_profile_data(self):
-    return self.router.get_profile(self.Author_Dict) # List
-
-  def get_profile_id(self):
-    return self.get_profile_data()[0] # String
+    return self.router.getAuthor(author=self.Author_Dict[0], cited_by=self.Author_Dict[1]) # List
 
   def get_articles(self):
     return self.query.articles(self.profile_id) # Array
