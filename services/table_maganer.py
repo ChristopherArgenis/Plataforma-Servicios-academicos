@@ -1,5 +1,6 @@
 import pandas as pd
 from models import db
+from models.user import Articles_Keys
 
 class Table_Maganer():
   def __init__(self):
@@ -31,3 +32,7 @@ class Table_Maganer():
     dataframe_f['year'] = pd.to_numeric(dataframe_f['year'], errors='coerce').astype('Int64')
     column_articles_f = pd.read_sql(f'{self.array_query[1]} == "{self.profile_id}" AND year == {year} AND title LIKE "{title}%"', self.db.engine)
     return dataframe_f, column_articles_f
+  
+  def delete_articles(self, profile_id):
+    deleted = Articles_Keys.query.filter_by(profile_id=profile_id).delete(synchronize_session=False)
+    db.session.commit()

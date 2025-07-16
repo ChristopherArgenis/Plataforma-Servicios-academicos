@@ -187,6 +187,7 @@
     {% elif name == "Usuario" %}
         <th class="rounded-top-left py-3">ID</th>
         <th class="py-3">Clave</th>
+        <th class="py-3">Afiliación</th>
         <th class="rounded-top-right py-3">Cited_by</th>
     {% endif %}
 {% endmacro %}
@@ -206,6 +207,7 @@
             <tr>
                 <td>{{ user.id }}</td>
                 <td>{{ user.profile_id }}</td>
+                <td>{{ user.affilition }}</td>
                 <td>{{ user.cited_by }}</td>
             </tr>
         {% endfor %}

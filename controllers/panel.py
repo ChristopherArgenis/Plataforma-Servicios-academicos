@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
 from services.user_service import Tables_Service
 from services.table_maganer import Table_Maganer
+from services.query_maganer import Query_Manager
+from models import db
 
-# Instance of User Service
-# Article_Keys = ArticlesKey_Service()
 table_maganer = Table_Maganer()
 
 panel_general = Blueprint('panel', __name__)
@@ -12,13 +12,14 @@ panel_general = Blueprint('panel', __name__)
 def panel_get():
     profile_id = session['scholarKey']
     dataframe, column_art = table_maganer.get_df_table(profile_id)
+    select_year = dataframe.dropna(subset=['year'])["year"].unique().tolist()
     return render_template(
         'panel.html',
         df=dataframe,
         user=session['username'],
         rol=session['CustomerRol'],
         id_articles=column_art.values,
-        years=dataframe.dropna(subset=['year'])["year"].unique().tolist()
+        years=select_year
     )
 
 @panel_general.route('/Panel', methods=["POST"])
@@ -52,6 +53,14 @@ def panel_post():
         id_articles=column_art.values,
         years=dataframe.dropna(subset=['year'])["year"].unique().tolist()
     )
+
+@panel_general.route('/Panel/Update_Table', methods=["POST"])
+def table_update():
+    table_maganer.delete_articles(session['scholarKey'])
+    query_Manager = Query_Manager(session['scholarKey'])
+    dataframe_Articles = query_Manager.get_dataframe()
+    df_A = dataframe_Articles.to_sql('Articles', con=db.engine, if_exists='append', index=False)
+    return redirect(url_for('panel.panel_get'))
 
 @panel_general.route('/Panel/adquirir', methods=["POST"])
 def get_articles():

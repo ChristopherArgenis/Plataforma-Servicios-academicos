@@ -1,7 +1,3 @@
-{% macro prueba() %}
-    <h6>Hola Estoy aqui</h6>
-{% endmacro %}
-
 {% macro select_year(years) %}
     <select class="form-select w-auto" name="year" aria-label="Default select example">
         <option selected disabled>Todos</option>
@@ -24,7 +20,7 @@
             <button class="btn btn-outline-primary" type="submit">Reiniciar</button>
         </form>
         <div class="p-2"></div>
-        <form method="PUT" action={{ url_for('panel.panel_get') }}>
+        <form method="POST" action={{ url_for('panel.table_update') }}>
             <button class="btn btn-outline-dark" type="submit">Actualizar</button>
         </form>
         <div class="p-2"></div>
@@ -35,7 +31,7 @@
     <tr>
         <th scope="col">T&iacutetulo</th>
         <th scope="col">A&ntildeo</th>
-        <th scope="col">☑</th>
+        <th scope="col"><input type="checkbox" id="select_all"></th>
     </tr>
 {% endmacro %}
 
@@ -52,7 +48,7 @@
                             {% endfor %}
                             <td>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="keys[]" value="{{ id_articles[loop.index0][0] }}" id="checkDefault">
+                                    <input class="form-check-input all" type="checkbox" name="keys[]" value="{{ id_articles[loop.index0][0] }}" id="checkDefault">
                                 </div>
                             </td>
                         </tr>
