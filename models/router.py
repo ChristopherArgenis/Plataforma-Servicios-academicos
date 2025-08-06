@@ -24,3 +24,21 @@ class Router:
         df.sort_values(by=['year'], ascending=False, inplace=True)
         df['profile_id'] = profile_id
         return df
+    
+    @staticmethod
+    def schema_citation(clave, article):
+        if article['publication_date'] == None: 
+            date = 0
+        else: 
+            date = int(article['publication_date'][:4])
+
+        article_schema = {
+            "id_Articles": clave,
+            "title": article['title'],
+            "authors": article['authors'],
+            "journal": article['journal'],
+            "volume": article['volume'],
+            "pages": article['pages'],
+            "year": date
+        }
+        return article_schema

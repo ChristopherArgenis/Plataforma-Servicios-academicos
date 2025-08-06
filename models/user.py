@@ -48,3 +48,15 @@ class Articles_Keys(db.Model):
     year = db.Column(db.Integer, nullable=True, default=0)
     # Define a column for profile_id, cannot be null
     profile_id = db.Column(db.String(150), nullable=False)
+
+class Articles(db.Model):
+    __tablename__ = 'Article'
+
+    id = db.Column(db.Integer, primary_key=True)
+    id_Articles = db.Column(db.String(100), unique=False, nullable=False)
+    title = db.Column(db.String(150), unique=False, nullable=False)
+    authors = db.Column(db.String(500), unique=False, nullable=True)
+    journal = db.Column(db.String(100), unique=False, nullable=True)
+    volume = db.Column(db.Integer, unique=False, nullable=True)
+    pages = db.Column(db.String(20), unique=False, nullable=False)
+    year = db.Column(db.Integer, nullable=True, default=0)
