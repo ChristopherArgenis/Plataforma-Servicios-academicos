@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
-from services.user_service import Tables_Service
+from services.user_service import Tables_Service, Check_Article
 from services.table_maganer import Table_Maganer
 from services.query_maganer import Query_Manager
 from services.articles_maganer import Articles_Maganer
@@ -7,6 +7,7 @@ from models import db
 
 table_maganer = Table_Maganer()
 articles_maganer = Articles_Maganer()
+check_article = Check_Article()
 
 panel_general = Blueprint('panel', __name__)
 
@@ -66,9 +67,14 @@ def table_update():
 
 @panel_general.route('/Panel/adquirir', methods=["POST"])
 def get_articles():
-    art_seleccionados = request.form.getlist('keys[]')
-    dataframe = articles_maganer.df_articles(array=art_seleccionados)
-    insert_db = dataframe.to_sql('Article', con=db.engine, if_exists='append', index=False)
+    art_selects = request.form.getlist('keys[]')
+    nrA = check_article.repeat_articles(art_selects)
+    if len(nrA) > 0:
+        dataframe = articles_maganer.df_articles(array=nrA)
+        insert_db = dataframe.to_sql('Article', con=db.engine, if_exists='append', index=False)
+        flash(f"{len(nrA)} consultados exitosamente.", "success")
+    else:
+        flash("Todos los Articulos ya estan almacenados", "success")
     return redirect(url_for('panel.panel_get'))
 
 @panel_general.route('/Administracion', methods=["GET"])
