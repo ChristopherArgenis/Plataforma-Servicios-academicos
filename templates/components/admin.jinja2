@@ -114,9 +114,10 @@
             <label for="update-rol" class="form-label visually-hidden">Nuevo rol</label>
             <select id="update-rol" class="form-select rounded" name="rol">
                 <option value="" disabled selected>Selecciona un rol</option>
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
+                <option value="0">Cliente</option>
+                <option value="1">Usuario</option>
+                <option value="2">Administrador</option>
+                <option value="3">Super Admin</option>
             </select>
         </div>
     {% elif name == "Usuario" %}
@@ -160,7 +161,7 @@
     {% endif %}
 {% endmacro %}
 
-{% macro navbar() %}
+{% macro navbar(rol) %}
     <ul class="nav nav-tabs border-0 mb-5 justify-content-center">
         <li class="nav-item">
             <!-- "Ver" is now the first tab -->
@@ -169,12 +170,14 @@
         <li class="nav-item">
             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add" onclick="openTab('add')">Añadir</button>
         </li>
-        <li class="nav-item">
-            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#update" onclick="openTab('update')">Actualizar</button>
-        </li>
-        <li class="nav-item">
-            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#delete" onclick="openTab('delete')">Eliminar</button>
-        </li>
+        {% if rol == 3 %}
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#update" onclick="openTab('update')">Actualizar</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#delete" onclick="openTab('delete')">Eliminar</button>
+            </li>
+        {% endif %}
     </ul>
 {% endmacro %}
 

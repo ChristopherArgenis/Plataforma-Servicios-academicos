@@ -81,13 +81,14 @@ def get_articles():
 def admin_read():
     named_table = request.args.get('table')
     session['nameTable'] = named_table
+    rol = session['CustomerRol']
     match named_table:
         case "Cliente":
             customers = Tables_Service.getCustomer()
-            return render_template('admin.html', name=named_table, table=customers)
+            return render_template('admin.html', name=named_table, table=customers, rol=rol)
         case "Usuario":
             users = Tables_Service.getUsers()
-            return render_template('admin.html', name=named_table, table=users)
+            return render_template('admin.html', name=named_table, table=users, rol=rol)
 
 @panel_general.route('/Admin/crear', methods=["POST"])
 def admin_create():
