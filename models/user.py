@@ -2,54 +2,98 @@ from models import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class Usuario(db.Model):
+    """
+    Modelo que representa un usuario de Google Scholar.
+
+    Attributes:
+        id (int): Identificador único del usuario.
+        profile_id (str): Identificador del perfil del autor.
+        affilition (str): Afiliación institucional del autor.
+        cited_by (int): Número de citas del autor.
+    """
     __tablename__ = 'Usuario'
 
-    # Define the primary key for the User table
     id = db.Column(db.Integer, primary_key=True)
-    # Define a column for profile_id, cannot be null
     profile_id = db.Column(db.String(50), nullable=False)
-    # Define a column for afflition, can be null
     affilition = db.Column(db.String(150), nullable=True)
-    # Define a column for cited_by, cannot be null
     cited_by = db.Column(db.Integer, nullable=False, default=0)
 
+
 class Cliente(db.Model):
+    """
+    Modelo que representa un cliente registrado en el sistema.
+
+    Attributes:
+        id (int): Identificador único del cliente.
+        rol (int): Rol asignado al cliente (por defecto 0).
+        nombre (str): Nombre del cliente.
+        email (str): Correo electrónico del cliente.
+        password_hash (str): Contraseña encriptada del cliente.
+    """
     __tablename__ = 'Cliente'
 
-    # Idenficador unico del Cliente
     id = db.Column(db.Integer, primary_key=True)
-    # Rol del Cliente al registrarse
     rol = db.Column(db.Integer, default=0)
-    # Nombre del Cliente
     nombre = db.Column(db.String(100), unique=True, nullable=False)
-    # Correo electronico del Cliente
     email = db.Column(db.String(100), unique=True, nullable=False)
-    # Contraseña del Cliente
     password_hash = db.Column(db.String(200), nullable=False)
 
-    def set_password(self, password):
-        # Convert the plain password to a hashed password for security
+    def set_password(self, password: str):
+        """
+        Genera y almacena el hash de la contraseña.
+
+        Args:
+            password (str): Contraseña en texto plano.
+        """
         self.password_hash = generate_password_hash(password)
 
-    # Method to compare given password with the hashed one
-    def check_password(self, password):
+    def check_password(self, password: str) -> bool:
+        """
+        Verifica si la contraseña proporcionada coincide con el hash almacenado.
+
+        Args:
+            password (str): Contraseña en texto plano.
+
+        Returns:
+            bool: True si la contraseña es correcta, False en caso contrario.
+        """
         return check_password_hash(self.password_hash, password)
 
+
 class Articles_Keys(db.Model):
+    """
+    Modelo que almacena claves de artículos vinculadas a un perfil.
+
+    Attributes:
+        id (int): Identificador único.
+        title (str): Título del artículo.
+        id_Articles (str): Identificador único del artículo.
+        year (int): Año de publicación.
+        profile_id (str): Identificador del perfil asociado.
+    """
     __tablename__ = 'Articles'
 
-    # Define the primary key for the User table
     id = db.Column(db.Integer, primary_key=True)
-    # Define a column for title, ensuring it's not unique and cannot be null
     title = db.Column(db.String(150), unique=False, nullable=False)
-    # Define a column for id_Articles, ensuring it's unique and cannot be null
     id_Articles = db.Column(db.String(100), unique=False, nullable=False)
-    # Define a column to store the year and cannot be null
     year = db.Column(db.Integer, nullable=True, default=0)
-    # Define a column for profile_id, cannot be null
     profile_id = db.Column(db.String(150), nullable=False)
 
+
 class Articles(db.Model):
+    """
+    Modelo que almacena la información completa de un artículo.
+
+    Attributes:
+        id (int): Identificador único.
+        id_Articles (str): Identificador del artículo.
+        title (str): Título del artículo.
+        authors (str): Autores del artículo.
+        journal (str): Revista donde fue publicado.
+        volume (int): Volumen de la revista.
+        pages (str): Páginas del artículo.
+        year (int): Año de publicación.
+    """
     __tablename__ = 'Article'
 
     id = db.Column(db.Integer, primary_key=True)
