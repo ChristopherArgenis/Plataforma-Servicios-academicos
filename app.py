@@ -29,4 +29,4 @@ app.register_blueprint(reg_log)
 app.register_blueprint(panel_general)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=3000, debug=False)
+    app.run(host='0.0.0.0', port=3000, debug=True)
