@@ -1,64 +1,105 @@
 {% macro select_year(years) %}
-    <select class="form-select w-auto" name="year" aria-label="Default select example">
-        <option selected disabled>Todos</option>
-        {% for year in years %}
-            <option value={{ year }}>{{year}}</option>
-        {% endfor %}
-    </select>
+    <div class="form-floating">
+        <select class="form-select" name="year" id="yearSelect" aria-label="Seleccionar año">
+            <option selected disabled>Todos</option>
+            {% for year in years %}
+                <option value={{ year }}>{{year}}</option>
+            {% endfor %}
+        </select>
+        <label for="yearSelect">Año</label>
+    </div>
 {% endmacro %}
 
 {% macro search(years) %}
-    <nav class="navbar bg-body-tertiary">
-        <div class="container-fluid">
-            <form method="POST" class="d-flex" role="search">
-                {{ select_year(years) }}
-                <input class="form-control me-2" type="search" placeholder="Título" aria-label="Search" name="titulo">
-                <button class="btn btn-outline-success" type="submit">Buscar</button>
-            </form>
+    <div class="card shadow-sm border-0 rounded-3 mb-4">
+        <div class="card-body p-4">
+            <div class="row g-3 align-items-center">
+                <!-- Search Form -->
+                <div class="col-lg-8">
+                    <form method="POST" class="row g-3" role="search">
+                        <div class="col-md-3">
+                            {{ select_year(years) }}
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input class="form-control" type="search" placeholder="Título" id="tituloSearch" aria-label="Search" name="titulo">
+                                <label for="tituloSearch"><i class="bi bi-search me-2"></i>Buscar por título</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-center">
+                            <button class="btn btn-primary w-100 h-100 shadow-sm" type="submit">
+                                <i class="bi bi-search"></i> Buscar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="col-lg-4 d-flex justify-content-end gap-2">
+                    <form method="GET" action={{ url_for('panel.panel_get') }}>
+                        <button class="btn btn-outline-secondary shadow-sm" type="submit" title="Reiniciar filtros">
+                            <i class="bi bi-arrow-counterclockwise"></i> Reiniciar
+                        </button>
+                    </form>
+                    <form method="POST" action={{ url_for('panel.table_update') }}>
+                        <button class="btn btn-outline-dark shadow-sm" type="submit" title="Actualizar datos">
+                            <i class="bi bi-cloud-arrow-down"></i> Actualizar
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <form method="GET" action={{ url_for('panel.panel_get') }}>
-            <button class="btn btn-outline-primary" type="submit">Reiniciar</button>
-        </form>
-        <div class="p-2"></div>
-        <form method="POST" action={{ url_for('panel.table_update') }}>
-            <button class="btn btn-outline-dark" type="submit">Actualizar</button>
-        </form>
-        <div class="p-2"></div>
-    </nav>
+    </div>
 {% endmacro %}
 
 {% macro columns_Articles() %}
     <tr>
-        <th scope="col">T&iacutetulo</th>
-        <th scope="col">A&ntildeo</th>
-        <th scope="col"><input type="checkbox" id="select_all"></th>
+        <th scope="col" class="py-3 ps-4">Título</th>
+        <th scope="col" class="py-3">Año</th>
+        <th scope="col" class="py-3 text-center" style="width: 50px;">
+            <div class="form-check d-flex justify-content-center">
+                <input class="form-check-input" type="checkbox" id="select_all" style="cursor: pointer;">
+            </div>
+        </th>
     </tr>
 {% endmacro %}
 
 {% macro table_articles(df, id_articles) %}
     <form action="{{ url_for('panel.get_articles') }}" method="POST">
-        <table class="table table-striped table-hover">
-            <thead class="table-light">
-                {{ columns_Articles() }}
-                <tbody>
-                    {% for row in df.itertuples(index=False) %}
-                        <tr>
-                            {% for value in row %}
-                                <td>{{ value }}</td>
+        <div class="card shadow border-0 rounded-3 overflow-hidden">
+            <div class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                <h5 class="text-primary fw-bold mb-0"><i class="bi bi-journal-text me-2"></i>Artículos Disponibles</h5>
+                <span class="badge bg-light text-dark border">{{ df|length }} resultados</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="bg-light text-secondary border-bottom">
+                            {{ columns_Articles() }}
+                        </thead>
+                        <tbody>
+                            {% for row in df.itertuples(index=False) %}
+                                <tr>
+                                    <td class="ps-4 fw-medium text-dark">{{ row[0] }}</td>
+                                    <td class="text-muted">{{ row[1] }}</td>
+                                    <td class="text-center">
+                                        <div class="form-check d-flex justify-content-center">
+                                            <input class="form-check-input all" type="checkbox" name="keys[]" value="{{ id_articles[loop.index0][0] }}" style="cursor: pointer;">
+                                        </div>
+                                    </td>
+                                </tr>
                             {% endfor %}
-                            <td>
-                                <div class="form-check">
-                                    <input class="form-check-input all" type="checkbox" name="keys[]" value="{{ id_articles[loop.index0][0] }}" id="checkDefault">
-                                </div>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </thead>
-        </table>
-        <div class="d-flex justify-content-end mb-3">
-            <button type="submit" class="btn btn-outline-danger">Adquirir</button>
-            <ul></ul>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-top p-3">
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success btn-lg shadow-sm px-4">
+                        <i class="bi bi-plus-circle me-2"></i> Adquirir Seleccionados
+                    </button>
+                </div>
+            </div>
         </div>
     </form>
 {% endmacro %}
