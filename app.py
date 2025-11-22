@@ -2,6 +2,7 @@ from flask import Flask
 from flask_bootstrap import Bootstrap5
 from controllers.register_login import reg_log
 from controllers.panel import panel_general
+from controllers.reports import report
 from middlewares.authentication_middleware import require_login_middleware
 from middlewares.request_timing_logger import request_timing_logger
 from models import db
@@ -27,6 +28,7 @@ require_login_middleware(app)
 
 app.register_blueprint(reg_log)
 app.register_blueprint(panel_general)
+app.register_blueprint(report)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000, debug=True)
