@@ -13,17 +13,54 @@ panel_general = Blueprint('panel', __name__)
 
 @panel_general.route('/Panel', methods=["GET"])
 def panel_get():
+    # Default view is Acquisition
+    return panel_acquisition()
+
+@panel_general.route('/Panel/Acquisition', methods=["GET"])
+def panel_acquisition():
     profile_id = session['scholarKey']
     dataframe, column_art = table_maganer.get_df_table(profile_id)
     select_year = dataframe.dropna(subset=['year'])["year"].unique().tolist()
-    return render_template(
-        'panel.html',
-        df=dataframe,
-        user=session['username'],
-        rol=session['CustomerRol'],
-        id_articles=column_art.values,
-        years=select_year
-    )
+    
+    context = {
+        'df': dataframe,
+        'user': session['username'],
+        'rol': session['CustomerRol'],
+        'id_articles': column_art.values,
+        'years': select_year,
+        'active_page': 'acquisition'
+    }
+
+    if request.headers.get('HX-Request'):
+        return render_template('partials/acquisition.html', **context)
+    
+    return render_template('base_panel.html', **context)
+
+@panel_general.route('/Panel/Info', methods=["GET"])
+def panel_info():
+    context = {
+        'user': session['username'],
+        'rol': session['CustomerRol'],
+        'active_page': 'info'
+    }
+    
+    if request.headers.get('HX-Request'):
+        return render_template('partials/info.html', **context)
+    
+    return render_template('base_panel.html', **context)
+
+@panel_general.route('/Panel/Report', methods=["GET"])
+def panel_report():
+    context = {
+        'user': session['username'],
+        'rol': session['CustomerRol'],
+        'active_page': 'report'
+    }
+    
+    if request.headers.get('HX-Request'):
+        return render_template('partials/report.html', **context)
+    
+    return render_template('base_panel.html', **context)
 
 @panel_general.route('/Panel', methods=["POST"])
 def panel_post():
@@ -48,14 +85,19 @@ def panel_post():
         except:
             pass
 
-    return render_template(
-        'panel.html',
-        df=dataframe,
-        user=session['username'],
-        rol=session['CustomerRol'],
-        id_articles=column_art.values,
-        years=dataframe.dropna(subset=['year'])["year"].unique().tolist()
-    )
+    context = {
+        'df': dataframe,
+        'user': session['username'],
+        'rol': session['CustomerRol'],
+        'id_articles': column_art.values,
+        'years': dataframe.dropna(subset=['year'])["year"].unique().tolist(),
+        'active_page': 'acquisition'
+    }
+    
+    if request.headers.get('HX-Request'):
+         return render_template('partials/acquisition.html', **context)
+
+    return render_template('base_panel.html', **context)
 
 @panel_general.route('/Panel/Update_Table', methods=["POST"])
 def table_update():

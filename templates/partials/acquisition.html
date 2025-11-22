@@ -1,0 +1,7 @@
+{% from 'components/table.jinja2' import table_articles, search %}
+
+<div id="Adquisicion">
+    {{ search(years) }}
+    {{ table_articles(df, id_articles) }}
+</div>
+<script src="{{ url_for('static', filename='js/selectAll.js') }}"></script>
