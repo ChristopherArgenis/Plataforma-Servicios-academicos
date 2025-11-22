@@ -16,26 +16,26 @@
         {{ render_messages() }}
     </div>
 
-    <div class="card">
-        <div class="tab-switch btn-group" role="group">
-            <button type="button" class="btn btn-light active" id="loginTab">Iniciar Sesión</button>
-            <button type="button" class="btn btn-light" id="registerTab">Registrarse</button>
+    <div class="card shadow-lg rounded-4">
+        <div class="tab-switch btn-group" role="group" aria-label="Toggle login and register">
+            <button type="button" class="btn btn-light active rounded-top-4" id="loginTab">Iniciar Sesión</button>
+            <button type="button" class="btn btn-light rounded-top-4" id="registerTab">Registrarse</button>
         </div>
 
         <!-- Formulario de inicio de sesión -->
         <div id="loginForm">
-            <h4 class="mb-3">Iniciar Sesión</h4>
-            <p class="text-muted">Ingresa tus credenciales para acceder</p>
+            <h4 class="mb-3 fw-bold text-primary">Iniciar Sesión</h4>
+            <p class="text-muted mb-4">Ingresa tus credenciales para acceder</p>
             <form method="POST">
                 <div class="mb-3">
                     <label for="loginEmail" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="loginEmail" placeholder="tu@email.com" name="email" required>
+                    <input type="email" class="form-control rounded-3" id="loginEmail" placeholder="tu@email.com" name="email" autocomplete="username" required>
                 </div>
                 <div class="mb-3">
                     <label for="loginPassword" class="form-label">Contraseña</label>
                     <div class="input-group">
-                        <input type="password" class="form-control" id="loginPassword" name="password">
-                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('loginPassword')">
+                        <input type="password" class="form-control rounded-start-3" id="loginPassword" name="password" autocomplete="current-password">
+                        <button class="btn btn-outline-secondary rounded-end-3" type="button" id="toggleLoginPassword" aria-label="Mostrar contraseña">
                             <i class="bi bi-eye"></i>
                         </button>
                     </div>
@@ -43,14 +43,19 @@
                 <div class="mb-3">
                     <label for="loginConfirmPassword" class="form-label">Confirmar Contraseña</label>
                     <div class="input-group">
-                        <input type="password" class="form-control" id="loginConfirmPassword">
-                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('loginConfirmPassword')">
+                        <input type="password" class="form-control rounded-start-3" id="loginConfirmPassword" autocomplete="off">
+                        <button class="btn btn-outline-secondary rounded-end-3" type="button" id="toggleLoginConfirmPassword" aria-label="Mostrar confirmar contraseña">
                             <i class="bi bi-eye"></i>
                         </button>
                     </div>
                     <small class="text-danger d-none" id="loginMismatch">Las contraseñas no coinciden</small>
                 </div>
-                <button type="submit" class="btn btn-primary w-100 disabled-btn" id="loginButton" formaction="{{ url_for('user.login') }}">
+                
+                <div class="mb-3 text-end">
+                    <a href="#" class="text-decoration-none small">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 disabled-btn rounded-3 py-2" id="loginButton" formaction="{{ url_for('user.login') }}">
                     <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
                 </button>
             </form>
@@ -58,22 +63,22 @@
 
         <!-- Formulario de registro -->
         <div id="registerForm" style="display: none;">
-            <h4 class="mb-3">Registrarse</h4>
-            <p class="text-muted">Crea tu cuenta ingresando la información requerida</p>
+            <h4 class="mb-3 fw-bold text-success">Registrarse</h4>
+            <p class="text-muted mb-4">Crea tu cuenta ingresando la información requerida</p>
             <form method="POST">
                 <div class="mb-3">
                     <label for="name" class="form-label">Nombre</label>
-                    <input type="text" class="form-control" id="name" placeholder="Tu nombre" name="username" required>
+                    <input type="text" class="form-control rounded-3" id="name" placeholder="Tu nombre" name="username" autocomplete="name" required>
                 </div>
                 <div class="mb-3">
                     <label for="registerEmail" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="registerEmail" placeholder="tu@email.com" name="email" required>
+                    <input type="email" class="form-control rounded-3" id="registerEmail" placeholder="tu@email.com" name="email" autocomplete="email" required>
                 </div>
                 <div class="mb-3">
                     <label for="registerPassword" class="form-label">Contraseña</label>
                     <div class="input-group">
-                        <input type="password" class="form-control" id="registerPassword" name="password">
-                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('registerPassword')">
+                        <input type="password" class="form-control rounded-start-3" id="registerPassword" name="password" autocomplete="new-password">
+                        <button class="btn btn-outline-secondary rounded-end-3" type="button" id="toggleRegisterPassword" aria-label="Mostrar contraseña">
                             <i class="bi bi-eye"></i>
                         </button>
                     </div>
@@ -81,14 +86,14 @@
                 <div class="mb-3">
                     <label for="registerConfirmPassword" class="form-label">Confirmar Contraseña</label>
                     <div class="input-group">
-                        <input type="password" class="form-control" id="registerConfirmPassword">
-                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('registerConfirmPassword')">
+                        <input type="password" class="form-control rounded-start-3" id="registerConfirmPassword" autocomplete="new-password">
+                        <button class="btn btn-outline-secondary rounded-end-3" type="button" id="toggleRegisterConfirmPassword" aria-label="Mostrar confirmar contraseña">
                             <i class="bi bi-eye"></i>
                         </button>
                     </div>
                     <small class="text-danger d-none" id="registerMismatch">Las contraseñas no coinciden</small>
                 </div>
-                <button type="submit" class="btn btn-primary w-100 disabled-btn" id="registerButton" formaction="{{ url_for('user.register') }}">
+                <button type="submit" class="btn btn-primary w-100 disabled-btn rounded-3 py-2" id="registerButton" formaction="{{ url_for('user.register') }}">
                     <i class="bi bi-person-plus"></i> Crear Cuenta
                 </button>
             </form>
