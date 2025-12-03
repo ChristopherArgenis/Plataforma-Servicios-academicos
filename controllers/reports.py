@@ -54,3 +54,7 @@ def generate_report():
     doc_model.save(output_path)
 
     return send_file(output_path, as_attachment=True, download_name="Reporte_Academico.docx")
+
+@report.route('/save_books', methods=['POST'])
+def save_books():
+    return {'status': 'success', 'message': 'Libros guardados correctamente'}

@@ -1,6 +1,7 @@
 <!-- {% from 'bootstrap4/table.html' import render_table %} -->
 {% from 'components/table.jinja2' import prueba, table_articles, search %}
 {% from 'components/report.jinja2' import accordion, steps_report, inputs_report, button_report %}
+{% from 'components/modals.jinja2' import confirmSaveBooksModal %}
 {% from 'components/admin.jinja2' import selectTable %}
 {% from 'components/info.jinja2' import selectForm %}
 
@@ -77,6 +78,7 @@
                     {{ steps_report() }}
                     {{ inputs_report() }}
                     {{ button_report() }}
+                    {{ confirmSaveBooksModal() }}
                 </div>
                 <div id="Tables" style="display: none;">
                     {{ selectTable() }}
@@ -88,5 +90,6 @@
     <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
     <script src="{{ url_for('static', filename='js/steps.js') }}"></script>
     <script src="{{ url_for('static', filename='js/selectAll.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/report.js') }}"></script>
 </body>
 </html>

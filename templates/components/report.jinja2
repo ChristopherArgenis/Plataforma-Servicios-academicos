@@ -63,7 +63,7 @@
     </div>
     <div class="step active" id="step-1">
       <div class="circle shadow-sm"><i class="bi bi-pencil-square"></i></div>
-      <div class="label fw-bold">Datos</div>
+      <div class="label fw-bold">Libros</div>
     </div>
     <div class="step" id="step-2">
       <div class="circle shadow-sm"><i class="bi bi-journal-text"></i></div>
@@ -125,31 +125,32 @@
         <form id="formularioCientifico">
             <h5 class="mb-4 text-secondary border-bottom pb-2">Información de Investigación</h5>
             
-            <div class="row g-3">
-                <div class="col-md-12">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="investigacion" placeholder="Investigación">
-                        <label for="investigacion">Investigación</label>
+            <div id="librosContainer">
+                <div class="row g-3 dynamic-book-row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="librosCientificos[]" placeholder="Libros científicos">
+                            <label>Libros científicos</label>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="librosCientificos" placeholder="Libros científicos">
-                        <label for="librosCientificos">Libros científicos</label>
-                    </div>
-                </div>
 
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <input type="number" class="form-control" id="capitulosLibro" placeholder="Capítulos del libro">
-                        <label for="capitulosLibro">Capítulos del libro</label>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="number" class="form-control" name="capitulosLibro[]" placeholder="Capítulos del libro">
+                            <label>Capítulos del libro</label>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <div class="d-flex justify-content-start mb-3">
+                <button type="button" class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" id="btnAddBook" title="Agregar otro libro">
+                    <i class="bi bi-plus-lg"></i>
+                </button>
+            </div>
+
             <div class="d-flex justify-content-end mt-4">
-                <button type="submit" class="btn btn-success text-white shadow-sm">
+                <button type="button" class="btn btn-success text-white shadow-sm" id="btnOpenSaveBooksModal">
                     <i class="bi bi-save me-2"></i> Guardar Cambios
                 </button>
             </div>
@@ -245,39 +246,41 @@
         <form id="formularioCursos4">
             <h5 class="mb-4 text-secondary border-bottom pb-2">Cursos Impartidos</h5>
             
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="materia4" placeholder="Materia">
-                        <label for="materia4">Materia</label>
+            <div id="cursosContainer">
+                <div class="row g-3 dynamic-course-row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="materia4[]" placeholder="Materia">
+                            <label>Materia</label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="nivel4" placeholder="Nivel">
-                        <label for="nivel4">Nivel</label>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="nivel4[]" placeholder="Nivel">
+                            <label>Nivel</label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-md-4">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="periodo4" placeholder="Período">
-                        <label for="periodo4">Período</label>
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="periodo4[]" placeholder="Período">
+                            <label>Período</label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-md-8">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="institucion4" placeholder="Institución">
-                        <label for="institucion4">Institución</label>
+                    <div class="col-md-8">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="institucion4[]" placeholder="Institución">
+                            <label>Institución</label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-md-12">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="programas4" placeholder="Programas">
-                        <label for="programas4">Programas / Herramientas</label>
+                    <div class="col-md-12">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="programas4[]" placeholder="Programas">
+                            <label>Programas / Herramientas</label>
+                        </div>
                     </div>
                 </div>
             </div>
