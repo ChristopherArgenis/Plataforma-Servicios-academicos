@@ -104,3 +104,27 @@ class Articles(db.Model):
     volume = db.Column(db.Integer, unique=False, nullable=True)
     pages = db.Column(db.String(20), unique=False, nullable=False)
     year = db.Column(db.Integer, nullable=True, default=0)
+
+
+class InformationAcademic(db.Model):
+    """
+    Modelo que almacena la información académica del usuario para el informe anual.
+
+    Attributes:
+        id (int): Identificador único.
+        cliente_id (int): ID del cliente asociado.
+        sni (str): Nivel SNI.
+        pride (str): Nivel PRIDE.
+        departamento (str): Departamento de adscripción.
+        categoria (str): Categoría y Nivel (ej. "Asociado A").
+    """
+    __tablename__ = 'InformationAcademic'
+
+    id = db.Column(db.Integer, primary_key=True)
+    cliente_id = db.Column(db.Integer, db.ForeignKey('Cliente.id'), nullable=False)
+    sni = db.Column(db.String(50), nullable=True)
+    pride = db.Column(db.String(50), nullable=True)
+    departamento = db.Column(db.String(100), nullable=True)
+    categoria = db.Column(db.String(50), nullable=True)
+
+    cliente = db.relationship('Cliente', backref=db.backref('information_academic', uselist=False))

@@ -84,3 +84,71 @@ class DocumentService:
             print("--- Fin del Contenido ---")
         else:
             print("No se puede imprimir el contenido. El documento no está cargado.")
+
+class Plantilla(DocumentService):
+    """
+    Clase que hereda de DocumentService para realizar reemplazos e inserciones específicas
+    en un documento basado en una plantilla.
+    """
+    def __init__(self, document_model: DocumentModel):
+        """
+        Inicializa la clase Plantilla con una instancia de DocumentModel y los índices de inicio para inserciones.
+
+        Args:
+            document_model (DocumentModel): Una instancia de DocumentModel.
+            insertion_start_indices (dict, optional): Un diccionario donde las claves son nombres
+                                                     de sección y los valores son los índices de
+                                                     párrafo donde comenzar las inserciones.
+                                                     Defaults to None.
+        """
+        super().__init__(document_model)
+        self.insertion_start_indices = {"Investigacion":16, "Docencia":27, "Difusion":37,
+                                        "Divulgacion":45, "Patentes":47, "Intercambio Académico": 51,
+                                        "Proyectos financiados":54, "Participación en comisiones académicas":56,
+                                        "Actividades de vinculación":59, "Otros":61,
+                                        "3 artículos más importantes/relevantes":65,
+                                        "Citas del año":67}
+
+    # Puedes añadir más métodos aquí para operaciones específicas de tu plantilla
+    # Por ejemplo, un método para rellenar los datos del investigador
+    def complete_researcher_data(self, information: dict):
+        """
+        Rellena los campos de datos del investigador en la plantilla usando un diccionario.
+
+        Args:
+            information (dict): Un diccionario con los datos del investigador (nombre,
+                                categoria_nivel, departamento, sni, pride).
+        """
+        replacements = {
+            3: f"Nombre: {information.get('nombre', '')}",
+            4: f"Categoría y nivel: {information.get('categoria_nivel', '')}",
+            5: f"Departamento: {information.get('departamento', '')}",
+            6: f"SNI: {information.get('sni', '')}",
+            7: f"PRIDE: {information.get('pride', '')}"
+        }
+        for index, text in replacements.items():
+            self.replace_paragraph_text(index, text)
+
+    # Método para insertar elementos en una sección por nombre o índice
+    def insertar_seccion(self, section_key_or_index, items_list):
+        """
+        Inserta una lista de elementos en una sección específica del documento
+        usando una clave de sección (nombre) o un índice de párrafo.
+
+        Args:
+            section_key_or_index (str or int): La clave de la sección (nombre, por ejemplo "Investigacion") o
+                                               el índice del párrafo donde comenzar a insertar.
+            items_list (list): Una lista de cadenas de texto a insertar.
+
+        Example:
+            Para insertar en la sección "Investigacion":
+            plantilla_instance.insertar_seccion("Investigacion", ["Publicacion 1", "Publicacion 2"])
+
+            Para insertar comenzando en el párrafo con índice 20:
+            plantilla_instance.insertar_seccion(20, ["Item 1", "Item 2"])
+        """
+        start_index = self.insertion_start_indices.get(section_key_or_index, section_key_or_index)
+        if isinstance(start_index, int):
+            self.insert_texts_in_paragraphs(start_index, items_list)
+        else:
+            print(f"No se pudo insertar en la sección '{section_key_or_index}'. La clave o índice no es válido.")
