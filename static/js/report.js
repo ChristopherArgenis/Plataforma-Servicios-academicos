@@ -133,4 +133,44 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Confirm button not found');
         }
     }
+
+    // === DIFUSION LOGIC ===
+    
+    // Toggle between Congreso and Evento fields
+    const tipoDifusionRadios = document.querySelectorAll('input[name="tipoDifusion"]');
+    tipoDifusionRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            const congresoFields = document.getElementById('congresoFields');
+            const eventoFields = document.getElementById('eventoFields');
+            
+            if (this.value === 'congreso') {
+                if (congresoFields) congresoFields.style.display = 'block';
+                if (eventoFields) eventoFields.style.display = 'none';
+            } else if (this.value === 'evento') {
+                if (congresoFields) congresoFields.style.display = 'none';
+                if (eventoFields) eventoFields.style.display = 'block';
+            }
+        });
+    });
+
+    // Add students dynamically
+    const btnAddStudent = document.getElementById('btnAddStudent');
+    if (btnAddStudent) {
+        btnAddStudent.addEventListener('click', function() {
+            const estudiantesContainer = document.getElementById('estudiantesContainer');
+            if (estudiantesContainer) {
+                const rows = estudiantesContainer.getElementsByClassName('dynamic-student-row');
+                if (rows.length > 0) {
+                    const lastRow = rows[rows.length - 1];
+                    const newRow = lastRow.cloneNode(true);
+                    
+                    // Clear input in the new row
+                    const input = newRow.querySelector('input');
+                    if (input) input.value = '';
+
+                    estudiantesContainer.appendChild(newRow);
+                }
+            }
+        });
+    }
 });

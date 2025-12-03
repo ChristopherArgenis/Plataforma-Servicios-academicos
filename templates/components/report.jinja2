@@ -74,6 +74,10 @@
       <div class="label fw-bold">Cursos</div>
     </div>
     <div class="step" id="step-4">
+      <div class="circle shadow-sm"><i class="bi bi-megaphone"></i></div>
+      <div class="label fw-bold">Difusión</div>
+    </div>
+    <div class="step" id="step-5">
       <div class="circle shadow-sm"><i class="bi bi-check-lg"></i></div>
       <div class="label fw-bold">Finalizar</div>
     </div>
@@ -96,6 +100,10 @@
     </div>
 
     <div id="paso4" style="display: none;">
+        {{ difusion() }}
+    </div>
+
+    <div id="paso5" style="display: none;">
       <div class="card shadow border-0 rounded-4">
         <div class="card-body text-center p-5">
             <h3 class="text-success mb-4"><i class="bi bi-check-circle-fill display-4"></i></h3>
@@ -301,6 +309,181 @@
         </div>
         <div class="card-body">
             {{ body_courses() }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro body_difusion() %}
+    <div class="p-4 bg-white">
+        <form id="formularioDifusion">
+            <h5 class="mb-4 text-secondary border-bottom pb-2">Difusión del Conocimiento</h5>
+            
+            <!-- Selector de Tipo -->
+            <div class="mb-4">
+                <label class="form-label fw-bold">Tipo de Registro</label>
+                <div class="btn-group w-100" role="group">
+                    <input type="radio" class="btn-check" name="tipoDifusion" id="tipoCongreso" value="congreso">
+                    <label class="btn btn-outline-primary" for="tipoCongreso">
+                        <i class="bi bi-people me-2"></i>Congreso
+                    </label>
+                    
+                    <input type="radio" class="btn-check" name="tipoDifusion" id="tipoEvento" value="evento">
+                    <label class="btn btn-outline-primary" for="tipoEvento">
+                        <i class="bi bi-calendar-event me-2"></i>Evento
+                    </label>
+                </div>
+            </div>
+
+            <!-- Campos de Congreso -->
+            <div id="congresoFields" style="display: none;">
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="tituloTrabajo" placeholder="Título del trabajo">
+                            <label>Título del trabajo</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="autores" placeholder="Autores">
+                            <label>Autores</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="nombreEvento" placeholder="Nombre del evento">
+                            <label>Nombre del evento</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="lugar" placeholder="Lugar">
+                            <label>Lugar</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-floating">
+                            <input type="date" class="form-control" name="fechaInicio" placeholder="Fecha inicio">
+                            <label>Fecha inicio</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-floating">
+                            <input type="date" class="form-control" name="fechaFin" placeholder="Fecha fin">
+                            <label>Fecha fin</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="ponente" placeholder="Ponente">
+                            <label>Ponente</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Estudiantes</label>
+                        <div id="estudiantesContainer">
+                            <div class="input-group mb-2 dynamic-student-row">
+                                <input type="text" class="form-control" name="estudiantes[]" placeholder="Nombre del estudiante">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddStudent">
+                            <i class="bi bi-plus-lg me-1"></i> Agregar estudiante
+                        </button>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Modalidad</label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="modalidad" id="modalidadPresencial" value="presencial">
+                            <label class="btn btn-outline-secondary" for="modalidadPresencial">Presencial</label>
+                            
+                            <input type="radio" class="btn-check" name="modalidad" id="modalidadLinea" value="linea">
+                            <label class="btn btn-outline-secondary" for="modalidadLinea">En línea</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Alcance</label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="alcance" id="alcanceInternacional" value="internacional">
+                            <label class="btn btn-outline-secondary" for="alcanceInternacional">Internacional</label>
+                            
+                            <input type="radio" class="btn-check" name="alcance" id="alcanceNacional" value="nacional">
+                            <label class="btn btn-outline-secondary" for="alcanceNacional">Nacional</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campos de Evento -->
+            <div id="eventoFields" style="display: none;">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <select class="form-select" name="tipoEvento">
+                                <option value="" selected disabled>Seleccionar...</option>
+                                <option value="coloquios">Coloquios</option>
+                                <option value="conferencias">Conferencias</option>
+                                <option value="congresos">Congresos</option>
+                                <option value="cursos">Cursos</option>
+                                <option value="diplomados">Diplomados</option>
+                                <option value="foros">Foros</option>
+                                <option value="mesas_redondas">Mesas redondas</option>
+                                <option value="seminarios">Seminarios</option>
+                                <option value="simposios">Simposios</option>
+                                <option value="talleres">Talleres</option>
+                                <option value="otras">Otras actividades</option>
+                            </select>
+                            <label>Tipo de evento</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="nombreEventoSimple" placeholder="Nombre del evento">
+                            <label>Nombre del evento</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="number" class="form-control" name="numPonentes" placeholder="Número de ponentes" min="0">
+                            <label>Número de ponentes</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="number" class="form-control" name="numAsistentes" placeholder="Número de asistentes" min="0">
+                            <label>Número de asistentes</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mt-4">
+                <button type="submit" class="btn btn-success text-white shadow-sm">
+                    <i class="bi bi-save me-2"></i> Guardar Cambios
+                </button>
+            </div>
+        </form>
+    </div>
+{% endmacro %}
+
+{% macro difusion() %}
+    <div class="card shadow border-0 rounded-3 mb-4">
+        <div class="card-header bg-white border-0 pt-4 px-4">
+            <h4 class="text-primary fw-bold"><i class="bi bi-megaphone me-2"></i> Difusión del Conocimiento</h4>
+        </div>
+        <div class="card-body">
+            {{ body_difusion() }}
         </div>
     </div>
 {% endmacro %}
