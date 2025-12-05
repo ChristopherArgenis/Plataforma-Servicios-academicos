@@ -153,6 +153,23 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // === COMITES Y JURADO LOGIC ===
+    const tipoParticipacionRadios = document.querySelectorAll('input[name="tipoParticipacion"]');
+    tipoParticipacionRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            const comiteFields = document.getElementById('comiteFields');
+            const juradoFields = document.getElementById('juradoFields');
+            
+            if (this.value === 'comite') {
+                if (comiteFields) comiteFields.style.display = 'block';
+                if (juradoFields) juradoFields.style.display = 'none';
+            } else if (this.value === 'jurado') {
+                if (comiteFields) comiteFields.style.display = 'none';
+                if (juradoFields) juradoFields.style.display = 'block';
+            }
+        });
+    });
+
     // Add students dynamically
     const btnAddStudent = document.getElementById('btnAddStudent');
     if (btnAddStudent) {

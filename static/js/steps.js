@@ -8,6 +8,7 @@
       document.getElementById("paso3"),
       document.getElementById("paso4"),
       document.getElementById("paso5"),
+      document.getElementById("paso6"),
     ];
 
     const pasosVisuales = [
@@ -16,6 +17,7 @@
       document.getElementById("step-3"),
       document.getElementById("step-4"),
       document.getElementById("step-5"),
+      document.getElementById("step-6"),
     ];
 
     const progressFill = document.getElementById("progress-fill");

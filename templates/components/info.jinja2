@@ -6,7 +6,8 @@
                 <p class="card-text text-muted mb-4">Aquello relacionado con temas de Docencia.</p>
                 <form action="{{ url_for('panel.admin_read') }}" method="GET">
                     <input type="hidden" name="table" value="Docencia">
-                    <button type="submit" class="btn btn-dark mt-auto rounded-pill">Llenar Formulario</button>
+                    {# Botón para ver datos #}
+                    <button type="submit" class="btn btn-dark mt-auto rounded-pill">Ver Datos</button>
                 </form>
             </div>
         </div>
@@ -21,7 +22,8 @@
                 <p class="card-text text-muted mb-4">Todos aquello relacionado con la Difusión y Divulgacion.</p>
                 <form action="{{ url_for('panel.admin_read') }}" method="GET">
                     <input type="hidden" name="table" value="Promocion">
-                    <button type="submit" class="btn btn-dark mt-auto text-white rounded-pill">Llenar Formulario</button>
+                    {# Botón para ver datos #}
+                    <button type="submit" class="btn btn-dark mt-auto text-white rounded-pill">Ver Datos</button>
                 </form>
             </div>
         </div>
@@ -36,7 +38,8 @@
                 <p class="card-text text-muted mb-4">Visitantes recibidos y/o estancias académicas.</p>
                 <form action="{{ url_for('panel.admin_read') }}" method="GET">
                     <input type="hidden" name="table" value="Intercambio">
-                    <button type="submit" class="btn btn-dark mt-auto text-white rounded-pill">Llenar Formulario</button>
+                    {# Botón para ver datos #}
+                    <button type="submit" class="btn btn-dark mt-auto text-white rounded-pill">Ver Datos</button>
                 </form>
             </div>
         </div>
@@ -51,7 +54,8 @@
                 <p class="card-text text-muted mb-4">Informacion de financiacion de proyectos.</p>
                 <form action="{{ url_for('panel.admin_read') }}" method="GET">
                     <input type="hidden" name="table" value="Proyectos">
-                    <button type="submit" class="btn btn-dark mt-auto text-white rounded-pill">Llenar Formulario</button>
+                    {# Botón para ver datos #}
+                    <button type="submit" class="btn btn-dark mt-auto text-white rounded-pill">Ver Datos</button>
                 </form>
             </div>
         </div>
@@ -66,7 +70,8 @@
                 <p class="card-text text-muted mb-4">Participación en comisiones académicas, tanto en la UNAM como externas.</p>
                 <form action="{{ url_for('panel.admin_read') }}" method="GET">
                     <input type="hidden" name="table" value="Participacion">
-                    <button type="submit" class="btn btn-dark mt-auto text-white rounded-pill">Llenar Formulario</button>
+                    {# Botón para ver datos #}
+                    <button type="submit" class="btn btn-dark mt-auto text-white rounded-pill">Ver Datos</button>
                 </form>
             </div>
         </div>
@@ -81,7 +86,8 @@
                 <p class="card-text text-muted mb-4">Servicios técnicos y/o proyectos realizados.</p>
                 <form action="{{ url_for('panel.admin_read') }}" method="GET">
                     <input type="hidden" name="table" value="Actividades">
-                    <button type="submit" class="btn btn-dark mt-auto text-white rounded-pill">Llenar Formulario</button>
+                    {# Botón para ver datos #}
+                    <button type="submit" class="btn btn-dark mt-auto text-white rounded-pill">Ver Datos</button>
                 </form>
             </div>
         </div>
@@ -96,7 +102,8 @@
                 <p class="card-text text-muted mb-4">Distinciones, premios, reconocimientos, logros, etc...</p>
                 <form action="{{ url_for('panel.admin_read') }}" method="GET">
                     <input type="hidden" name="table" value="Otros">
-                    <button type="submit" class="btn btn-dark mt-auto text-white rounded-pill">Llenar Formulario</button>
+                    {# Botón para ver datos #}
+                    <button type="submit" class="btn btn-dark mt-auto text-white rounded-pill">Ver Datos</button>
                 </form>
             </div>
         </div>
@@ -104,8 +111,9 @@
 {% endmacro %}
 
 {% macro selectForm() %}
-    <div id="card-selection-screen" class="container mt-4 mb-4 p-4 bg-white rounded shadow" style="max-width: 900px;">
-        <h1 class="text-center mb-5">Selecciona un Formulario</h1>
+    {# Contenedor principal con estilo de tarjeta #}
+    <div id="card-selection-screen" class="card shadow-sm border-0 rounded-3 container mt-4 mb-4 p-4" style="max-width: 900px;">
+        <h1 class="text-center mb-5">Registros</h1>
         <div class="row justify-content-center">
             {{ card_Docencia() }}
             {{ card_Promocion() }}
