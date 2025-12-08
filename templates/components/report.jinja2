@@ -182,7 +182,7 @@
     </div>
 
     <div id="paso9" style="display: none;">
-        {{ simple_step_card("Financiación", "Describe aquí los detalles correspondientes a la sección Financiación", "bi-cash-coin") }}
+        {{ finance() }}
     </div>
 
     <div id="paso10" style="display: none;">
@@ -363,7 +363,11 @@
 
                     <div class="col-md-6">
                         <div class="form-floating">
-                            <input type="text" class="form-control" name="nivel4[]" placeholder="Nivel">
+                            <select class="form-select" name="nivel4[]" aria-label="Nivel">
+                                <option value="" selected disabled>Seleccionar...</option>
+                                <option value="licenciatura">Licenciatura</option>
+                                <option value="posgrado">Posgrado</option>
+                            </select>
                             <label>Nivel</label>
                         </div>
                     </div>
@@ -437,8 +441,8 @@
                 <div class="row g-3">
                     <div class="col-md-12">
                         <div class="form-floating">
-                            <input type="text" class="form-control" name="tituloTrabajo" placeholder="Título del trabajo">
-                            <label>Título del trabajo</label>
+                            <input type="text" class="form-control" name="tituloTrabajo" placeholder="Título">
+                            <label>Título del trabajo o Plática</label>
                         </div>
                     </div>
 
@@ -670,6 +674,86 @@
         </div>
         <div class="card-body">
             {{ body_comites_jurado() }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro body_finance() %}
+    <div class="p-4 bg-white">
+        <form id="formularioFinanciacion">
+            <h5 class="mb-4 text-secondary border-bottom pb-2">Información de Financiación</h5>
+            
+            <div class="row g-3">
+                <div class="col-md-12">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="tituloFinanciacion" placeholder="Título">
+                        <label>Título</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" name="participantesFinanciacion">
+                            <option value="" selected disabled>Seleccionar...</option>
+                            <option value="Academicos">Académicos</option>
+                            <option value="Estudiantes">Estudiantes</option>
+                            <option value="Instituciones">Instituciones</option>
+                        </select>
+                        <label>Participantes</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="fuenteFinanciamiento" placeholder="Fuente de Financiamiento">
+                        <label>Fuente de Financiamiento</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" name="clasificacionFinanciacion">
+                            <option value="" selected disabled>Seleccionar...</option>
+                            <option value="Basico">Básico</option>
+                            <option value="Aplicado">Aplicado</option>
+                            <option value="Desarrollo Tecnologico">Desarrollo Tecnológico</option>
+                            <option value="Innovación">Innovación</option>
+                            <option value="Frontera">Frontera</option>
+                        </select>
+                        <label>Clasificar como</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" name="indoleFinanciacion">
+                            <option value="" selected disabled>Seleccionar...</option>
+                            <option value="Investigación">Investigación</option>
+                            <option value="infraestructura">Infraestructura</option>
+                            <option value="vinculación">Vinculación</option>
+                            <option value="Divulgacion">Divulgación</option>
+                        </select>
+                        <label>Definir índole</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mt-4">
+                <button type="submit" class="btn btn-success text-white shadow-sm">
+                    <i class="bi bi-save me-2"></i> Guardar Cambios
+                </button>
+            </div>
+        </form>
+    </div>
+{% endmacro %}
+
+{% macro finance() %}
+    <div class="card shadow border-0 rounded-3 mb-4">
+        <div class="card-header bg-white border-0 pt-4 px-4">
+            <h4 class="text-primary fw-bold"><i class="bi bi-cash-coin me-2"></i> Financiación</h4>
+        </div>
+        <div class="card-body">
+            {{ body_finance() }}
         </div>
     </div>
 {% endmacro %}
