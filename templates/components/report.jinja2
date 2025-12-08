@@ -55,35 +55,93 @@
     </div>
 {% endmacro %}
 
+{% macro simple_step_card(title, placeholder, icon_class) %}
+    <div class="card shadow border-0 rounded-3 mb-4">
+        <div class="card-header bg-white border-0 pt-4 px-4">
+            <h4 class="text-primary fw-bold"><i class="bi {{ icon_class }} me-2"></i> {{ title }}</h4>
+        </div>
+        <div class="card-body p-4">
+             <div class="form-floating">
+                <textarea class="form-control" placeholder="{{ placeholder }}" style="height: 200px"></textarea>
+                <label>{{ placeholder }}</label>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
 {% macro steps_report() %}
 <!-- Barra de pasos -->
+<!-- Barra de pasos - Fila Superior -->
   <div class="step-bar mb-5 mx-auto" style="max-width: 1000px;">
-    <div class="progress-line">
-      <div id="progress-fill" class="progress-line-fill"></div>
+    <div class="progress-line" id="progress-line-1">
+      <div id="progress-fill-1" class="progress-line-fill"></div>
     </div>
-    <div class="step active" id="step-1">
-      <div class="circle shadow-sm"><i class="bi bi-pencil-square"></i></div>
-      <div class="label fw-bold">Libros</div>
+    <div class="d-flex justify-content-between w-100 position-relative">
+        <div class="step active" id="step-1">
+            <div class="circle shadow-sm"><i class="bi bi-pencil-square"></i></div>
+            <div class="label fw-bold">Libros</div>
+        </div>
+        <div class="step" id="step-2">
+            <div class="circle shadow-sm"><i class="bi bi-journal-text"></i></div>
+            <div class="label fw-bold">Artículos</div>
+        </div>
+        <div class="step" id="step-3">
+            <div class="circle shadow-sm"><i class="bi bi-book"></i></div>
+            <div class="label fw-bold">Cursos</div>
+        </div>
+        <div class="step" id="step-4">
+            <div class="circle shadow-sm"><i class="bi bi-people-fill"></i></div>
+            <div class="label fw-bold">Comités</div>
+        </div>
+        <div class="step" id="step-5">
+            <div class="circle shadow-sm"><i class="bi bi-megaphone"></i></div>
+            <div class="label fw-bold">Difusión</div>
+        </div>
+        <div class="step" id="step-6">
+            <div class="circle shadow-sm"><i class="bi bi-broadcast"></i></div>
+            <div class="label fw-bold">Divulgación</div>
+        </div>
+        <div class="step" id="step-7">
+            <div class="circle shadow-sm"><i class="bi bi-lightbulb"></i></div>
+            <div class="label fw-bold">Patente</div>
+        </div>
     </div>
-    <div class="step" id="step-2">
-      <div class="circle shadow-sm"><i class="bi bi-journal-text"></i></div>
-      <div class="label fw-bold">Artículos</div>
+  </div>
+
+  <!-- Barra de pasos - Fila Inferior -->
+  <div class="step-bar mb-5 mx-auto" style="max-width: 1000px;">
+    <div class="progress-line" id="progress-line-2">
+      <div id="progress-fill-2" class="progress-line-fill"></div>
     </div>
-    <div class="step" id="step-3">
-      <div class="circle shadow-sm"><i class="bi bi-book"></i></div>
-      <div class="label fw-bold">Cursos</div>
-    </div>
-    <div class="step" id="step-4">
-      <div class="circle shadow-sm"><i class="bi bi-people-fill"></i></div>
-      <div class="label fw-bold">Comités</div>
-    </div>
-    <div class="step" id="step-5">
-      <div class="circle shadow-sm"><i class="bi bi-megaphone"></i></div>
-      <div class="label fw-bold">Difusión</div>
-    </div>
-    <div class="step" id="step-6">
-      <div class="circle shadow-sm"><i class="bi bi-check-lg"></i></div>
-      <div class="label fw-bold">Finalizar</div>
+    <div class="d-flex justify-content-between w-100 position-relative">
+        <div class="step" id="step-8">
+            <div class="circle shadow-sm"><i class="bi bi-geo-alt"></i></div>
+            <div class="label fw-bold">Estancias</div>
+        </div>
+        <div class="step" id="step-9">
+            <div class="circle shadow-sm"><i class="bi bi-cash-coin"></i></div>
+            <div class="label fw-bold">Financiación</div>
+        </div>
+        <div class="step" id="step-10">
+            <div class="circle shadow-sm"><i class="bi bi-clipboard-check"></i></div>
+            <div class="label fw-bold">Comisiones</div>
+        </div>
+        <div class="step" id="step-11">
+            <div class="circle shadow-sm"><i class="bi bi-link-45deg"></i></div>
+            <div class="label fw-bold">Vinculación</div>
+        </div>
+        <div class="step" id="step-12">
+            <div class="circle shadow-sm"><i class="bi bi-award"></i></div>
+            <div class="label fw-bold">Distinciones</div>
+        </div>
+        <div class="step" id="step-13">
+            <div class="circle shadow-sm"><i class="bi bi-trophy"></i></div>
+            <div class="label fw-bold">Logros</div>
+        </div>
+        <div class="step" id="step-14">
+            <div class="circle shadow-sm"><i class="bi bi-check-lg"></i></div>
+            <div class="label fw-bold">Finalizar</div>
+        </div>
     </div>
   </div>
 {% endmacro %}
@@ -112,6 +170,38 @@
     </div>
 
     <div id="paso6" style="display: none;">
+        {{ simple_step_card("Divulgación", "Describe aquí los detalles correspondientes a la sección Divulgación", "bi-broadcast") }}
+    </div>
+
+    <div id="paso7" style="display: none;">
+        {{ simple_step_card("Patente", "Describe aquí los detalles correspondientes a la sección Patente", "bi-lightbulb") }}
+    </div>
+
+    <div id="paso8" style="display: none;">
+        {{ simple_step_card("Estancias", "Describe aquí los detalles correspondientes a la sección Estancias", "bi-geo-alt") }}
+    </div>
+
+    <div id="paso9" style="display: none;">
+        {{ simple_step_card("Financiación", "Describe aquí los detalles correspondientes a la sección Financiación", "bi-cash-coin") }}
+    </div>
+
+    <div id="paso10" style="display: none;">
+         {{ simple_step_card("Comisiones", "Describe aquí los detalles correspondientes a la sección Comisiones", "bi-clipboard-check") }}
+    </div>
+
+    <div id="paso11" style="display: none;">
+        {{ simple_step_card("Vinculación", "Describe aquí los detalles correspondientes a la sección Vinculación", "bi-link-45deg") }}
+    </div>
+
+    <div id="paso12" style="display: none;">
+        {{ simple_step_card("Distinciones", "Describe aquí los detalles correspondientes a la sección Distinciones", "bi-award") }}
+    </div>
+
+    <div id="paso13" style="display: none;">
+        {{ simple_step_card("Logros", "Describe aquí los detalles correspondientes a la sección Logros", "bi-trophy") }}
+    </div>
+
+    <div id="paso14" style="display: none;">
       <div class="card shadow border-0 rounded-4">
         <div class="card-body text-center p-5">
             <h3 class="text-success mb-4"><i class="bi bi-check-circle-fill display-4"></i></h3>

@@ -9,6 +9,14 @@
       document.getElementById("paso4"),
       document.getElementById("paso5"),
       document.getElementById("paso6"),
+      document.getElementById("paso7"),
+      document.getElementById("paso8"),
+      document.getElementById("paso9"),
+      document.getElementById("paso10"),
+      document.getElementById("paso11"),
+      document.getElementById("paso12"),
+      document.getElementById("paso13"),
+      document.getElementById("paso14"),
     ];
 
     const pasosVisuales = [
@@ -18,9 +26,20 @@
       document.getElementById("step-4"),
       document.getElementById("step-5"),
       document.getElementById("step-6"),
+      document.getElementById("step-7"),
+      document.getElementById("step-8"),
+      document.getElementById("step-9"),
+      document.getElementById("step-10"),
+      document.getElementById("step-11"),
+      document.getElementById("step-12"),
+      document.getElementById("step-13"),
+      document.getElementById("step-14"),
     ];
 
-    const progressFill = document.getElementById("progress-fill");
+    const progressFill1 = document.getElementById("progress-fill-1");
+    const progressFill2 = document.getElementById("progress-fill-2");
+    const SPLIT_INDEX = 7; // Number of steps in the first row
+
     let pasoActual = 0;
 
     function actualizarVista() {
@@ -38,10 +57,28 @@
         }
       });
 
-      // Actualizar ancho de la línea de progreso
-      if(progressFill) {
-          const porcentaje = (pasoActual / (pasosVisuales.length - 1)) * 100;
-          progressFill.style.width = `${porcentaje}%`;
+      // Actualizar ancho de las líneas de progreso
+      if (progressFill1 && progressFill2) {
+          // Calculate percentage for first row
+          let percent1 = 0;
+          if (pasoActual >= SPLIT_INDEX) {
+              percent1 = 100;
+          } else {
+              percent1 = (pasoActual / (SPLIT_INDEX - 1)) * 100;
+          }
+          progressFill1.style.width = `${percent1}%`;
+
+          // Calculate percentage for second row
+          let percent2 = 0;
+          if (pasoActual < SPLIT_INDEX) {
+              percent2 = 0;
+          } else {
+              // Normalized step for second row
+              const stepsInRow2 = pasosVisuales.length - SPLIT_INDEX;
+              const stepInRow2 = pasoActual - SPLIT_INDEX;
+              percent2 = (stepInRow2 / (stepsInRow2 - 1)) * 100;
+          }
+          progressFill2.style.width = `${percent2}%`;
       }
 
       // Habilitar/deshabilitar botones
