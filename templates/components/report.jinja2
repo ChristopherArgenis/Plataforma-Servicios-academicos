@@ -170,7 +170,7 @@
     </div>
 
     <div id="paso6" style="display: none;">
-        {{ simple_step_card("Divulgación", "Describe aquí los detalles correspondientes a la sección Divulgación", "bi-broadcast") }}
+        {{ divulgacion() }}
     </div>
 
     <div id="paso7" style="display: none;">
@@ -178,7 +178,7 @@
     </div>
 
     <div id="paso8" style="display: none;">
-        {{ simple_step_card("Estancias", "Describe aquí los detalles correspondientes a la sección Estancias", "bi-geo-alt") }}
+        {{ estancia() }}
     </div>
 
     <div id="paso9" style="display: none;">
@@ -754,6 +754,181 @@
         </div>
         <div class="card-body">
             {{ body_finance() }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro body_estancia() %}
+    <div class="p-4 bg-white">
+        <form id="formularioEstancia">
+            <h5 class="mb-4 text-secondary border-bottom pb-2">Información de Estancia</h5>
+            
+            <div class="mb-4">
+                <label class="form-label fw-bold">Tipo de Actividad</label>
+                <div class="btn-group w-100" role="group">
+                    <input type="radio" class="btn-check" name="tipoEstancia" id="tipoVisita" value="visita">
+                    <label class="btn btn-outline-primary" for="tipoVisita">
+                        <i class="bi bi-geo-fill me-2"></i>Visita
+                    </label>
+                    
+                    <input type="radio" class="btn-check" name="tipoEstancia" id="tipoEstanciaOption" value="estancia">
+                    <label class="btn btn-outline-primary" for="tipoEstanciaOption">
+                        <i class="bi bi-house-door-fill me-2"></i>Estancia
+                    </label>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="nombreEstancia" placeholder="Nombre">
+                        <label>Nombre</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" name="origenEstancia">
+                            <option value="" selected disabled>Seleccionar...</option>
+                            <option value="Nacional">Nacional</option>
+                            <option value="Extranjero">Extranjero</option>
+                        </select>
+                        <label>Origen</label>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="institucionProcedencia" placeholder="Institución de Procedencia">
+                        <label>Institución de Procedencia</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="date" class="form-control" name="fechaInicioEstancia" placeholder="Fecha Inicio">
+                        <label>Fecha Inicio</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="date" class="form-control" name="fechaFinEstancia" placeholder="Fecha Fin">
+                        <label>Fecha Fin</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mt-4">
+                <button type="submit" class="btn btn-success text-white shadow-sm">
+                    <i class="bi bi-save me-2"></i> Guardar Cambios
+                </button>
+            </div>
+        </form>
+    </div>
+{% endmacro %}
+
+{% macro estancia() %}
+    <div class="card shadow border-0 rounded-3 mb-4">
+        <div class="card-header bg-white border-0 pt-4 px-4">
+            <h4 class="text-primary fw-bold"><i class="bi bi-geo-alt me-2"></i> Estancias</h4>
+        </div>
+        <div class="card-body">
+            {{ body_estancia() }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro body_divulgacion() %}
+    <div class="p-4 bg-white">
+        <form id="formularioDivulgacion">
+            <h5 class="mb-4 text-secondary border-bottom pb-2">Información de Divulgación</h5>
+            
+            <div class="mb-4">
+                <label class="form-label fw-bold">Tipo de Publicación</label>
+                <div class="btn-group w-100" role="group">
+                    <input type="radio" class="btn-check" name="tipoDivulgacion" id="tipoArticulo" value="articulo">
+                    <label class="btn btn-outline-primary" for="tipoArticulo">
+                        <i class="bi bi-file-text me-2"></i>Artículo
+                    </label>
+                    
+                    <input type="radio" class="btn-check" name="tipoDivulgacion" id="tipoLibro" value="libro">
+                    <label class="btn btn-outline-primary" for="tipoLibro">
+                        <i class="bi bi-book me-2"></i>Libro
+                    </label>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-12">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="tituloDivulgacion" placeholder="Título">
+                        <label>Título</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="autoresDivulgacion" placeholder="Autores">
+                        <label>Autores</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="revistaDivulgacion" placeholder="Revista">
+                        <label>Revista</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" name="tipoEventoDivulgacion">
+                            <option value="" selected disabled>Seleccionar...</option>
+                            <option value="coloquios">Coloquios</option>
+                            <option value="conferencias">Conferencias</option>
+                            <option value="congresos">Congresos</option>
+                            <option value="cursos">Cursos</option>
+                            <option value="diplomados">Diplomados</option>
+                            <option value="foros">Foros</option>
+                            <option value="mesas_redondas">Mesas redondas</option>
+                            <option value="seminarios">Seminarios</option>
+                            <option value="simposios">Simposios</option>
+                            <option value="talleres">Talleres</option>
+                            <option value="otras">Otras actividades</option>
+                        </select>
+                        <label>Tipo de Evento</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-bold d-block mb-2">Modalidad</label>
+                    <div class="btn-group w-100" role="group">
+                        <input type="radio" class="btn-check" name="modalidadDivulgacion" id="modalidadPresencialDiv" value="presencial">
+                        <label class="btn btn-outline-secondary" for="modalidadPresencialDiv">Presencial</label>
+                        
+                        <input type="radio" class="btn-check" name="modalidadDivulgacion" id="modalidadLineaDiv" value="linea">
+                        <label class="btn btn-outline-secondary" for="modalidadLineaDiv">En Línea</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mt-4">
+                <button type="submit" class="btn btn-success text-white shadow-sm">
+                    <i class="bi bi-save me-2"></i> Guardar Cambios
+                </button>
+            </div>
+        </form>
+    </div>
+{% endmacro %}
+
+{% macro divulgacion() %}
+    <div class="card shadow border-0 rounded-3 mb-4">
+        <div class="card-header bg-white border-0 pt-4 px-4">
+            <h4 class="text-primary fw-bold"><i class="bi bi-broadcast me-2"></i> Divulgación</h4>
+        </div>
+        <div class="card-body">
+            {{ body_divulgacion() }}
         </div>
     </div>
 {% endmacro %}
