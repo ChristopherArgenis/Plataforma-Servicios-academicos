@@ -79,9 +79,39 @@ document.addEventListener('DOMContentLoaded', function() {
                 const formData = new FormData(form);
 
                 console.log('Sending data to server...'); // Debug
-                fetch('/save_books', {
+                // Update to new explicit route
+                // Use 'libros' logical name route
+                const clientId = document.getElementById('Report')?.dataset.clienteId;
+                formData.append('cliente_id', clientId);
+
+                // Note: The new backend expects JSON payload {cliente_id, data: {libros_cientificos: [], ...}}
+                // But this legacy modal sends FormData directly? 
+                // The new route expects JSON. I need to adapt strictly!
+                
+                // Let's CONVERT FormData to the JSON structure expected by save_libros
+                const rawData = {};
+                for (let [key, value] of formData.entries()) {
+                     let dbKey = key;
+                     if (key.includes('librosCientificos')) dbKey = 'libros_cientificos';
+                     if (key.includes('capitulosLibro')) dbKey = 'capitulos_libro';
+                     
+                     if (key.endsWith('[]')) {
+                         if (!rawData[dbKey]) rawData[dbKey] = [];
+                         rawData[dbKey].push(value);
+                     } else {
+                         rawData[dbKey] = value;
+                     }
+                }
+                
+                const payload = {
+                    cliente_id: clientId,
+                    data: rawData
+                };
+
+                fetch('/Panel/Reporte/libros/guardar', {
                     method: 'POST',
-                    body: formData
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
                 })
                 .then(response => {
                     console.log('Response received:', response); // Debug
