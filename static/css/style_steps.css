@@ -24,7 +24,6 @@ body {
   align-items: center;
   position: relative;
   z-index: 1;
-  cursor: pointer; /* Changed to pointer */
   flex: 1; /* Force equal width */
   text-align: center;
 }
