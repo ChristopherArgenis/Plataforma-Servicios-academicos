@@ -676,7 +676,7 @@
             <div class="mb-4">
                 <label class="form-label fw-bold">Tipo de Participación</label>
                 <div class="btn-group w-100" role="group">
-                    <input type="radio" class="btn-check" name="tipoParticipacion" id="tipoComite" value="comite">
+                    <input type="radio" class="btn-check" name="tipoParticipacion" id="tipoComite" value="comite" checked>
                     <label class="btn btn-outline-primary" for="tipoComite">
                         <i class="bi bi-people me-2"></i>Comité
                     </label>
@@ -685,52 +685,101 @@
                     <label class="btn btn-outline-primary" for="tipoJurado">
                         <i class="bi bi-award me-2"></i>Jurado
                     </label>
+
+                    <input type="radio" class="btn-check" name="tipoParticipacion" id="tipoEstudiantes" value="estudiantes">
+                    <label class="btn btn-outline-primary" for="tipoEstudiantes">
+                        <i class="bi bi-mortarboard me-2"></i>Estudiantes
+                    </label>
                 </div>
             </div>
 
-            <!-- Campos Comunes -->
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <select class="form-select" name="nivelAcademico">
-                            <option value="" selected disabled>Seleccionar...</option>
-                            <option value="licenciatura">Licenciatura</option>
-                            <option value="maestria">Maestría</option>
-                            <option value="doctorado">Doctorado</option>
-                        </select>
-                        <label>Nivel Académico</label>
+            <!-- Campos Comunes (Nivel y Posgrado - Se mantienen para Comité y Jurado, revisar si aplican para Estudiantes, asumimos que no o se ocultan si no se piden explícitamente, pero el request dice "Estudiantes tiene los siguientes campos", lo que implica que son distintos. Ocultaré los comunes cuando sea Estudiantes) -->
+            <div id="commonFields">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <select class="form-select" name="nivelAcademico">
+                                <option value="" selected disabled>Seleccionar...</option>
+                                <option value="licenciatura">Licenciatura</option>
+                                <option value="maestria">Maestría</option>
+                                <option value="doctorado">Doctorado</option>
+                            </select>
+                            <label>Nivel Académico</label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" name="programaPosgrado" placeholder="Programa de Posgrado">
-                        <label>Programa de Posgrado</label>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="programaPosgrado" placeholder="Programa de Posgrado">
+                            <label>Programa de Posgrado</label>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Campos Específicos de Comité -->
-            <div id="comiteFields" class="mt-3" style="display: none;">
-                <label class="form-label fw-bold">Subapartado - Comités</label>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="tesis" id="checkTesis">
-                    <label class="form-check-label" for="checkTesis">
-                        Tesis
+            <div id="comiteFields" class="mt-4">
+                <label class="form-label fw-bold mb-3">Subapartado - Comités</label>
+                <div class="d-flex gap-3">
+                    <input type="checkbox" class="btn-check" id="checkTesis" value="tesis">
+                    <label class="btn btn-outline-secondary px-4 rounded-pill" for="checkTesis">
+                        <i class="bi bi-file-text me-2"></i>Tesis
                     </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="tutoriales" id="checkTutoriales">
-                    <label class="form-check-label" for="checkTutoriales">
-                        Tutoriales
+
+                    <input type="checkbox" class="btn-check" id="checkTutoriales" value="tutoriales">
+                    <label class="btn btn-outline-secondary px-4 rounded-pill" for="checkTutoriales">
+                        <i class="bi bi-person-video3 me-2"></i>Tutoriales
                     </label>
                 </div>
             </div>
 
             <!-- Campos Específicos de Jurado -->
-            <div id="juradoFields" class="mt-3" style="display: none;">
+            <div id="juradoFields" class="mt-4" style="display: none;">
                 <div class="alert alert-light border shadow-sm">
                     <i class="bi bi-info-circle me-2"></i> Se registrará como <strong>Examen de Grado</strong>.
+                </div>
+            </div>
+
+            <!-- Campos Específicos de Estudiantes -->
+            <div id="estudiantesFields" class="mt-4" style="display: none;">
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="nombreEstudianteParticipacion" placeholder="Nombre del Estudiante">
+                            <label>Nombre del Estudiante</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold">Tipo de Actividad</label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="tipoEstudiante" id="tipoProyecto" value="proyecto">
+                            <label class="btn btn-outline-secondary" for="tipoProyecto">Proyecto de Investigación</label>
+                            
+                            <input type="radio" class="btn-check" name="tipoEstudiante" id="tipoServicio" value="servicio">
+                            <label class="btn btn-outline-secondary" for="tipoServicio">Servicio Social</label>
+                        </div>
+                    </div>
+
+                    <!-- Proyecto Fields -->
+                    <div id="proyectoFields" class="col-md-12" style="display: none;">
+                        <div class="form-floating">
+                            <select class="form-select" name="nivelProyecto">
+                                <option value="" selected disabled>Seleccionar...</option>
+                                <option value="Licenciatura">Licenciatura</option>
+                                <option value="Posgrado">Posgrado</option>
+                            </select>
+                            <label>Nivel del Proyecto</label>
+                        </div>
+                    </div>
+
+                    <!-- Servicio Fields -->
+                    <div id="servicioFields" class="col-md-12" style="display: none;">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="procedenciaServicio" placeholder="Procedencia">
+                            <label>Procedencia</label>
+                        </div>
+                    </div>
                 </div>
             </div>
 

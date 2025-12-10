@@ -155,17 +155,64 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // === COMITES Y JURADO LOGIC ===
     const tipoParticipacionRadios = document.querySelectorAll('input[name="tipoParticipacion"]');
+    
+    // Function to handle visibility
+    function toggleParticipacionFields(value) {
+        const comiteFields = document.getElementById('comiteFields');
+        const juradoFields = document.getElementById('juradoFields');
+        const commonFields = document.getElementById('commonFields');
+        const estudiantesFields = document.getElementById('estudiantesFields');
+        
+        // Hide all first
+        if (comiteFields) comiteFields.style.display = 'none';
+        if (juradoFields) juradoFields.style.display = 'none';
+        if (estudiantesFields) estudiantesFields.style.display = 'none';
+        
+        // Common fields are shown for Comite and Jurado, hidden for Estudiantes (based on my assumption in plan)
+        if (commonFields) {
+            if (value === 'estudiantes') {
+                commonFields.style.display = 'none';
+            } else {
+                commonFields.style.display = 'block'; // using block? or flex? default is block usually for div
+                // or restore previous display style? block is safe for div
+            }
+        }
+
+        if (value === 'comite') {
+            if (comiteFields) comiteFields.style.display = 'block';
+        } else if (value === 'jurado') {
+            if (juradoFields) juradoFields.style.display = 'block';
+        } else if (value === 'estudiantes') {
+            if (estudiantesFields) estudiantesFields.style.display = 'block';
+        }
+    }
+
+    // Initial check
+    const checkedParticipacion = document.querySelector('input[name="tipoParticipacion"]:checked');
+    if (checkedParticipacion) {
+        toggleParticipacionFields(checkedParticipacion.value);
+    }
+
+    // Listener
     tipoParticipacionRadios.forEach(radio => {
         radio.addEventListener('change', function() {
-            const comiteFields = document.getElementById('comiteFields');
-            const juradoFields = document.getElementById('juradoFields');
+            toggleParticipacionFields(this.value);
+        });
+    });
+
+    // === ESTUDIANTES SUB-LOGIC ===
+    const tipoEstudianteRadios = document.querySelectorAll('input[name="tipoEstudiante"]');
+    tipoEstudianteRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            const proyectoFields = document.getElementById('proyectoFields');
+            const servicioFields = document.getElementById('servicioFields');
             
-            if (this.value === 'comite') {
-                if (comiteFields) comiteFields.style.display = 'block';
-                if (juradoFields) juradoFields.style.display = 'none';
-            } else if (this.value === 'jurado') {
-                if (comiteFields) comiteFields.style.display = 'none';
-                if (juradoFields) juradoFields.style.display = 'block';
+            if (this.value === 'proyecto') {
+                if (proyectoFields) proyectoFields.style.display = 'block';
+                if (servicioFields) servicioFields.style.display = 'none';
+            } else if (this.value === 'servicio') {
+                if (proyectoFields) proyectoFields.style.display = 'none';
+                if (servicioFields) servicioFields.style.display = 'block';
             }
         });
     });
