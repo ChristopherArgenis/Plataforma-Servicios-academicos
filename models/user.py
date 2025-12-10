@@ -81,9 +81,8 @@ class Libro(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     cliente_id = db.Column(db.Integer, db.ForeignKey('Cliente.id'), nullable=False)
 
-    libros_cientificos = db.Column(db.Text, nullable=True)
-    capitulos_libro = db.Column(db.Text, nullable=True)
-
+    libros_cientificos = db.Column(db.String(255), nullable=True)
+    capitulos_libro = db.Column(db.String(255), nullable=True)
 
 # -------------------------
 # ARTICULOS
