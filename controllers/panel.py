@@ -1,9 +1,10 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
-from services.user_service import Tables_Service, Check_Article
+from services.user_service import Tables_Service, Check_Article, UserService
 from services.table_maganer import Table_Maganer
 from services.query_maganer import Query_Manager
 from services.articles_maganer import Articles_Maganer
 from models import db
+from models.user import Cliente, InformationAcademic
 
 table_maganer = Table_Maganer()
 articles_maganer = Articles_Maganer()
@@ -51,10 +52,24 @@ def panel_info():
 
 @panel_general.route('/Panel/Report', methods=["GET"])
 def panel_report():
+    # Fetch User Data
+    username = session.get('username')
+    client = Cliente.query.filter_by(nombre=username).first()
+    
+    user_info = None
+    academic_info = None
+    
+    if client:
+        user_info = UserService.checkUser(client.id)
+        academic_info = InformationAcademic.query.filter_by(cliente_id=client.id).first()
+
     context = {
-        'user': session['username'],
+        'user': username,
         'rol': session['CustomerRol'],
-        'active_page': 'report'
+        'active_page': 'report',
+        'client': client,
+        'user_info': user_info,
+        'academic_info': academic_info
     }
     
     if request.headers.get('HX-Request'):
@@ -117,6 +132,28 @@ def get_articles():
         flash(f"{len(nrA)} consultados exitosamente.", "success")
     else:
         flash("Todos los Articulos ya estan almacenados", "success")
+    return redirect(url_for('panel.panel_get'))
+
+@panel_general.route('/Panel/save_relevant_articles', methods=["POST"])
+def save_relevant_articles():
+    relevant_keys = request.form.getlist('relevant_keys[]')
+    
+    # Validation 1.2: Check if exactly 3
+    if len(relevant_keys) == 3:
+        nrA = check_article.repeat_articles(relevant_keys)
+        if len(nrA) > 0:
+            dataframe = articles_maganer.df_articles(array=nrA)
+            try:
+                dataframe.to_sql('Article', con=db.engine, if_exists='append', index=False)
+                flash(f"Se han guardado los {len(nrA)} artículos relevantes correctamente.", "success")
+            except Exception as e:
+                flash("Error al guardar los artículos.", "danger")
+                print(e)
+        else:
+            flash("Los artículos seleccionados ya están guardados.", "info")
+    else:
+        flash(f"Error: Debes seleccionar exactamente 3 artículos. Recibidos: {len(relevant_keys)}", "warning")
+
     return redirect(url_for('panel.panel_get'))
 
 @panel_general.route('/Administracion', methods=["GET"])
