@@ -127,7 +127,7 @@ class ComiteJurado(db.Model):
 
     nivel_academico = db.Column(db.Text, nullable=True)
     programa_posgrado = db.Column(db.Text, nullable=True)
-    participacion = db.Column(db.Text, nullable=True)  # 1 o 2 elementos separados
+    participacion = db.Column(db.Text, nullable=True)  # Se mantendrá como 'Comité - Subtipo'
     titulo_tesis = db.Column(db.Text, nullable=True)
     nombre_estudiante = db.Column(db.Text, nullable=True)
 

@@ -1,282 +1,59 @@
 document.addEventListener('DOMContentLoaded', function() {
     const reportContainer = document.getElementById('Report');
-    if (!reportContainer) {
-        console.error('Report container not found');
-        return;
-    }
+    if (!reportContainer) return;
 
-    // ========================================
-    // LIBROS SECTION - Clean Implementation
-    // ========================================
-    
-    const btnAddBook = document.getElementById('btnAddBook');
-    const btnSaveLibros = document.getElementById('btnSaveLibros');
-    const librosContainer = document.getElementById('librosContainer');
-    const formLibros = document.getElementById('formularioCientifico');
-    
-    // Add new book row
-    if (btnAddBook) {
-        btnAddBook.addEventListener('click', function() {
-            if (!librosContainer) return;
-            
-            const rows = librosContainer.querySelectorAll('.dynamic-book-row');
-            if (rows.length === 0) return;
-            
-            // Clone last row
-            const lastRow = rows[rows.length - 1];
-            const newRow = lastRow.cloneNode(true);
-            
-            // Clear all inputs
-            newRow.querySelectorAll('input').forEach(input => {
-                input.value = '';
-            });
-            
-            // Append new row
-            librosContainer.appendChild(newRow);
-        });
-    }
-    
-    // Save Libros
-    if (btnSaveLibros) {
-        btnSaveLibros.addEventListener('click', function() {
-            if (!formLibros) return;
-            
-            // Get cliente_id
-            const clienteId = reportContainer.dataset.clienteId;
-            if (!clienteId) {
-                showToast('Error: Cliente ID no encontrado', 'error');
-                return;
-            }
-            
-            // Collect data from form
-            const formData = new FormData(formLibros);
-            
-            // Get all books and chapters (arrays)
-            const libros = formData.getAll('librosCientificos[]').filter(v => v.trim() !== '');
-            const capitulos = formData.getAll('capitulosLibro[]').filter(v => v.trim() !== '');
-            
-            // Validate at least one entry
-            if (libros.length === 0 && capitulos.length === 0) {
-                showToast('Debe agregar al menos un libro o capítulo', 'warning');
-                return;
-            }
-            
-            // Prepare payload
-            const payload = {
-                cliente_id: clienteId,
-                data: {
-                    libros_cientificos: libros,
-                    capitulos_libro: capitulos
-                }
-            };
-            
-            // Send to server
-            fetch('/Panel/Reporte/libros/guardar', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(payload)
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    showToast('Libros guardados correctamente', 'success');
-                    
-                    // Clear form
-                    formLibros.reset();
-                    
-                    // Remove extra rows, keep only first
-                    const rows = librosContainer.querySelectorAll('.dynamic-book-row');
-                    for (let i = rows.length - 1; i > 0; i--) {
-                        rows[i].remove();
-                    }
-                } else {
-                    showToast('Error: ' + data.message, 'error');
-                }
-            })
-            .catch(err => {
-                console.error('Error saving libros:', err);
-                showToast('Error de conexión al guardar', 'error');
-            });
-        });
-    }
+    const getClienteId = () => reportContainer.dataset.clienteId;
 
-    // === DIFUSION LOGIC ===
-    
-    // Toggle between Congreso and Evento fields
-    const tipoDifusionRadios = document.querySelectorAll('input[name="tipoDifusion"]');
-    tipoDifusionRadios.forEach(radio => {
-        radio.addEventListener('change', function() {
-            const congresoFields = document.getElementById('congresoFields');
-            const eventoFields = document.getElementById('eventoFields');
-            
-            if (this.value === 'congreso') {
-                if (congresoFields) congresoFields.style.display = 'block';
-                if (eventoFields) eventoFields.style.display = 'none';
-            } else if (this.value === 'evento') {
-                if (congresoFields) congresoFields.style.display = 'none';
-                if (eventoFields) eventoFields.style.display = 'block';
-            }
-        });
-    });
-
-    // === COMITES LOGIC ===
-    const subapartadoComiteRadios = document.querySelectorAll('input[name="subapartadoComite"]');
-    subapartadoComiteRadios.forEach(radio => {
-        radio.addEventListener('change', function() {
-            const comiteTesisInputs = document.getElementById('comiteTesisInputs');
-            if (this.value === 'tesis') {
-                if (comiteTesisInputs) comiteTesisInputs.style.display = 'block';
-            } else {
-                if (comiteTesisInputs) comiteTesisInputs.style.display = 'none';
-            }
-        });
-    });
-
-    // Function to handle visibility
-    function toggleParticipacionFields(value) {
-        const comiteFields = document.getElementById('comiteFields');
-        const juradoFields = document.getElementById('juradoFields');
-        const commonFields = document.getElementById('commonFields');
-        const estudiantesFields = document.getElementById('estudiantesFields');
-        
-        // Hide all first
-        if (comiteFields) comiteFields.style.display = 'none';
-        if (juradoFields) juradoFields.style.display = 'none';
-        if (estudiantesFields) estudiantesFields.style.display = 'none';
-        
-        if (commonFields) {
-            if (value === 'estudiantes') {
-                commonFields.style.display = 'none';
-            } else {
-                commonFields.style.display = 'block'; 
-            }
-        }
-
-        if (value === 'comite') {
-            if (comiteFields) comiteFields.style.display = 'block';
-        } else if (value === 'jurado') {
-            if (juradoFields) juradoFields.style.display = 'block';
-        } else if (value === 'estudiantes') {
-            if (estudiantesFields) estudiantesFields.style.display = 'block';
-        }
-    }
-
-    // Initial check
-    const checkedParticipacion = document.querySelector('input[name="tipoParticipacion"]:checked');
-    if (checkedParticipacion) {
-        toggleParticipacionFields(checkedParticipacion.value);
-    }
-
-    const tipoParticipacionRadios = document.querySelectorAll('input[name="tipoParticipacion"]');
-    tipoParticipacionRadios.forEach(radio => {
-        radio.addEventListener('change', function() {
-            toggleParticipacionFields(this.value);
-        });
-    });
-
-    // === ESTUDIANTES SUB-LOGIC ===
-    const tipoEstudianteRadios = document.querySelectorAll('input[name="tipoEstudiante"]');
-    tipoEstudianteRadios.forEach(radio => {
-        radio.addEventListener('change', function() {
-            const proyectoFields = document.getElementById('proyectoFields');
-            const servicioFields = document.getElementById('servicioFields');
-            
-            if (this.value === 'proyecto') {
-                if (proyectoFields) proyectoFields.style.display = 'block';
-                if (servicioFields) servicioFields.style.display = 'none';
-            } else if (this.value === 'servicio') {
-                if (proyectoFields) proyectoFields.style.display = 'none';
-                if (servicioFields) servicioFields.style.display = 'block';
-            }
-        });
-    });
-
-    // Add students dynamically
-    const btnAddStudent = document.getElementById('btnAddStudent');
-    if (btnAddStudent) {
-        btnAddStudent.addEventListener('click', function() {
-            const estudiantesContainer = document.getElementById('estudiantesContainer');
-            if (estudiantesContainer) {
-                const rows = estudiantesContainer.getElementsByClassName('dynamic-student-row');
-                if (rows.length > 0) {
-                    const lastRow = rows[rows.length - 1];
-                    const newRow = lastRow.cloneNode(true);
-                    const input = newRow.querySelector('input');
-                    if (input) input.value = '';
-                    estudiantesContainer.appendChild(newRow);
-                }
-            }
-        });
-    }
-
-    // === FINANCIADOS PARTICIPANTS LOGIC ===
+    // Estado local para participantes de Financiación
     let participantesFinanciacion = [];
-    const btnAddPartFin = document.getElementById('btnAddPartFin');
-    
-    // Render Function
-    function renderParticipantesFin() {
-        const container = document.getElementById('participantesFinList');
-        if (!container) return;
-        container.innerHTML = '';
-        
-        participantesFinanciacion.forEach((p, index) => {
-            const item = document.createElement('div');
-            item.className = 'd-flex justify-content-between align-items-center bg-white p-2 mb-2 rounded border shadow-sm';
-            item.innerHTML = `
-                <div>
-                    <span class="fw-bold text-primary">${p.nombre}</span>
-                    <small class="text-muted mx-2">|</small>
-                    <span class="text-secondary small">${p.tipo}</span>
-                    <small class="text-muted mx-2">|</small>
-                    <span class="text-dark small">${p.institucion}</span>
-                </div>
-                <button type="button" class="btn btn-outline-danger btn-sm border-0" onclick="removeParticipanteFin(${index})">
-                    <i class="bi bi-trash"></i>
-                </button>
-            `;
-            container.appendChild(item);
-        });
-    }
-    
-    // Expose remove function globally
-    window.removeParticipanteFin = function(index) {
-        participantesFinanciacion.splice(index, 1);
-        renderParticipantesFin();
-    };
 
-    if (btnAddPartFin) {
-        btnAddPartFin.addEventListener('click', function() {
-           const nameInput = document.getElementById('partFinName');
-           const instInput = document.getElementById('partFinInst');
-           const typeInput = document.querySelector('input[name="tipoPartFin"]:checked');
-           
-           if (!nameInput.value.trim()) {
-               alert('El nombre es requerido');
-               return;
-           }
-           if (!typeInput) {
-               alert('Seleccione un tipo (Académico/Estudiante)');
-               return;
-           }
-           
-           const participante = {
-               nombre: nameInput.value.trim(),
-               tipo: typeInput.value, // Academico or Estudiante
-               institucion: instInput.value.trim() || 'N/A'
-           };
-           
-           participantesFinanciacion.push(participante);
-           renderParticipantesFin();
-           
-           // Clear inputs
-           nameInput.value = '';
-           instInput.value = '';
-           // Don't clear radio? better UX to keep it or reset? Resetting is safer.
-           typeInput.checked = false; 
+    // ========================================
+    // NOTIFICATIONS
+    // ========================================
+    function showNotification(message, type = 'success') {
+        if (typeof showToast === 'function') {
+            showToast(message, type);
+        } else {
+            alert(message);
+        }
+    }
+
+    // ========================================
+    // API HELPERS
+    // ========================================
+    function sendFormData(url, formData, successMessage) {
+        const clienteId = getClienteId();
+        if (!clienteId) {
+            showNotification('Error: Cliente ID no encontrado', 'error');
+            return;
+        }
+
+        // Ensure cliente_id is in FormData
+        if (!formData.has('cliente_id')) {
+            formData.append('cliente_id', clienteId);
+        }
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                showNotification(successMessage || 'Guardado correctamente', 'success');
+            } else {
+                showNotification('Error: ' + data.message, 'error');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            showNotification('Error de conexión', 'error');
         });
     }
 
-    // === DYNAMIC LISTS LOGIC (Generic) ===
+    // ========================================
+    // DYNAMIC ROWS LOGIC
+    // ========================================
     function setupDynamicList(btnAddId, containerId, rowClass) {
         const btnAdd = document.getElementById(btnAddId);
         if (btnAdd) {
@@ -285,286 +62,237 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (container) {
                     const rows = container.getElementsByClassName(rowClass);
                     if (rows.length > 0) {
-                        const lastRow = rows[rows.length - 1];
-                        const newRow = lastRow.cloneNode(true);
+                        const templateRow = rows[0]; 
+                        const newRow = templateRow.cloneNode(true);
                         
                         // Clear inputs
-                        const inputs = newRow.querySelectorAll('input, select');
-                        inputs.forEach(input => input.value = '');
+                        newRow.querySelectorAll('input, select, textarea').forEach(input => {
+                            // Don't clear radio buttons/checkboxes 'checked' status here immediately or set default?
+                            // For text/select:
+                            if (input.type !== 'hidden' && input.type !== 'radio' && input.type !== 'checkbox') {
+                                input.value = '';
+                            }
+                        });
 
-                        // Show delete button for new row
+                        // Fix Radio Button IDs to be unique
+                        const timestamp = new Date().getTime();
+                        newRow.querySelectorAll('input[type="radio"]').forEach((radio, idx) => {
+                            const oldId = radio.id;
+                            const newId = oldId + '_' + timestamp + '_' + idx;
+                            radio.id = newId;
+                            
+                            // Find corresponding label
+                            const label = newRow.querySelector(`label[for="${oldId}"]`);
+                            if (label) {
+                                label.setAttribute('for', newId);
+                            }
+                            
+                            // Reset selection to default (e.g. Comite) if needed
+                            if (radio.value === 'comite') radio.checked = true;
+                            else radio.checked = false;
+                        });
+
+                        // Show delete button
                         const deleteBtn = newRow.querySelector('.delete-row-btn');
                         if (deleteBtn) {
                             deleteBtn.style.display = 'block';
-                            // Add listener to new delete button
-                            deleteBtn.addEventListener('click', function() {
-                                newRow.remove();
-                            });
+                            deleteBtn.onclick = () => newRow.remove();
                         }
-
-                        container.appendChild(newRow);
                         
-                        // Ensure first row also has delete button if there are > 1 rows?
-                        // Or just show delete button for ANY row if count > 1?
-                        // Simple approach: Always show delete on cloned rows.
-                        // Ideally, if we have > 1 row, all should be deletable? 
-                        // Let's keep it simple: Clone adds a row with a working delete button.
-                        // First row delete button is initially hidden. We can enable it if count > 1.
-                        updateDeleteButtons(container, rowClass);
+                        container.appendChild(newRow);
                     }
                 }
             });
         }
     }
 
-    function updateDeleteButtons(container, rowClass) {
-        const rows = container.getElementsByClassName(rowClass);
-        Array.from(rows).forEach((row, index) => {
-            const deleteBtn = row.querySelector('.delete-row-btn');
-            if (deleteBtn) {
-                // If only 1 row, hide delete. Else show.
-                deleteBtn.style.display = rows.length > 1 ? 'block' : 'none';
-                // Ensure listener is attached (might duplicate if not careful, but cloneNode doesn't copy dynamic listeners)
-                // Better: rely on event delegation or attach only on creation.
-                // Since this runs on "Add", we can just set display.
-                // The cleaner way:
-                deleteBtn.onclick = function() {
-                   if (container.getElementsByClassName(rowClass).length > 1) {
-                       row.remove();
-                       updateDeleteButtons(container, rowClass);
-                   }
-                };
+    // Initialize all dynamic sections
+    const sections = [
+        { btn: 'btnAddTesis', container: 'tesisContainer', row: 'dynamic-tesis-row' },
+        { btn: 'btnAddCurso', container: 'cursosContainer', row: 'dynamic-course-row' },
+        
+        // Difusion
+        { btn: 'btnAddCongreso', container: 'congresoContainer', row: 'dynamic-congreso-row' },
+        { btn: 'btnAddEvento', container: 'eventoContainer', row: 'dynamic-evento-row' },
+        
+        // Comites (Unificado)
+        { btn: 'btnAddComite', container: 'comitesContainer', row: 'dynamic-comite-row' },
+        // Jurados removed (handled by Comites)
+        
+        { btn: 'btnAddEstudiante', container: 'estudiantesContainer', row: 'dynamic-estudiante-row' },
+        
+        { btn: 'btnAddDivulgacion', container: 'divulgacionContainer', row: 'dynamic-divulgacion-row' },
+        { btn: 'btnAddEstancia', container: 'estanciaContainer', row: 'dynamic-estancia-row' }
+    ];
+
+    sections.forEach(config => setupDynamicList(config.btn, config.container, config.row));
+
+    // Libros Special Case
+    const btnAddBook = document.getElementById('btnAddBook');
+    if (btnAddBook) {
+        btnAddBook.addEventListener('click', function() {
+            const container = document.getElementById('librosContainer');
+            if (container) {
+                const rows = container.getElementsByClassName('dynamic-book-row');
+                if (rows.length > 0) {
+                    const newRow = rows[0].cloneNode(true);
+                    newRow.querySelectorAll('input').forEach(i => i.value = '');
+                     const deleteBtn = newRow.querySelector('.delete-row-btn');
+                    if (deleteBtn) {
+                        deleteBtn.style.display = 'block';
+                        deleteBtn.onclick = () => newRow.remove();
+                    }
+                    container.appendChild(newRow);
+                }
             }
         });
     }
 
-    setupDynamicList('btnAddTesis', 'tesisContainer', 'dynamic-tesis-row');
-    setupDynamicList('btnAddCurso', 'cursosContainer', 'dynamic-course-row');
-    
-    // Difusión section
-    setupDynamicList('btnAddCongreso', 'congresoContainer', 'dynamic-congreso-row');
-    setupDynamicList('btnAddEvento', 'eventoContainer', 'dynamic-evento-row');
-    
-    // Comités section
-    setupDynamicList('btnAddComite', 'comitesContainer', 'dynamic-comite-row');
-    setupDynamicList('btnAddEstudiante', 'estudiantesContainer', 'dynamic-estudiante-row');
-    
-    // Divulgación section
-    setupDynamicList('btnAddDivulgacion', 'divulgacionContainer', 'dynamic-divulgacion-row');
-    
-    // Estancias section
-    setupDynamicList('btnAddEstancia', 'estanciaContainer', 'dynamic-estancia-row');
+    // ========================================
+    // FORM SUBMISSIONS
+    // ========================================
+    const forms = [
+        { id: 'formularioCientifico', url: '/Panel/Reporte/libros/guardar', msg: 'Libros guardados' },
+        { id: 'formularioGeneral3', url: '/Panel/Reporte/articulos/guardar', msg: 'Tesis guardadas' },
+        { id: 'formularioCursos4', url: '/Panel/Reporte/cursos/guardar', msg: 'Cursos guardados' },
+        
+        // Comites (Unificado)
+        { id: 'formComites', url: '/Panel/Reporte/comite/guardar', msg: 'Comités y Jurados guardados' },
+        { id: 'formEstudiantes', url: '/Panel/Reporte/estudiantes/guardar', msg: 'Estudiantes guardados' },
+        
+        { id: 'formCongresos', url: '/Panel/Reporte/congresos/guardar', msg: 'Congresos guardados' },
+        { id: 'formEventos', url: '/Panel/Reporte/eventos/guardar', msg: 'Eventos guardados' },
+        
+        { id: 'formularioDivulgacion', url: '/Panel/Reporte/divulgacion/guardar', msg: 'Divulgación guardada' },
+        { id: 'formularioEstancia', url: '/Panel/Reporte/estancias/guardar', msg: 'Estancias guardadas' },
+        
+        // Simples
+        { id: 'formularioPatente', url: '/Panel/Reporte/patentes/guardar', msg: 'Patentes guardadas' },
+        { id: 'formularioComisiones', url: '/Panel/Reporte/comisiones/guardar', msg: 'Comisiones guardadas' },
+        { id: 'formularioVinculacion', url: '/Panel/Reporte/vinculacion/guardar', msg: 'Vinculación guardada' },
+        { id: 'formularioDistinciones', url: '/Panel/Reporte/distinciones/guardar', msg: 'Distinciones guardadas' },
+        { id: 'formularioLogros', url: '/Panel/Reporte/logros/guardar', msg: 'Logros guardados' }
+    ];
 
+    forms.forEach(config => {
+        const form = document.getElementById(config.id);
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                sendFormData(config.url, new FormData(this), config.msg);
+            });
+        }
+    });
 
-    // === GLOBAL FORM SUBMISSION HANDLERS ===
+    // ========================================
+    // FINANCIAMIENTO LOGIC
+    // ========================================
     
-    // 1. SAVE LIBROS (Existing) - Logic in setupConfirmButton
+    function renderParticipantes() {
+        const container = document.getElementById('participantesFinList');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        participantesFinanciacion.forEach((p, index) => {
+            const badge = document.createElement('div');
+            badge.className = 'd-flex justify-content-between align-items-center bg-white border p-2 mb-1 rounded';
+            badge.innerHTML = `
+                <small><strong>${p.nombre}</strong> (${p.tipo}) - ${p.institucion}</small>
+                <button type="button" class="btn btn-sm text-danger remove-part-btn" data-index="${index}">&times;</button>
+            `;
+            container.appendChild(badge);
+        });
 
-    // 2. SAVE TESIS/DOCENCIA (Step 2 - "Articulos") -> Now Multiple
-    const formTesis = document.getElementById('formularioGeneral3');
-    if (formTesis) {
-        formTesis.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            // Collect arrays
-            const titulos = formData.getAll('tituloTesis3[]');
-            const grados = formData.getAll('grado3[]');
-            const estudiantes = formData.getAll('estudiante3[]');
-            const instituciones = formData.getAll('institucion3[]');
-            const estatus = formData.getAll('estatus3[]');
-
-            // Construct JSON payload
-            // We'll send arrays. The backend should handle converting to JSON string if needed.
-            const data = {
-                titulo: titulos,
-                nivel: grados, 
-                nombre_estudiante: estudiantes,
-                institucion: instituciones,
-                estatus: estatus
-            };
-            // Note: If fields are empty, arrays might have empty strings.
-             sendReportData('/Panel/Reporte/articulos/guardar', data, 'Tesis guardada');
+        // Add listeners to remove buttons
+        container.querySelectorAll('.remove-part-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const idx = parseInt(this.dataset.index);
+                participantesFinanciacion.splice(idx, 1);
+                renderParticipantes();
+            });
         });
     }
 
-    // 3. SAVE CURSOS (Step 3)
-    const formCursos = document.getElementById('formularioCursos4'); 
-    if (formCursos) {
-        formCursos.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            const data = {
-                materia: formData.getAll('materia4[]'),
-                nivel: formData.getAll('nivel4[]'),
-                periodo: formData.getAll('periodo4[]'),
-                institucion: formData.getAll('institucion4[]'),
-                programas: formData.getAll('programas4[]')
-            };
-            sendReportData('/Panel/Reporte/cursos/guardar', data, 'Cursos guardados');
-        });
-    }
-
-    // 4. SAVE COMITES (Step 4)
-    const formComites = document.getElementById('formularioComites');
-    if (formComites) {
-        formComites.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            const tipo = formData.get('tipoParticipacion');
+    const btnAddPartFin = document.getElementById('btnAddPartFin');
+    if (btnAddPartFin) {
+        btnAddPartFin.addEventListener('click', function() {
+            const nameInput = document.getElementById('partFinName');
+            const instInput = document.getElementById('partFinInst');
             
-            let data = {
-                tipo_participacion: tipo,
-                nivel_academico: formData.get('nivelAcademico'),
-                programa_posgrado: formData.get('programaPosgrado')
-            };
+            // Get selected radio
+            const tipoRadio = document.querySelector('input[name="tipoPartFin"]:checked');
+            const tipo = tipoRadio ? tipoRadio.value : 'N/A';
 
-            if (tipo === 'comite') {
-                const sub = formData.get('subapartadoComite');
-                data.participacion = `Comité - ${sub || 'General'}`;
-                data.titulo_tesis = formData.get('tituloTesisComite');
-                data.nombre_estudiante = formData.get('estudianteComite');
-            } else if (tipo === 'jurado') {
-                data.participacion = 'Jurado - Examen de Grado';
-                data.titulo_tesis = formData.get('tituloTesisJurado');
-                data.nombre_estudiante = formData.get('estudianteJurado');
-            } else if (tipo === 'estudiantes') {
-                 const subTipo = formData.get('tipoEstudiante');
-                 const estData = {
-                     nombre: formData.get('nombreEstudianteParticipacion'), 
-                     actividad: subTipo, 
-                     titulo_proyecto: formData.get('tituloProyectoEstudiante'),
-                     procedencia: formData.get('procedenciaServicio') // Ensure this field exists if used
-                 };
-                 
-                 if(subTipo === 'proyecto') {
-                     estData.actividad = `Proyecto: ${formData.get('nivelProyecto')}`;
-                     estData.titulo_proyecto = formData.get('tituloProyectoEstudiante');
-                 } else {
-                     estData.actividad = 'Servicio Social';
-                     estData.procedencia = formData.get('procedenciaServicio');
-                 }
-                 
-                 sendReportData('/Panel/Reporte/estudiantes/guardar', estData, 'Estudiante guardado');
-                 return; 
+            if (nameInput && nameInput.value.trim() !== '') {
+                participantesFinanciacion.push({
+                    nombre: nameInput.value.trim(),
+                    tipo: tipo,
+                    institucion: instInput ? instInput.value.trim() : ''
+                });
+                
+                nameInput.value = '';
+                if (instInput) instInput.value = '';
+                renderParticipantes();
             }
-            
-            sendReportData('/Panel/Reporte/comite/guardar', data, 'Participación guardada');
         });
     }
 
-    // 5. SAVE FINANCIADOS
+    // Financiación Submit
     const formFinanciacion = document.getElementById('formularioFinanciacion');
     if (formFinanciacion) {
         formFinanciacion.addEventListener('submit', function(e) {
             e.preventDefault();
             const formData = new FormData(this);
-            const data = {
-                tituloFinanciacion: formData.get('tituloFinanciacion'),
-                fuenteFinanciamiento: formData.get('fuenteFinanciamiento'),
-                clasificacionFinanciacion: formData.get('clasificacionFinanciacion'),
-                indoleFinanciacion: formData.get('indoleFinanciacion'),
-                participantesLista: participantesFinanciacion
-            };
-            sendReportData('/Panel/Reporte/financiacion/guardar', data, 'Financiación guardada');
+            // Append attributes as JSON string
+            formData.append('participantesLista', JSON.stringify(participantesFinanciacion));
+            sendFormData('/Panel/Reporte/financiacion/guardar', formData, 'Proyecto de Financiación guardado');
         });
     }
 
-    // === SIMPLE SECTIONS SAVE LOGIC ===
-    
-    // 6. SAVE PATENTE (Step 7)
-    const formPatente = document.getElementById('formularioPatente');
-    if (formPatente) {
-        formPatente.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            const data = {
-                descripcion: formData.get('descripcion')
-            };
-            sendReportData('/Panel/Reporte/patentes/guardar', data, 'Patente guardada');
-        });
-    }
+    // Load Financiados Data
+    const loadFinanciacion = () => {
+        const clienteId = getClienteId();
+        if (!clienteId) return;
 
-    // 7. SAVE COMISIONES (Step 10)
-    const formComisiones = document.getElementById('formularioComisiones');
-    if (formComisiones) {
-        formComisiones.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            const data = {
-                descripcion: formData.get('descripcion')
-            };
-            sendReportData('/Panel/Reporte/comisiones/guardar', data, 'Comisión guardada');
-        });
-    }
-
-    // 8. SAVE VINCULACION (Step 11)
-    const formVinculacion = document.getElementById('formularioVinculacion');
-    if (formVinculacion) {
-        formVinculacion.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            const data = {
-                descripcion: formData.get('descripcion')
-            };
-            sendReportData('/Panel/Reporte/vinculacion/guardar', data, 'Vinculación guardada');
-        });
-    }
-
-    // 9. SAVE DISTINCIONES (Step 12)
-    const formDistinciones = document.getElementById('formularioDistinciones');
-    if (formDistinciones) {
-        formDistinciones.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            const data = {
-                descripcion: formData.get('descripcion')
-            };
-            sendReportData('/Panel/Reporte/distinciones/guardar', data, 'Distinción guardada');
-        });
-    }
-
-    // 10. SAVE LOGROS (Step 13)
-    const formLogros = document.getElementById('formularioLogros');
-    if (formLogros) {
-        formLogros.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            const data = {
-                descripcion: formData.get('descripcion')
-            };
-            sendReportData('/Panel/Reporte/logros/guardar', data, 'Logro guardado');
-        });
-    }
-
-    // === helper functions
-    function sendReportData(url, dataObject, successMessage) {
-        const clienteId = document.getElementById('Report')?.dataset.clienteId;
-        if (!clienteId) {
-            showToast('Error: Cliente ID no encontrado', 'error');
-            return;
-        }
-
-        const payload = {
-            cliente_id: clienteId,
-            data: dataObject
-        };
-
-        fetch(url, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(payload)
-        })
+        fetch(`/Panel/Reporte/financiacion/obtener?cliente_id=${clienteId}`)
         .then(res => res.json())
-        .then(data => {
-            if (data.status === 'success') {
-                showToast(successMessage || 'Guardado correctamente', 'success');
-            } else {
-                showToast('Error al guardar: ' + data.message, 'error');
+        .then(resp => {
+            if (resp.status === 'success' && resp.data) {
+                const d = resp.data;
+                // Fill fields
+                const inputs = {
+                    'tituloFinanciacion': d.tituloFinanciacion,
+                    'fuenteFinanciamiento': d.fuenteFinanciamiento,
+                    'clasificacionFinanciacion': d.clasificacionFinanciacion,
+                    'indoleFinanciacion': d.indoleFinanciacion
+                };
+                
+                for (const [name, val] of Object.entries(inputs)) {
+                    const el = formFinanciacion.querySelector(`[name="${name}"]`);
+                    if (el && val) el.value = val;
+                }
+
+                // Fill list
+                // Aseguramos que sea array. Si es string (fallback), parseamos?
+                // Backend ya lo envía parseado en 'participantesLista' (ver ReportService.obtener)
+                if (d.participantesLista && Array.isArray(d.participantesLista)) {
+                    participantesFinanciacion = d.participantesLista;
+                    renderParticipantes();
+                } else if (typeof d.participantesLista === 'string') {
+                     // Fallback raro
+                     try {
+                        participantesFinanciacion = JSON.parse(d.participantesLista);
+                        renderParticipantes();
+                     } catch(e) {}
+                }
             }
         })
-        .catch(err => {
-            console.error(err);
-            showToast('Error de red al guardar', 'error');
-        });
+        .catch(console.error);
+    };
+
+    // Load on init if form exists
+    if (formFinanciacion) {
+        loadFinanciacion();
     }
+
 });

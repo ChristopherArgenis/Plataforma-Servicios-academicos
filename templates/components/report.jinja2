@@ -515,287 +515,269 @@
     </div>
 {% endmacro %}
 
-{% macro body_difusion() %}
-    <div class="p-4 bg-white">
-        <form id="formularioDifusion">
-            <!-- SECCIÓN 1: CONGRESOS -->
-            <h5 class="mb-3 text-secondary border-bottom pb-2">Congresos</h5>
-            <div id="congresoContainer">
-                <div class="dynamic-congreso-row border rounded p-3 mb-3 bg-light position-relative">
-                    <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
-                    
-                    <div class="row g-3">
-                         <div class="col-md-12">
-                            <label class="form-label fw-bold small">Título del Trabajo/Plática</label>
-                            <input type="text" class="form-control" name="tituloTrabajo[]" placeholder="Título">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small">Autores</label>
-                            <input type="text" class="form-control" name="autores[]" placeholder="Autores">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small">Nombre del Evento</label>
-                            <input type="text" class="form-control" name="nombreEvento[]" placeholder="Evento">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small">Lugar</label>
-                            <input type="text" class="form-control" name="lugar[]" placeholder="Lugar">
-                        </div>
-
-                        <div class="col-md-3">
-                             <label class="form-label fw-bold small">Fecha Inicio</label>
-                             <input type="date" class="form-control" name="fechaInicio[]">
-                        </div>
-                        <div class="col-md-3">
-                             <label class="form-label fw-bold small">Fecha Fin</label>
-                             <input type="date" class="form-control" name="fechaFin[]">
-                        </div>
-
-                        <div class="col-md-6">
-                             <label class="form-label fw-bold small">Ponente</label>
-                             <input type="text" class="form-control" name="ponente[]" placeholder="Ponente">
-                        </div>
-
-                        <div class="col-md-12">
-                             <label class="form-label fw-bold small">Estudiantes (Lista separada por comas)</label>
-                             <input type="text" class="form-control" name="estudiantes[]" placeholder="Estudiantes involucrados">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small">Modalidad</label>
-                            <select class="form-select" name="modalidad[]">
-                                <option value="presencial">Presencial</option>
-                                <option value="linea">En línea</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small">Alcance</label>
-                            <select class="form-select" name="alcance[]">
-                                <option value="internacional">Internacional</option>
-                                <option value="nacional">Nacional</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="d-flex justify-content-start mb-5">
-                 <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddCongreso">
-                    <i class="bi bi-plus-lg me-2"></i> Agregar Congreso
-                </button>
-            </div>
-
-            <!-- SECCIÓN 2: EVENTOS -->
-            <h5 class="mb-3 text-secondary border-bottom pb-2">Eventos</h5>
-            <div id="eventoContainer">
-                <div class="dynamic-evento-row border rounded p-3 mb-3 bg-light position-relative">
-                    <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
-
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small">Tipo de Evento</label>
-                            <select class="form-select" name="tipoEvento[]">
-                                <option value="" selected disabled>Seleccionar...</option>
-                                <option value="coloquios">Coloquios</option>
-                                <option value="conferencias">Conferencias</option>
-                                <option value="congresos">Congresos</option>
-                                <option value="cursos">Cursos</option>
-                                <option value="diplomados">Diplomados</option>
-                                <option value="foros">Foros</option>
-                                <option value="mesas_redondas">Mesas redondas</option>
-                                <option value="seminarios">Seminarios</option>
-                                <option value="simposios">Simposios</option>
-                                <option value="talleres">Talleres</option>
-                                <option value="otras">Otras actividades</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6">
-                             <label class="form-label fw-bold small">Nombre del Evento</label>
-                             <input type="text" class="form-control" name="nombreEventoSimple[]" placeholder="Nombre">
-                        </div>
-
-                        <div class="col-md-6">
-                             <label class="form-label fw-bold small">Número de Ponentes</label>
-                             <input type="number" class="form-control" name="numPonentes[]" min="0">
-                        </div>
-                        <div class="col-md-6">
-                             <label class="form-label fw-bold small">Número de Asistentes</label>
-                             <input type="number" class="form-control" name="numAsistentes[]" min="0">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-start mb-4">
-                 <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddEvento">
-                    <i class="bi bi-plus-lg me-2"></i> Agregar Evento
-                </button>
-            </div>
-
-            <div class="d-flex justify-content-end mt-4">
-                <button type="submit" class="btn btn-success text-white shadow-sm">
-                    <i class="bi bi-save me-2"></i> Guardar Todo
-                </button>
-            </div>
-        </form>
-    </div>
-{% endmacro %}
-
 {% macro difusion() %}
-    <div class="card shadow border-0 rounded-3 mb-4">
-        <div class="card-header bg-white border-0 pt-4 px-4">
-            <h4 class="text-primary fw-bold"><i class="bi bi-megaphone me-2"></i> Difusión del Conocimiento</h4>
+    <div class="row">
+        <!-- CARD 1: CONGRESOS -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow border-0 rounded-3 h-100">
+                <div class="card-header bg-white border-0 pt-4 px-4">
+                    <h4 class="text-primary fw-bold"><i class="bi bi-people-fill me-2"></i> Congresos</h4>
+                </div>
+                <div class="card-body">
+                    <form id="formCongresos" action="{{ url_for('reports.save_congresos') }}" method="POST">
+                        <input type="hidden" name="cliente_id" value="{{ client.id if client else '' }}">
+                        <div id="congresoContainer">
+                            <div class="dynamic-congreso-row border rounded p-3 mb-3 bg-light position-relative">
+                                <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
+                                
+                                <div class="row g-3">
+                                     <div class="col-12">
+                                        <label class="form-label fw-bold small">Título del Trabajo/Plática</label>
+                                        <input type="text" class="form-control" name="tituloTrabajo[]" placeholder="Título">
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold small">Autores</label>
+                                        <input type="text" class="form-control" name="autores[]" placeholder="Autores">
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold small">Nombre del Evento</label>
+                                        <input type="text" class="form-control" name="nombreEvento[]" placeholder="Evento">
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold small">Lugar</label>
+                                        <input type="text" class="form-control" name="lugar[]" placeholder="Lugar">
+                                    </div>
+
+                                    <div class="col-6">
+                                         <label class="form-label fw-bold small">Fecha Inicio</label>
+                                         <input type="date" class="form-control" name="fechaInicio[]">
+                                    </div>
+                                    <div class="col-6">
+                                         <label class="form-label fw-bold small">Fecha Fin</label>
+                                         <input type="date" class="form-control" name="fechaFin[]">
+                                    </div>
+
+                                    <div class="col-12">
+                                         <label class="form-label fw-bold small">Ponente</label>
+                                         <input type="text" class="form-control" name="ponente[]" placeholder="Ponente">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                             <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddCongreso">
+                                <i class="bi bi-plus-lg me-2"></i> Agregar
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-sm text-white">
+                                <i class="bi bi-save me-2"></i> Guardar Congresos
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            {{ body_difusion() }}
+
+        <!-- CARD 2: EVENTOS -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow border-0 rounded-3 h-100">
+                <div class="card-header bg-white border-0 pt-4 px-4">
+                    <h4 class="text-primary fw-bold"><i class="bi bi-calendar-event me-2"></i> Eventos</h4>
+                </div>
+                <div class="card-body">
+                    <form id="formEventos" action="{{ url_for('reports.save_eventos') }}" method="POST">
+                        <input type="hidden" name="cliente_id" value="{{ client.id if client else '' }}">
+                        <div id="eventoContainer">
+                            <div class="dynamic-evento-row border rounded p-3 mb-3 bg-light position-relative">
+                                <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
+
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold small">Tipo de Evento</label>
+                                        <select class="form-select" name="tipoEvento[]">
+                                            <option value="" selected disabled>Seleccionar...</option>
+                                            <option value="coloquios">Coloquios</option>
+                                            <option value="conferencias">Conferencias</option>
+                                            <option value="congresos">Congresos</option>
+                                            <option value="cursos">Cursos</option>
+                                            <option value="diplomados">Diplomados</option>
+                                            <option value="foros">Foros</option>
+                                            <option value="mesas_redondas">Mesas redondas</option>
+                                            <option value="seminarios">Seminarios</option>
+                                            <option value="simposios">Simposios</option>
+                                            <option value="talleres">Talleres</option>
+                                            <option value="otras">Otras actividades</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12">
+                                         <label class="form-label fw-bold small">Nombre del Evento</label>
+                                         <input type="text" class="form-control" name="nombreEventoSimple[]" placeholder="Nombre">
+                                    </div>
+
+                                    <div class="col-6">
+                                         <label class="form-label fw-bold small"># Ponentes</label>
+                                         <input type="number" class="form-control" name="numPonentes[]" min="0">
+                                    </div>
+                                    <div class="col-6">
+                                         <label class="form-label fw-bold small"># Asistentes</label>
+                                         <input type="number" class="form-control" name="numAsistentes[]" min="0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-3">
+                             <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddEvento">
+                                <i class="bi bi-plus-lg me-2"></i> Agregar
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-sm text-white">
+                                <i class="bi bi-save me-2"></i> Guardar Eventos
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 {% endmacro %}
 
 {# Macro para la sección de Comités y Jurados #}
-{% macro body_comites_jurado() %}
-    <div class="p-4 bg-white">
-        <form id="formularioComites">
-            <!-- SECCIÓN 1: COMITÉS Y JURADOS -->
-            <h5 class="mb-3 text-secondary border-bottom pb-2">Participación en Comités y Jurados</h5>
-            <div id="comitesContainer">
-                <!-- Fila dinámica plantilla -->
-                <div class="dynamic-comite-row border rounded p-3 mb-3 bg-light position-relative">
-                    
-                    <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
 
-                    <div class="row g-3">
-                        <!-- Selector de Tipo -->
-                        <div class="col-md-4">
-                             <label class="form-label fw-bold small">Tipo de Participación</label>
-                             <select class="form-select" name="tipoParticipacion[]">
-                                <option value="comite">Comité</option>
-                                <option value="jurado">Jurado</option>
-                             </select>
-                        </div>
-
-                         <!-- Selector de Subapartado (Solo para Comité) -->
-                        <div class="col-md-4 comite-subtype-group">
-                             <label class="form-label fw-bold small">Sub-tipo (Comité)</label>
-                             <select class="form-select" name="subapartadoComite[]">
-                                <option value="tesis">Tesis</option>
-                                <option value="tutoriales">Tutoriales</option>
-                             </select>
-                        </div>
-                        
-                        <!-- Nivel Académico -->
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold small">Nivel Académico</label>
-                            <select class="form-select" name="nivelAcademico[]">
-                                <option value="" selected disabled>Seleccionar...</option>
-                                <option value="licenciatura">Licenciatura</option>
-                                <option value="maestria">Maestría</option>
-                                <option value="doctorado">Doctorado</option>
-                            </select>
-                        </div>
-
-                         <!-- Programa Posgrado -->
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small">Programa de Posgrado</label>
-                            <input type="text" class="form-control" name="programaPosgrado[]" placeholder="Programa">
-                        </div>
-
-                        <!-- TITULO TESIS (Común para Comité->Tesis y Jurado) -->
-                        <div class="col-md-12 thesis-title-group">
-                            <label class="form-label fw-bold small">Título de la Tesis</label>
-                            <input type="text" class="form-control" name="tituloTesisComite[]" placeholder="Título">
-                        </div>
-
-                        <!-- NOMBRE ESTUDIANTE (Común) -->
-                        <div class="col-md-12">
-                             <label class="form-label fw-bold small">Nombre del Estudiante</label>
-                             <input type="text" class="form-control" name="estudianteComite[]" placeholder="Estudiante">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="d-flex justify-content-start mb-5">
-                <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddComite">
-                    <i class="bi bi-plus-lg me-2"></i> Agregar Participación
-                </button>
-            </div>
-
-
-            <!-- SECCIÓN 2: ESTUDIANTES -->
-            <h5 class="mb-3 text-secondary border-bottom pb-2">Estudiantes (Investigación y Servicio)</h5>
-            <div id="estudiantesContainer">
-                <div class="dynamic-estudiante-row border rounded p-3 mb-3 bg-light position-relative">
-                    <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
-
-                    <div class="row g-3">
-                         <!-- Selector Tipo Actividad -->
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold small">Tipo de Actividad</label>
-                            <select class="form-select" name="tipoEstudiante[]">
-                                <option value="proyecto">Proyecto de Investigación</option>
-                                <option value="servicio">Servicio Social</option>
-                            </select>
-                        </div>
-
-                        <!-- Nombre Estudiante -->
-                         <div class="col-md-8">
-                            <label class="form-label fw-bold small">Nombre del Estudiante</label>
-                            <input type="text" class="form-control" name="nombreEstudianteParticipacion[]">
-                         </div>
-
-                        <!-- Campos PROYECTO -->
-                         <div class="col-md-8 project-fields">
-                            <label class="form-label fw-bold small">Título del Proyecto</label>
-                            <input type="text" class="form-control" name="tituloProyectoEstudiante[]">
-                         </div>
-                         <div class="col-md-4 project-fields">
-                            <label class="form-label fw-bold small">Nivel Proyecto</label>
-                            <select class="form-select" name="nivelProyecto[]">
-                                <option value="" selected disabled>Seleccionar...</option>
-                                <option value="Licenciatura">Licenciatura</option>
-                                <option value="Posgrado">Posgrado</option>
-                            </select>
-                         </div>
-
-                        <!-- Campos SERVICIO -->
-                         <div class="col-md-12 service-fields" style="display: none;">
-                            <label class="form-label fw-bold small">Institución de Procedencia</label>
-                            <input type="text" class="form-control" name="procedenciaServicio[]">
-                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-start mb-4">
-                 <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddEstudiante">
-                    <i class="bi bi-plus-lg me-2"></i> Agregar Estudiante
-                </button>
-            </div>
-
-            <div class="d-flex justify-content-end mt-4">
-                <button type="submit" class="btn btn-success text-white shadow-sm">
-                    <i class="bi bi-save me-2"></i> Guardar Todo
-                </button>
-            </div>
-        </form>
-    </div>
-{% endmacro %}
 
 {% macro comites_jurado() %}
-    <div class="card shadow border-0 rounded-3 mb-4">
-        <div class="card-header bg-white border-0 pt-4 px-4">
-            <h4 class="text-primary fw-bold"><i class="bi bi-people-fill me-2"></i> Comités y Jurado</h4>
+    <div class="row">
+        <!-- CARD 1: COMITÉS Y JURADOS (Consolidado) -->
+        <div class="col-12 mb-4">
+            <div class="card shadow border-0 rounded-3 h-100">
+                <div class="card-header bg-white border-0 pt-4 px-4">
+                    <h4 class="text-primary fw-bold"><i class="bi bi-people me-2"></i> Comités y Jurados</h4>
+                </div>
+                <div class="card-body">
+                    <form id="formComites" action="{{ url_for('reports.save_comite') }}" method="POST">
+                        <input type="hidden" name="cliente_id" value="{{ client.id if client else '' }}">
+                        <div id="comitesContainer">
+                            <div class="dynamic-comite-row border rounded p-3 mb-3 bg-light position-relative">
+                                <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
+                                
+                                <div class="row g-3">
+                                    <!-- Selector Tipo (Radio) -->
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold small d-block">Participación como:</label>
+                                        <div class="btn-group w-100" role="group">
+                                            <input type="radio" class="btn-check" name="tipoParticipacion[]" id="tipoPartComite" value="comite" checked>
+                                            <label class="btn btn-outline-primary" for="tipoPartComite">Comité</label>
+                                            
+                                            <input type="radio" class="btn-check" name="tipoParticipacion[]" id="tipoPartJurado" value="jurado">
+                                            <label class="btn btn-outline-primary" for="tipoPartJurado">Jurado</label>
+                                        </div>
+                                    </div>
+
+                                     <div class="col-12 comite-subtype-group">
+                                         <label class="form-label fw-bold small">Sub-tipo (Solo Comité)</label>
+                                         <select class="form-select" name="subapartadoComite[]">
+                                            <option value="tesis">Tesis</option>
+                                            <option value="tutoriales">Tutoriales</option>
+                                         </select>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold small">Nivel Académico</label>
+                                        <select class="form-select" name="nivelAcademico[]">
+                                            <option value="" selected disabled>Seleccionar...</option>
+                                            <option value="licenciatura">Licenciatura</option>
+                                            <option value="maestria">Maestría</option>
+                                            <option value="doctorado">Doctorado</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold small">Programa Posgrado</label>
+                                        <input type="text" class="form-control" name="programaPosgrado[]" placeholder="Programa">
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold small">Título Tesis</label>
+                                        <input type="text" class="form-control" name="tituloTesisComite[]" placeholder="Título">
+                                    </div>
+
+                                    <div class="col-12">
+                                         <label class="form-label fw-bold small">Estudiante</label>
+                                         <input type="text" class="form-control" name="estudianteComite[]" placeholder="Estudiante">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="d-flex justify-content-between mt-3">
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddComite">
+                                <i class="bi bi-plus-lg me-2"></i> Agregar
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-sm text-white">
+                                <i class="bi bi-save me-2"></i> Guardar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            {{ body_comites_jurado() }}
+
+        <!-- CARD 2: ESTUDIANTES (Separada) -->
+        <div class="col-12 mb-4">
+             <div class="card shadow border-0 rounded-3 h-100">
+                <div class="card-header bg-white border-0 pt-4 px-4">
+                    <h4 class="text-primary fw-bold"><i class="bi bi-mortarboard me-2"></i> Estudiantes</h4>
+                </div>
+                <div class="card-body">
+                    <form id="formEstudiantes" action="{{ url_for('reports.save_estudiantes') }}" method="POST">
+                        <input type="hidden" name="cliente_id" value="{{ client.id if client else '' }}">
+                        <div id="estudiantesContainer">
+                            <div class="dynamic-estudiante-row border rounded p-3 mb-3 bg-light position-relative">
+                                <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
+
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold small">Tipo de Actividad</label>
+                                        <select class="form-select" name="tipoEstudiante[]">
+                                            <option value="proyecto">Proyecto de Investigación</option>
+                                            <option value="servicio">Servicio Social</option>
+                                        </select>
+                                    </div>
+
+                                     <div class="col-12">
+                                        <label class="form-label fw-bold small">Nombre del Estudiante</label>
+                                        <input type="text" class="form-control" name="nombreEstudianteParticipacion[]">
+                                     </div>
+
+                                      <div class="col-12">
+                                        <label class="form-label fw-bold small">Procedencia</label>
+                                        <input type="text" class="form-control" name="procedenciaServicio[]" placeholder="Procedencia (Servicio)">
+                                     </div>
+
+                                      <div class="col-12">
+                                        <label class="form-label fw-bold small">Título del Proyecto</label>
+                                        <input type="text" class="form-control" name="tituloProyectoEstudiante[]" placeholder="Proyecto">
+                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="d-flex justify-content-between mt-3">
+                             <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddEstudiante">
+                                <i class="bi bi-plus-lg me-2"></i> Agregar
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-sm text-white">
+                                <i class="bi bi-save me-2"></i> Guardar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+             </div>
         </div>
     </div>
 {% endmacro %}
+
 
 {% macro body_finance() %}
     <div class="p-4 bg-white">
