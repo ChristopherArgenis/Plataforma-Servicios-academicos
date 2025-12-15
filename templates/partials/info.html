@@ -14,9 +14,17 @@
                 <!-- 1. Nombre del Usuario -->
                 <div class="mb-4">
                     <label class="form-label fw-bold text-secondary">Nombre del Académico</label>
-                    <div class="p-3 bg-light rounded border" style="border-left: 4px solid #002855 !important;">
-                        <i class="bi bi-person-circle me-2" style="color: #002855;"></i>
-                        <span class="fw-bold" style="color: #002855;">{{ user }}</span>
+                    <div class="p-3 bg-light rounded border d-flex justify-content-between align-items-center" style="border-left: 4px solid #002855 !important;">
+                        <div class="d-flex align-items-center gap-2 w-100">
+                            <i class="bi bi-person-circle me-2" style="color: #002855;"></i>
+                            <span id="userNameDisplay" class="fw-bold" style="color: #002855;">{{ user }}</span>
+                            <div id="userInputContainer" style="display: none;" class="w-100">
+                                <input type="text" class="form-control form-control-sm border-primary" id="userNameInput" value="{{ user }}">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary border-0" id="btnEditName" title="Editar Nombre">
+                             <i class="bi bi-pencil-fill"></i>
+                        </button>
                     </div>
                 </div>
 

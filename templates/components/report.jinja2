@@ -35,15 +35,8 @@
                             <span class="fw-medium">{{ user_info.affilition if user_info and user_info.affilition else 'N/A' }}</span>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="bg-light rounded-circle p-3 text-primary me-3">
-                            <i class="bi bi-quote fs-4"></i>
-                        </div>
-                        <div>
-                            <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.75rem;">Citas</small>
-                            <span class="fw-medium">{{ user_info.cited_by if user_info else '0' }}</span>
-                        </div>
                     </div>
+                </div>
                 </div>
             </div>
 
@@ -525,118 +518,86 @@
 {% macro body_difusion() %}
     <div class="p-4 bg-white">
         <form id="formularioDifusion">
-            <h5 class="mb-4 text-secondary border-bottom pb-2">Difusión del Conocimiento</h5>
-            
-            <!-- Selector de Tipo -->
-            <div class="mb-4">
-                <label class="form-label fw-bold">Tipo de Registro</label>
-                <div class="btn-group w-100" role="group">
-                    <input type="radio" class="btn-check" name="tipoDifusion" id="tipoCongreso" value="congreso">
-                    <label class="btn btn-outline-primary" for="tipoCongreso">
-                        <i class="bi bi-people me-2"></i>Congreso
-                    </label>
+            <!-- SECCIÓN 1: CONGRESOS -->
+            <h5 class="mb-3 text-secondary border-bottom pb-2">Congresos</h5>
+            <div id="congresoContainer">
+                <div class="dynamic-congreso-row border rounded p-3 mb-3 bg-light position-relative">
+                    <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
                     
-                    <input type="radio" class="btn-check" name="tipoDifusion" id="tipoEvento" value="evento">
-                    <label class="btn btn-outline-primary" for="tipoEvento">
-                        <i class="bi bi-calendar-event me-2"></i>Evento
-                    </label>
-                </div>
-            </div>
-
-            <!-- Campos de Congreso -->
-            <div id="congresoFields" style="display: none;">
-                <div class="row g-3">
-                    <div class="col-md-12">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" name="tituloTrabajo" placeholder="Título">
-                            <label>Título del trabajo o Plática</label>
+                    <div class="row g-3">
+                         <div class="col-md-12">
+                            <label class="form-label fw-bold small">Título del Trabajo/Plática</label>
+                            <input type="text" class="form-control" name="tituloTrabajo[]" placeholder="Título">
                         </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" name="autores" placeholder="Autores">
-                            <label>Autores</label>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Autores</label>
+                            <input type="text" class="form-control" name="autores[]" placeholder="Autores">
                         </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" name="nombreEvento" placeholder="Nombre del evento">
-                            <label>Nombre del evento</label>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Nombre del Evento</label>
+                            <input type="text" class="form-control" name="nombreEvento[]" placeholder="Evento">
                         </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" name="lugar" placeholder="Lugar">
-                            <label>Lugar</label>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Lugar</label>
+                            <input type="text" class="form-control" name="lugar[]" placeholder="Lugar">
                         </div>
-                    </div>
 
-                    <div class="col-md-3">
-                        <div class="form-floating">
-                            <input type="date" class="form-control" name="fechaInicio" placeholder="Fecha inicio">
-                            <label>Fecha inicio</label>
+                        <div class="col-md-3">
+                             <label class="form-label fw-bold small">Fecha Inicio</label>
+                             <input type="date" class="form-control" name="fechaInicio[]">
                         </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-floating">
-                            <input type="date" class="form-control" name="fechaFin" placeholder="Fecha fin">
-                            <label>Fecha fin</label>
+                        <div class="col-md-3">
+                             <label class="form-label fw-bold small">Fecha Fin</label>
+                             <input type="date" class="form-control" name="fechaFin[]">
                         </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" name="ponente" placeholder="Ponente">
-                            <label>Ponente</label>
+                        <div class="col-md-6">
+                             <label class="form-label fw-bold small">Ponente</label>
+                             <input type="text" class="form-control" name="ponente[]" placeholder="Ponente">
                         </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold">Estudiantes</label>
-                        <div id="estudiantesContainer">
-                            <div class="input-group mb-2 dynamic-student-row">
-                                <input type="text" class="form-control" name="estudiantes[]" placeholder="Nombre del estudiante">
-                            </div>
+                        <div class="col-md-12">
+                             <label class="form-label fw-bold small">Estudiantes (Lista separada por comas)</label>
+                             <input type="text" class="form-control" name="estudiantes[]" placeholder="Estudiantes involucrados">
                         </div>
-                        <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddStudent">
-                            <i class="bi bi-plus-lg me-1"></i> Agregar estudiante
-                        </button>
-                    </div>
 
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold">Modalidad</label>
-                        <div class="btn-group w-100" role="group">
-                            <input type="radio" class="btn-check" name="modalidad" id="modalidadPresencial" value="presencial">
-                            <label class="btn btn-outline-secondary" for="modalidadPresencial">Presencial</label>
-                            
-                            <input type="radio" class="btn-check" name="modalidad" id="modalidadLinea" value="linea">
-                            <label class="btn btn-outline-secondary" for="modalidadLinea">En línea</label>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Modalidad</label>
+                            <select class="form-select" name="modalidad[]">
+                                <option value="presencial">Presencial</option>
+                                <option value="linea">En línea</option>
+                            </select>
                         </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold">Alcance</label>
-                        <div class="btn-group w-100" role="group">
-                            <input type="radio" class="btn-check" name="alcance" id="alcanceInternacional" value="internacional">
-                            <label class="btn btn-outline-secondary" for="alcanceInternacional">Internacional</label>
-                            
-                            <input type="radio" class="btn-check" name="alcance" id="alcanceNacional" value="nacional">
-                            <label class="btn btn-outline-secondary" for="alcanceNacional">Nacional</label>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Alcance</label>
+                            <select class="form-select" name="alcance[]">
+                                <option value="internacional">Internacional</option>
+                                <option value="nacional">Nacional</option>
+                            </select>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <div class="d-flex justify-content-start mb-5">
+                 <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddCongreso">
+                    <i class="bi bi-plus-lg me-2"></i> Agregar Congreso
+                </button>
+            </div>
 
-            <!-- Campos de Evento -->
-            <div id="eventoFields" style="display: none;">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <select class="form-select" name="tipoEvento">
+            <!-- SECCIÓN 2: EVENTOS -->
+            <h5 class="mb-3 text-secondary border-bottom pb-2">Eventos</h5>
+            <div id="eventoContainer">
+                <div class="dynamic-evento-row border rounded p-3 mb-3 bg-light position-relative">
+                    <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Tipo de Evento</label>
+                            <select class="form-select" name="tipoEvento[]">
                                 <option value="" selected disabled>Seleccionar...</option>
                                 <option value="coloquios">Coloquios</option>
                                 <option value="conferencias">Conferencias</option>
@@ -650,36 +611,34 @@
                                 <option value="talleres">Talleres</option>
                                 <option value="otras">Otras actividades</option>
                             </select>
-                            <label>Tipo de evento</label>
                         </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" name="nombreEventoSimple" placeholder="Nombre del evento">
-                            <label>Nombre del evento</label>
+                        <div class="col-md-6">
+                             <label class="form-label fw-bold small">Nombre del Evento</label>
+                             <input type="text" class="form-control" name="nombreEventoSimple[]" placeholder="Nombre">
                         </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="number" class="form-control" name="numPonentes" placeholder="Número de ponentes" min="0">
-                            <label>Número de ponentes</label>
+                        <div class="col-md-6">
+                             <label class="form-label fw-bold small">Número de Ponentes</label>
+                             <input type="number" class="form-control" name="numPonentes[]" min="0">
                         </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="number" class="form-control" name="numAsistentes" placeholder="Número de asistentes" min="0">
-                            <label>Número de asistentes</label>
+                        <div class="col-md-6">
+                             <label class="form-label fw-bold small">Número de Asistentes</label>
+                             <input type="number" class="form-control" name="numAsistentes[]" min="0">
                         </div>
                     </div>
                 </div>
             </div>
 
+            <div class="d-flex justify-content-start mb-4">
+                 <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddEvento">
+                    <i class="bi bi-plus-lg me-2"></i> Agregar Evento
+                </button>
+            </div>
+
             <div class="d-flex justify-content-end mt-4">
                 <button type="submit" class="btn btn-success text-white shadow-sm">
-                    <i class="bi bi-save me-2"></i> Guardar Cambios
+                    <i class="bi bi-save me-2"></i> Guardar Todo
                 </button>
             </div>
         </form>
@@ -701,161 +660,126 @@
 {% macro body_comites_jurado() %}
     <div class="p-4 bg-white">
         <form id="formularioComites">
-            <h5 class="mb-4 text-secondary border-bottom pb-2">Participaciones</h5>
-            
-            <!-- Selector de Tipo de Participación -->
-            <div class="mb-4">
-                <label class="form-label fw-bold">Tipo de Participación</label>
-                <div class="btn-group w-100" role="group">
-                    <input type="radio" class="btn-check" name="tipoParticipacion" id="tipoComite" value="comite" checked>
-                    <label class="btn btn-outline-primary" for="tipoComite">
-                        <i class="bi bi-people me-2"></i>Comité
-                    </label>
+            <!-- SECCIÓN 1: COMITÉS Y JURADOS -->
+            <h5 class="mb-3 text-secondary border-bottom pb-2">Participación en Comités y Jurados</h5>
+            <div id="comitesContainer">
+                <!-- Fila dinámica plantilla -->
+                <div class="dynamic-comite-row border rounded p-3 mb-3 bg-light position-relative">
                     
-                    <input type="radio" class="btn-check" name="tipoParticipacion" id="tipoJurado" value="jurado">
-                    <label class="btn btn-outline-primary" for="tipoJurado">
-                        <i class="bi bi-award me-2"></i>Jurado
-                    </label>
+                    <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
 
-                    <input type="radio" class="btn-check" name="tipoParticipacion" id="tipoEstudiantes" value="estudiantes">
-                    <label class="btn btn-outline-primary" for="tipoEstudiantes">
-                        <i class="bi bi-mortarboard me-2"></i>Estudiantes
-                    </label>
-                </div>
-            </div>
+                    <div class="row g-3">
+                        <!-- Selector de Tipo -->
+                        <div class="col-md-4">
+                             <label class="form-label fw-bold small">Tipo de Participación</label>
+                             <select class="form-select" name="tipoParticipacion[]">
+                                <option value="comite">Comité</option>
+                                <option value="jurado">Jurado</option>
+                             </select>
+                        </div>
 
-            <!-- Campos Comunes (Nivel y Posgrado - Se mantienen para Comité y Jurado, revisar si aplican para Estudiantes, asumimos que no o se ocultan si no se piden explícitamente, pero el request dice "Estudiantes tiene los siguientes campos", lo que implica que son distintos. Ocultaré los comunes cuando sea Estudiantes) -->
-            <div id="commonFields">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <select class="form-select" name="nivelAcademico">
+                         <!-- Selector de Subapartado (Solo para Comité) -->
+                        <div class="col-md-4 comite-subtype-group">
+                             <label class="form-label fw-bold small">Sub-tipo (Comité)</label>
+                             <select class="form-select" name="subapartadoComite[]">
+                                <option value="tesis">Tesis</option>
+                                <option value="tutoriales">Tutoriales</option>
+                             </select>
+                        </div>
+                        
+                        <!-- Nivel Académico -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold small">Nivel Académico</label>
+                            <select class="form-select" name="nivelAcademico[]">
                                 <option value="" selected disabled>Seleccionar...</option>
                                 <option value="licenciatura">Licenciatura</option>
                                 <option value="maestria">Maestría</option>
                                 <option value="doctorado">Doctorado</option>
                             </select>
-                            <label>Nivel Académico</label>
                         </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" name="programaPosgrado" placeholder="Programa de Posgrado">
-                            <label>Programa de Posgrado</label>
+                         <!-- Programa Posgrado -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Programa de Posgrado</label>
+                            <input type="text" class="form-control" name="programaPosgrado[]" placeholder="Programa">
+                        </div>
+
+                        <!-- TITULO TESIS (Común para Comité->Tesis y Jurado) -->
+                        <div class="col-md-12 thesis-title-group">
+                            <label class="form-label fw-bold small">Título de la Tesis</label>
+                            <input type="text" class="form-control" name="tituloTesisComite[]" placeholder="Título">
+                        </div>
+
+                        <!-- NOMBRE ESTUDIANTE (Común) -->
+                        <div class="col-md-12">
+                             <label class="form-label fw-bold small">Nombre del Estudiante</label>
+                             <input type="text" class="form-control" name="estudianteComite[]" placeholder="Estudiante">
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <div class="d-flex justify-content-start mb-5">
+                <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddComite">
+                    <i class="bi bi-plus-lg me-2"></i> Agregar Participación
+                </button>
+            </div>
 
-            <!-- Campos Específicos de Comité -->
-            <div id="comiteFields" class="mt-4">
-                <label class="form-label fw-bold mb-3">Tipo</label>
-                <div class="d-flex gap-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="subapartadoComite" id="checkTesis" value="tesis">
-                        <label class="form-check-label" for="checkTesis">
-                            Tesis
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="subapartadoComite" id="checkTutoriales" value="tutoriales">
-                        <label class="form-check-label" for="checkTutoriales">
-                            Tutoriales
-                        </label>
-                    </div>
-                </div>
 
-                <!-- New Inputs for Comite (Tesis) -->
-                 <div id="comiteTesisInputs" class="mt-3" style="display: none;">
+            <!-- SECCIÓN 2: ESTUDIANTES -->
+            <h5 class="mb-3 text-secondary border-bottom pb-2">Estudiantes (Investigación y Servicio)</h5>
+            <div id="estudiantesContainer">
+                <div class="dynamic-estudiante-row border rounded p-3 mb-3 bg-light position-relative">
+                    <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
+
                     <div class="row g-3">
-                        <div class="col-md-12">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" name="tituloTesisComite" placeholder="Título de la Tesis">
-                                <label>Título de la Tesis</label>
-                            </div>
+                         <!-- Selector Tipo Actividad -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold small">Tipo de Actividad</label>
+                            <select class="form-select" name="tipoEstudiante[]">
+                                <option value="proyecto">Proyecto de Investigación</option>
+                                <option value="servicio">Servicio Social</option>
+                            </select>
                         </div>
-                        <div class="col-md-12">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" name="estudianteComite" placeholder="Nombre del Estudiante">
-                                <label>Nombre del Estudiante</label>
-                            </div>
-                        </div>
-                    </div>
-                 </div>
-            </div>
 
-            <!-- Campos Específicos de Jurado -->
-            <div id="juradoFields" class="mt-4" style="display: none;">
-                <div class="alert alert-light border shadow-sm mb-3">
-                    <i class="bi bi-info-circle me-2"></i> Se registrará como <strong>Examen de Grado</strong>.
-                </div>
-                 <div class="row g-3">
-                    <div class="col-md-12">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" name="tituloTesisJurado" placeholder="Título de la Tesis">
-                            <label>Título de la Tesis</label>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" name="estudianteJurado" placeholder="Nombre del Estudiante">
-                            <label>Nombre del Estudiante</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        <!-- Nombre Estudiante -->
+                         <div class="col-md-8">
+                            <label class="form-label fw-bold small">Nombre del Estudiante</label>
+                            <input type="text" class="form-control" name="nombreEstudianteParticipacion[]">
+                         </div>
 
-            <!-- Campos Específicos de Estudiantes -->
-            <div id="estudiantesFields" class="mt-4" style="display: none;">
-                <div class="row g-3">
-                    <div class="col-md-12">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" name="nombreEstudianteParticipacion" placeholder="Nombre del Estudiante">
-                            <label>Nombre del Estudiante</label>
-                        </div>
-                    </div>
-
-                    <div class="col-md-12">
-                        <label class="form-label fw-bold">Tipo de Actividad</label>
-                        <div class="btn-group w-100" role="group">
-                            <input type="radio" class="btn-check" name="tipoEstudiante" id="tipoProyecto" value="proyecto">
-                            <label class="btn btn-outline-primary" for="tipoProyecto">Proyecto de Investigación</label>
-                            
-                            <input type="radio" class="btn-check" name="tipoEstudiante" id="tipoServicio" value="servicio">
-                            <label class="btn btn-outline-primary" for="tipoServicio">Servicio Social</label>
-                        </div>
-                    </div>
-
-                    <!-- Proyecto Fields -->
-                    <div id="proyectoFields" class="col-md-12" style="display: none;">
-                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" name="tituloProyectoEstudiante" placeholder="Título del Proyecto">
-                            <label>Título del Proyecto</label>
-                        </div>
-                        <div class="form-floating">
-                            <select class="form-select" name="nivelProyecto">
+                        <!-- Campos PROYECTO -->
+                         <div class="col-md-8 project-fields">
+                            <label class="form-label fw-bold small">Título del Proyecto</label>
+                            <input type="text" class="form-control" name="tituloProyectoEstudiante[]">
+                         </div>
+                         <div class="col-md-4 project-fields">
+                            <label class="form-label fw-bold small">Nivel Proyecto</label>
+                            <select class="form-select" name="nivelProyecto[]">
                                 <option value="" selected disabled>Seleccionar...</option>
                                 <option value="Licenciatura">Licenciatura</option>
                                 <option value="Posgrado">Posgrado</option>
                             </select>
-                            <label>Nivel del Proyecto</label>
-                        </div>
-                    </div>
+                         </div>
 
-                    <!-- Servicio Fields -->
-                    <div id="servicioFields" class="col-md-12" style="display: none;">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" name="procedenciaServicio" placeholder="Procedencia">
-                            <label>Procedencia</label>
-                        </div>
+                        <!-- Campos SERVICIO -->
+                         <div class="col-md-12 service-fields" style="display: none;">
+                            <label class="form-label fw-bold small">Institución de Procedencia</label>
+                            <input type="text" class="form-control" name="procedenciaServicio[]">
+                         </div>
                     </div>
                 </div>
             </div>
 
+            <div class="d-flex justify-content-start mb-4">
+                 <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddEstudiante">
+                    <i class="bi bi-plus-lg me-2"></i> Agregar Estudiante
+                </button>
+            </div>
+
             <div class="d-flex justify-content-end mt-4">
                 <button type="submit" class="btn btn-success text-white shadow-sm">
-                    <i class="bi bi-save me-2"></i> Guardar Cambios
+                    <i class="bi bi-save me-2"></i> Guardar Todo
                 </button>
             </div>
         </form>
@@ -987,62 +911,55 @@
 {% macro body_estancia() %}
     <div class="p-4 bg-white">
         <form id="formularioEstancia">
-            <h5 class="mb-4 text-secondary border-bottom pb-2">Información de Estancia</h5>
-            
-            <div class="mb-4">
-                <label class="form-label fw-bold">Tipo de Actividad</label>
-                <div class="btn-group w-100" role="group">
-                    <input type="radio" class="btn-check" name="tipoEstancia" id="tipoVisita" value="visita">
-                    <label class="btn btn-outline-primary" for="tipoVisita">
-                        <i class="bi bi-geo-fill me-2"></i>Visita
-                    </label>
+            <h5 class="mb-3 text-secondary border-bottom pb-2">Información de Estancia</h5>
+            <div id="estanciaContainer">
+                <div class="dynamic-estancia-row border rounded p-3 mb-3 bg-light position-relative">
+                    <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
                     
-                    <input type="radio" class="btn-check" name="tipoEstancia" id="tipoEstanciaOption" value="estancia">
-                    <label class="btn btn-outline-primary" for="tipoEstanciaOption">
-                        <i class="bi bi-house-door-fill me-2"></i>Estancia
-                    </label>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Tipo de Actividad</label>
+                            <select class="form-select" name="tipoEstancia[]">
+                                <option value="visita">Visita</option>
+                                <option value="estancia">Estancia</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Nombre</label>
+                            <input type="text" class="form-control" name="nombreEstancia[]" placeholder="Nombre">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Origen</label>
+                             <select class="form-select" name="origenEstancia[]">
+                                <option value="" selected disabled>Seleccionar...</option>
+                                <option value="Nacional">Nacional</option>
+                                <option value="Extranjero">Extranjero</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Institución de Procedencia</label>
+                            <input type="text" class="form-control" name="institucionProcedencia[]" placeholder="Institución">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Fecha Inicio</label>
+                            <input type="date" class="form-control" name="fechaInicioEstancia[]">
+                        </div>
+                        <div class="col-md-6">
+                             <label class="form-label fw-bold small">Fecha Fin</label>
+                             <input type="date" class="form-control" name="fechaFinEstancia[]">
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" name="nombreEstancia" placeholder="Nombre">
-                        <label>Nombre</label>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <select class="form-select" name="origenEstancia">
-                            <option value="" selected disabled>Seleccionar...</option>
-                            <option value="Nacional">Nacional</option>
-                            <option value="Extranjero">Extranjero</option>
-                        </select>
-                        <label>Origen</label>
-                    </div>
-                </div>
-
-                <div class="col-md-12">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" name="institucionProcedencia" placeholder="Institución de Procedencia">
-                        <label>Institución de Procedencia</label>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <input type="date" class="form-control" name="fechaInicioEstancia" placeholder="Fecha Inicio">
-                        <label>Fecha Inicio</label>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <input type="date" class="form-control" name="fechaFinEstancia" placeholder="Fecha Fin">
-                        <label>Fecha Fin</label>
-                    </div>
-                </div>
+            <div class="d-flex justify-content-start mb-4">
+                 <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddEstancia">
+                    <i class="bi bi-plus-lg me-2"></i> Agregar Estancia
+                </button>
             </div>
 
             <div class="d-flex justify-content-end mt-4">
@@ -1068,75 +985,67 @@
 {% macro body_divulgacion() %}
     <div class="p-4 bg-white">
         <form id="formularioDivulgacion">
-            <h5 class="mb-4 text-secondary border-bottom pb-2">Información de Divulgación</h5>
-            
-            <div class="mb-4">
-                <label class="form-label fw-bold">Tipo de Publicación</label>
-                <div class="btn-group w-100" role="group">
-                    <input type="radio" class="btn-check" name="tipoDivulgacion" id="tipoArticulo" value="articulo">
-                    <label class="btn btn-outline-primary" for="tipoArticulo">
-                        <i class="bi bi-file-text me-2"></i>Artículo
-                    </label>
+            <h5 class="mb-3 text-secondary border-bottom pb-2">Información de Divulgación</h5>
+            <div id="divulgacionContainer">
+                <div class="dynamic-divulgacion-row border rounded p-3 mb-3 bg-light position-relative">
+                    <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
                     
-                    <input type="radio" class="btn-check" name="tipoDivulgacion" id="tipoLibro" value="libro">
-                    <label class="btn btn-outline-primary" for="tipoLibro">
-                        <i class="bi bi-book me-2"></i>Libro
-                    </label>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Tipo de Publicación</label>
+                            <select class="form-select" name="tipoDivulgacion[]">
+                                <option value="articulo">Artículo</option>
+                                <option value="libro">Libro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Tipo de Evento</label>
+                            <select class="form-select" name="tipoEventoDivulgacion[]">
+                                <option value="" selected disabled>Seleccionar...</option>
+                                <option value="coloquios">Coloquios</option>
+                                <option value="conferencias">Conferencias</option>
+                                <option value="congresos">Congresos</option>
+                                <option value="cursos">Cursos</option>
+                                <option value="diplomados">Diplomados</option>
+                                <option value="foros">Foros</option>
+                                <option value="mesas_redondas">Mesas redondas</option>
+                                <option value="seminarios">Seminarios</option>
+                                <option value="simposios">Simposios</option>
+                                <option value="talleres">Talleres</option>
+                                <option value="otras">Otras actividades</option>
+                            </select>
+                        </div>
+
+                         <div class="col-md-12">
+                            <label class="form-label fw-bold small">Título</label>
+                            <input type="text" class="form-control" name="tituloDivulgacion[]" placeholder="Título">
+                         </div>
+
+                         <div class="col-md-6">
+                            <label class="form-label fw-bold small">Autores</label>
+                            <input type="text" class="form-control" name="autoresDivulgacion[]" placeholder="Autores">
+                         </div>
+
+                         <div class="col-md-6">
+                            <label class="form-label fw-bold small">Revista</label>
+                            <input type="text" class="form-control" name="revistaDivulgacion[]" placeholder="Revista">
+                         </div>
+
+                         <div class="col-md-6">
+                            <label class="form-label fw-bold small">Modalidad</label>
+                            <select class="form-select" name="modalidadDivulgacion[]">
+                                <option value="presencial">Presencial</option>
+                                <option value="linea">En Línea</option>
+                            </select>
+                         </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="row g-3">
-                <div class="col-md-12">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" name="tituloDivulgacion" placeholder="Título">
-                        <label>Título</label>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" name="autoresDivulgacion" placeholder="Autores">
-                        <label>Autores</label>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" name="revistaDivulgacion" placeholder="Revista">
-                        <label>Revista</label>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <select class="form-select" name="tipoEventoDivulgacion">
-                            <option value="" selected disabled>Seleccionar...</option>
-                            <option value="coloquios">Coloquios</option>
-                            <option value="conferencias">Conferencias</option>
-                            <option value="congresos">Congresos</option>
-                            <option value="cursos">Cursos</option>
-                            <option value="diplomados">Diplomados</option>
-                            <option value="foros">Foros</option>
-                            <option value="mesas_redondas">Mesas redondas</option>
-                            <option value="seminarios">Seminarios</option>
-                            <option value="simposios">Simposios</option>
-                            <option value="talleres">Talleres</option>
-                            <option value="otras">Otras actividades</option>
-                        </select>
-                        <label>Tipo de Evento</label>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label fw-bold d-block mb-2">Modalidad</label>
-                    <div class="btn-group w-100" role="group">
-                        <input type="radio" class="btn-check" name="modalidadDivulgacion" id="modalidadPresencialDiv" value="presencial">
-                        <label class="btn btn-outline-secondary" for="modalidadPresencialDiv">Presencial</label>
-                        
-                        <input type="radio" class="btn-check" name="modalidadDivulgacion" id="modalidadLineaDiv" value="linea">
-                        <label class="btn btn-outline-secondary" for="modalidadLineaDiv">En Línea</label>
-                    </div>
-                </div>
+            <div class="d-flex justify-content-start mb-4">
+                 <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddDivulgacion">
+                    <i class="bi bi-plus-lg me-2"></i> Agregar Divulgación
+                </button>
             </div>
 
             <div class="d-flex justify-content-end mt-4">

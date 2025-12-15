@@ -56,6 +56,23 @@ class InfoService:
             return False, f'Error al guardar la información: {str(e)}'
 
     @staticmethod
+    def update_nombre_cliente(current_username: str, new_name: str) -> tuple[bool, str]:
+        """
+        Actualiza el nombre del cliente.
+        """
+        try:
+            cliente = Cliente.query.filter_by(nombre=current_username).first()
+            if not cliente:
+                return False, 'Usuario no encontrado'
+            
+            cliente.nombre = new_name
+            db.session.commit()
+            return True, 'Nombre actualizado correctamente'
+        except Exception as e:
+            db.session.rollback()
+            return False, str(e)
+
+    @staticmethod
     def get_informacion_academica(username: str) -> dict:
         """
         Obtiene la información académica de un usuario.
