@@ -128,6 +128,8 @@ class ComiteJurado(db.Model):
     nivel_academico = db.Column(db.Text, nullable=True)
     programa_posgrado = db.Column(db.Text, nullable=True)
     participacion = db.Column(db.Text, nullable=True)  # 1 o 2 elementos separados
+    titulo_tesis = db.Column(db.Text, nullable=True)
+    nombre_estudiante = db.Column(db.Text, nullable=True)
 
 
 # -------------------------
@@ -142,6 +144,7 @@ class Estudiante(db.Model):
     nombre = db.Column(db.Text, nullable=False)
     actividad = db.Column(db.Text, nullable=True)
     procedencia = db.Column(db.Text, nullable=True)
+    titulo_proyecto = db.Column(db.Text, nullable=True)
 
 
 # -------------------------

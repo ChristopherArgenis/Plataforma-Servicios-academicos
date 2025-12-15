@@ -74,24 +74,24 @@
                                 <h6 class="card-title fw-bold mb-3" style="color: #002855;">
                                     <i class="bi bi-building me-2"></i>Departamento
                                 </h6>
-                                <div class="row g-3">
-                                    {% set deptos = [
-                                    'Laboratorio', 'Biomateriales', 'Física',
-                                    'Físico-química', 'Nanomateriales', 'Materiales Avanzados',
-                                    'Modelación de Nanomateriales', 'Nanocatálisis', 'Nanoestructuras'
-                                    ] %}
-                                    {% for depto in deptos %}
-                                    <div class="col-md-4">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="departamento"
-                                                value="{{ depto }}" id="depto_{{ loop.index }}">
-                                            <label class="form-check-label" for="depto_{{ loop.index }}">
-                                                {{ depto }}
-                                            </label>
+                                    <div class="row g-3">
+                                        {% set deptos = [
+                                        'Biomateriales', 'Física',
+                                        'Físico-química de Nanomateriales', 'Materiales Avanzados',
+                                        'Modelación de Nanomateriales', 'Nanocatálisis', 'Nanoestructuras'
+                                        ] %}
+                                        {% for depto in deptos %}
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="departamento"
+                                                    value="{{ depto }}" id="depto_{{ loop.index }}">
+                                                <label class="form-check-label" for="depto_{{ loop.index }}">
+                                                    {{ depto }}
+                                                </label>
+                                            </div>
                                         </div>
+                                        {% endfor %}
                                     </div>
-                                    {% endfor %}
-                                </div>
                             </div>
                         </div>
                     </div>

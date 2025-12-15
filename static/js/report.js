@@ -183,9 +183,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // === COMITES Y JURADO LOGIC ===
-    const tipoParticipacionRadios = document.querySelectorAll('input[name="tipoParticipacion"]');
-    
+    // === COMITES LOGIC ===
+    const subapartadoComiteRadios = document.querySelectorAll('input[name="subapartadoComite"]');
+    subapartadoComiteRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            const comiteTesisInputs = document.getElementById('comiteTesisInputs');
+            if (this.value === 'tesis') {
+                if (comiteTesisInputs) comiteTesisInputs.style.display = 'block';
+            } else {
+                if (comiteTesisInputs) comiteTesisInputs.style.display = 'none';
+            }
+        });
+    });
+
     // Function to handle visibility
     function toggleParticipacionFields(value) {
         const comiteFields = document.getElementById('comiteFields');
@@ -198,13 +208,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (juradoFields) juradoFields.style.display = 'none';
         if (estudiantesFields) estudiantesFields.style.display = 'none';
         
-        // Common fields are shown for Comite and Jurado, hidden for Estudiantes (based on my assumption in plan)
         if (commonFields) {
             if (value === 'estudiantes') {
                 commonFields.style.display = 'none';
             } else {
-                commonFields.style.display = 'block'; // using block? or flex? default is block usually for div
-                // or restore previous display style? block is safe for div
+                commonFields.style.display = 'block'; 
             }
         }
 
@@ -223,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
         toggleParticipacionFields(checkedParticipacion.value);
     }
 
-    // Listener
+    const tipoParticipacionRadios = document.querySelectorAll('input[name="tipoParticipacion"]');
     tipoParticipacionRadios.forEach(radio => {
         radio.addEventListener('change', function() {
             toggleParticipacionFields(this.value);
@@ -257,14 +265,289 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (rows.length > 0) {
                     const lastRow = rows[rows.length - 1];
                     const newRow = lastRow.cloneNode(true);
-                    
-                    // Clear input in the new row
                     const input = newRow.querySelector('input');
                     if (input) input.value = '';
-
                     estudiantesContainer.appendChild(newRow);
                 }
             }
+        });
+    }
+
+    // === FINANCIADOS PARTICIPANTS LOGIC ===
+    let participantesFinanciacion = [];
+    const btnAddPartFin = document.getElementById('btnAddPartFin');
+    
+    // Render Function
+    function renderParticipantesFin() {
+        const container = document.getElementById('participantesFinList');
+        if (!container) return;
+        container.innerHTML = '';
+        
+        participantesFinanciacion.forEach((p, index) => {
+            const item = document.createElement('div');
+            item.className = 'd-flex justify-content-between align-items-center bg-white p-2 mb-2 rounded border shadow-sm';
+            item.innerHTML = `
+                <div>
+                    <span class="fw-bold text-primary">${p.nombre}</span>
+                    <small class="text-muted mx-2">|</small>
+                    <span class="text-secondary small">${p.tipo}</span>
+                    <small class="text-muted mx-2">|</small>
+                    <span class="text-dark small">${p.institucion}</span>
+                </div>
+                <button type="button" class="btn btn-outline-danger btn-sm border-0" onclick="removeParticipanteFin(${index})">
+                    <i class="bi bi-trash"></i>
+                </button>
+            `;
+            container.appendChild(item);
+        });
+    }
+    
+    // Expose remove function globally
+    window.removeParticipanteFin = function(index) {
+        participantesFinanciacion.splice(index, 1);
+        renderParticipantesFin();
+    };
+
+    if (btnAddPartFin) {
+        btnAddPartFin.addEventListener('click', function() {
+           const nameInput = document.getElementById('partFinName');
+           const instInput = document.getElementById('partFinInst');
+           const typeInput = document.querySelector('input[name="tipoPartFin"]:checked');
+           
+           if (!nameInput.value.trim()) {
+               alert('El nombre es requerido');
+               return;
+           }
+           if (!typeInput) {
+               alert('Seleccione un tipo (Académico/Estudiante)');
+               return;
+           }
+           
+           const participante = {
+               nombre: nameInput.value.trim(),
+               tipo: typeInput.value, // Academico or Estudiante
+               institucion: instInput.value.trim() || 'N/A'
+           };
+           
+           participantesFinanciacion.push(participante);
+           renderParticipantesFin();
+           
+           // Clear inputs
+           nameInput.value = '';
+           instInput.value = '';
+           // Don't clear radio? better UX to keep it or reset? Resetting is safer.
+           typeInput.checked = false; 
+        });
+    }
+
+    // === DYNAMIC LISTS LOGIC (Generic) ===
+    function setupDynamicList(btnAddId, containerId, rowClass) {
+        const btnAdd = document.getElementById(btnAddId);
+        if (btnAdd) {
+            btnAdd.addEventListener('click', function() {
+                const container = document.getElementById(containerId);
+                if (container) {
+                    const rows = container.getElementsByClassName(rowClass);
+                    if (rows.length > 0) {
+                        const lastRow = rows[rows.length - 1];
+                        const newRow = lastRow.cloneNode(true);
+                        
+                        // Clear inputs
+                        const inputs = newRow.querySelectorAll('input, select');
+                        inputs.forEach(input => input.value = '');
+
+                        // Show delete button for new row
+                        const deleteBtn = newRow.querySelector('.delete-row-btn');
+                        if (deleteBtn) {
+                            deleteBtn.style.display = 'block';
+                            // Add listener to new delete button
+                            deleteBtn.addEventListener('click', function() {
+                                newRow.remove();
+                            });
+                        }
+
+                        container.appendChild(newRow);
+                        
+                        // Ensure first row also has delete button if there are > 1 rows?
+                        // Or just show delete button for ANY row if count > 1?
+                        // Simple approach: Always show delete on cloned rows.
+                        // Ideally, if we have > 1 row, all should be deletable? 
+                        // Let's keep it simple: Clone adds a row with a working delete button.
+                        // First row delete button is initially hidden. We can enable it if count > 1.
+                        updateDeleteButtons(container, rowClass);
+                    }
+                }
+            });
+        }
+    }
+
+    function updateDeleteButtons(container, rowClass) {
+        const rows = container.getElementsByClassName(rowClass);
+        Array.from(rows).forEach((row, index) => {
+            const deleteBtn = row.querySelector('.delete-row-btn');
+            if (deleteBtn) {
+                // If only 1 row, hide delete. Else show.
+                deleteBtn.style.display = rows.length > 1 ? 'block' : 'none';
+                // Ensure listener is attached (might duplicate if not careful, but cloneNode doesn't copy dynamic listeners)
+                // Better: rely on event delegation or attach only on creation.
+                // Since this runs on "Add", we can just set display.
+                // The cleaner way:
+                deleteBtn.onclick = function() {
+                   if (container.getElementsByClassName(rowClass).length > 1) {
+                       row.remove();
+                       updateDeleteButtons(container, rowClass);
+                   }
+                };
+            }
+        });
+    }
+
+    setupDynamicList('btnAddTesis', 'tesisContainer', 'dynamic-tesis-row');
+    setupDynamicList('btnAddCurso', 'cursosContainer', 'dynamic-course-row');
+
+
+    // === GLOBAL FORM SUBMISSION HANDLERS ===
+    
+    // 1. SAVE LIBROS (Existing) - Logic in setupConfirmButton
+
+    // 2. SAVE TESIS/DOCENCIA (Step 2 - "Articulos") -> Now Multiple
+    const formTesis = document.getElementById('formularioGeneral3');
+    if (formTesis) {
+        formTesis.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            // Collect arrays
+            const titulos = formData.getAll('tituloTesis3[]');
+            const grados = formData.getAll('grado3[]');
+            const estudiantes = formData.getAll('estudiante3[]');
+            const instituciones = formData.getAll('institucion3[]');
+            const estatus = formData.getAll('estatus3[]');
+
+            // Construct JSON payload
+            // We'll send arrays. The backend should handle converting to JSON string if needed.
+            const data = {
+                titulo: titulos,
+                nivel: grados, 
+                nombre_estudiante: estudiantes,
+                institucion: instituciones,
+                estatus: estatus
+            };
+            // Note: If fields are empty, arrays might have empty strings.
+             sendReportData('/Panel/Reporte/articulos/guardar', data, 'Tesis guardada');
+        });
+    }
+
+    // 3. SAVE CURSOS (Step 3)
+    const formCursos = document.getElementById('formularioCursos4'); 
+    if (formCursos) {
+        formCursos.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = {
+                materia: formData.getAll('materia4[]'),
+                nivel: formData.getAll('nivel4[]'),
+                periodo: formData.getAll('periodo4[]'),
+                institucion: formData.getAll('institucion4[]'),
+                programas: formData.getAll('programas4[]')
+            };
+            sendReportData('/Panel/Reporte/cursos/guardar', data, 'Cursos guardados');
+        });
+    }
+
+    // 4. SAVE COMITES (Step 4)
+    const formComites = document.getElementById('formularioComites');
+    if (formComites) {
+        formComites.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const tipo = formData.get('tipoParticipacion');
+            
+            let data = {
+                tipo_participacion: tipo,
+                nivel_academico: formData.get('nivelAcademico'),
+                programa_posgrado: formData.get('programaPosgrado')
+            };
+
+            if (tipo === 'comite') {
+                const sub = formData.get('subapartadoComite');
+                data.participacion = `Comité - ${sub || 'General'}`;
+                data.titulo_tesis = formData.get('tituloTesisComite');
+                data.nombre_estudiante = formData.get('estudianteComite');
+            } else if (tipo === 'jurado') {
+                data.participacion = 'Jurado - Examen de Grado';
+                data.titulo_tesis = formData.get('tituloTesisJurado');
+                data.nombre_estudiante = formData.get('estudianteJurado');
+            } else if (tipo === 'estudiantes') {
+                 const subTipo = formData.get('tipoEstudiante');
+                 const estData = {
+                     nombre: formData.get('nombreEstudianteParticipacion'), 
+                     actividad: subTipo, 
+                     titulo_proyecto: formData.get('tituloProyectoEstudiante'),
+                     procedencia: formData.get('procedenciaServicio') // Ensure this field exists if used
+                 };
+                 
+                 if(subTipo === 'proyecto') {
+                     estData.actividad = `Proyecto: ${formData.get('nivelProyecto')}`;
+                     estData.titulo_proyecto = formData.get('tituloProyectoEstudiante');
+                 } else {
+                     estData.actividad = 'Servicio Social';
+                     estData.procedencia = formData.get('procedenciaServicio');
+                 }
+                 
+                 sendReportData('/Panel/Reporte/estudiantes/guardar', estData, 'Estudiante guardado');
+                 return; 
+            }
+            
+            sendReportData('/Panel/Reporte/comite/guardar', data, 'Participación guardada');
+        });
+    }
+
+    // 5. SAVE FINANCIADOS
+    const formFinanciacion = document.getElementById('formularioFinanciacion');
+    if (formFinanciacion) {
+        formFinanciacion.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = {
+                tituloFinanciacion: formData.get('tituloFinanciacion'),
+                fuenteFinanciamiento: formData.get('fuenteFinanciamiento'),
+                clasificacionFinanciacion: formData.get('clasificacionFinanciacion'),
+                indoleFinanciacion: formData.get('indoleFinanciacion'),
+                participantesLista: participantesFinanciacion
+            };
+            sendReportData('/Panel/Reporte/financiacion/guardar', data, 'Financiación guardada');
+        });
+    }
+
+    // ... Helper functions
+    function sendReportData(url, dataObject, successMessage) {
+        const clienteId = document.getElementById('Report')?.dataset.clienteId;
+        if (!clienteId) {
+            alert('Error: Cliente ID no encontrado');
+            return;
+        }
+
+        const payload = {
+            cliente_id: clienteId,
+            data: dataObject
+        };
+
+        fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert(successMessage || 'Guardado correctamente');
+            } else {
+                alert('Error al guardar: ' + data.message);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Error de red al guardar');
         });
     }
 });

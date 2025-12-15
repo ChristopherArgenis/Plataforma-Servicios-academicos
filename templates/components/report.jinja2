@@ -203,7 +203,7 @@
         </div>
         <div class="step" id="step-9">
             <div class="circle shadow-sm"><i class="bi bi-cash-coin"></i></div>
-            <div class="label fw-bold">Financiación</div>
+            <div class="label fw-bold">Financiados</div>
         </div>
         <div class="step" id="step-10">
             <div class="circle shadow-sm"><i class="bi bi-clipboard-check"></i></div>
@@ -363,51 +363,64 @@
         <form id="formularioGeneral3">
             <h5 class="mb-4 text-secondary border-bottom pb-2">Dirección de Tesis</h5>
             
-            <div class="row g-3">
-                <div class="col-md-8">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="tituloTesis3" placeholder="Título de Tesis">
-                        <label for="tituloTesis3">Título de Tesis</label>
+            <div id="tesisContainer">
+                <div class="row g-3 dynamic-tesis-row border-bottom pb-3 mb-3">
+                    <div class="col-md-8">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="tituloTesis3[]" placeholder="Título de Tesis">
+                            <label>Título de Tesis</label>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="form-floating">
-                        <select class="form-select" id="grado3" aria-label="Grado">
-                            <option value="" selected disabled>Seleccionar...</option>
-                            <option value="licenciatura">Licenciatura</option>
-                            <option value="maestria">Maestría</option>
-                            <option value="doctorado">Doctorado</option>
-                        </select>
-                        <label for="grado3">Grado</label>
+                    
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <select class="form-select" name="grado3[]" aria-label="Grado">
+                                <option value="" selected disabled>Seleccionar...</option>
+                                <option value="licenciatura">Licenciatura</option>
+                                <option value="maestria">Maestría</option>
+                                <option value="doctorado">Doctorado</option>
+                            </select>
+                            <label>Grado</label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="estudiante3" placeholder="Estudiante">
-                        <label for="estudiante3">Nombre del Estudiante</label>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="estudiante3[]" placeholder="Estudiante">
+                            <label>Nombre del Estudiante</label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="institucion3" placeholder="Institución">
-                        <label for="institucion3">Institución</label>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="institucion3[]" placeholder="Institución">
+                            <label>Institución</label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-md-12">
-                    <div class="form-floating">
-                        <select class="form-select" id="estatus3" aria-label="Estatus">
-                            <option value="" selected disabled>Seleccionar...</option>
-                            <option value="En curso">En curso</option>
-                            <option value="Completada">Completada</option>
-                            <option value="Pendiente">Pendiente</option>
-                        </select>
-                        <label for="estatus3">Estatus</label>
+                    <div class="col-md-11">
+                        <div class="form-floating">
+                            <select class="form-select" name="estatus3[]" aria-label="Estatus">
+                                <option value="" selected disabled>Seleccionar...</option>
+                                <option value="En curso">En curso</option>
+                                <option value="Completada">Completada</option>
+                                <option value="Pendiente">Pendiente</option>
+                            </select>
+                            <label>Estatus</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1 d-flex align-items-center">
+                        <button type="button" class="btn btn-outline-danger w-100 h-100 delete-row-btn" style="display: none;">
+                            <i class="bi bi-trash"></i>
+                        </button>
                     </div>
                 </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-3">
+                 <button type="button" class="btn btn-outline-primary" id="btnAddTesis">
+                    <i class="bi bi-plus-lg me-2"></i> Agregar Tesis
+                </button>
             </div>
 
             <div class="d-flex justify-content-end mt-4">
@@ -436,7 +449,7 @@
             <h5 class="mb-4 text-secondary border-bottom pb-2">Cursos Impartidos</h5>
             
             <div id="cursosContainer">
-                <div class="row g-3 dynamic-course-row mb-3">
+                <div class="row g-3 dynamic-course-row border-bottom pb-3 mb-3">
                     <div class="col-md-6">
                         <div class="form-floating">
                             <input type="text" class="form-control" name="materia4[]" placeholder="Materia">
@@ -469,13 +482,24 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12">
+                    <div class="col-md-11">
                         <div class="form-floating">
                             <input type="text" class="form-control" name="programas4[]" placeholder="Programas">
                             <label>Programas / Herramientas</label>
                         </div>
                     </div>
+                     <div class="col-md-1 d-flex align-items-center">
+                        <button type="button" class="btn btn-outline-danger w-100 h-100 delete-row-btn" style="display: none;">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
                 </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-3">
+                 <button type="button" class="btn btn-outline-primary" id="btnAddCurso">
+                    <i class="bi bi-plus-lg me-2"></i> Agregar Curso
+                </button>
             </div>
 
             <div class="d-flex justify-content-end mt-4">
@@ -726,24 +750,59 @@
 
             <!-- Campos Específicos de Comité -->
             <div id="comiteFields" class="mt-4">
-                <label class="form-label fw-bold mb-3">Subapartado - Comités</label>
+                <label class="form-label fw-bold mb-3">Tipo</label>
                 <div class="d-flex gap-3">
-                    <input type="checkbox" class="btn-check" id="checkTesis" value="tesis">
-                    <label class="btn btn-outline-secondary px-4 rounded-pill" for="checkTesis">
-                        <i class="bi bi-file-text me-2"></i>Tesis
-                    </label>
-
-                    <input type="checkbox" class="btn-check" id="checkTutoriales" value="tutoriales">
-                    <label class="btn btn-outline-secondary px-4 rounded-pill" for="checkTutoriales">
-                        <i class="bi bi-person-video3 me-2"></i>Tutoriales
-                    </label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="subapartadoComite" id="checkTesis" value="tesis">
+                        <label class="form-check-label" for="checkTesis">
+                            Tesis
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="subapartadoComite" id="checkTutoriales" value="tutoriales">
+                        <label class="form-check-label" for="checkTutoriales">
+                            Tutoriales
+                        </label>
+                    </div>
                 </div>
+
+                <!-- New Inputs for Comite (Tesis) -->
+                 <div id="comiteTesisInputs" class="mt-3" style="display: none;">
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="tituloTesisComite" placeholder="Título de la Tesis">
+                                <label>Título de la Tesis</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="estudianteComite" placeholder="Nombre del Estudiante">
+                                <label>Nombre del Estudiante</label>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
             </div>
 
             <!-- Campos Específicos de Jurado -->
             <div id="juradoFields" class="mt-4" style="display: none;">
-                <div class="alert alert-light border shadow-sm">
+                <div class="alert alert-light border shadow-sm mb-3">
                     <i class="bi bi-info-circle me-2"></i> Se registrará como <strong>Examen de Grado</strong>.
+                </div>
+                 <div class="row g-3">
+                    <div class="col-md-12">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="tituloTesisJurado" placeholder="Título de la Tesis">
+                            <label>Título de la Tesis</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="estudianteJurado" placeholder="Nombre del Estudiante">
+                            <label>Nombre del Estudiante</label>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -761,15 +820,19 @@
                         <label class="form-label fw-bold">Tipo de Actividad</label>
                         <div class="btn-group w-100" role="group">
                             <input type="radio" class="btn-check" name="tipoEstudiante" id="tipoProyecto" value="proyecto">
-                            <label class="btn btn-outline-secondary" for="tipoProyecto">Proyecto de Investigación</label>
+                            <label class="btn btn-outline-primary" for="tipoProyecto">Proyecto de Investigación</label>
                             
                             <input type="radio" class="btn-check" name="tipoEstudiante" id="tipoServicio" value="servicio">
-                            <label class="btn btn-outline-secondary" for="tipoServicio">Servicio Social</label>
+                            <label class="btn btn-outline-primary" for="tipoServicio">Servicio Social</label>
                         </div>
                     </div>
 
                     <!-- Proyecto Fields -->
                     <div id="proyectoFields" class="col-md-12" style="display: none;">
+                         <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="tituloProyectoEstudiante" placeholder="Título del Proyecto">
+                            <label>Título del Proyecto</label>
+                        </div>
                         <div class="form-floating">
                             <select class="form-select" name="nivelProyecto">
                                 <option value="" selected disabled>Seleccionar...</option>
@@ -813,7 +876,7 @@
 {% macro body_finance() %}
     <div class="p-4 bg-white">
         <form id="formularioFinanciacion">
-            <h5 class="mb-4 text-secondary border-bottom pb-2">Información de Financiación</h5>
+            <h5 class="mb-4 text-secondary border-bottom pb-2">Proyectos Financiados</h5>
             
             <div class="row g-3">
                 <div class="col-md-12">
@@ -823,7 +886,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6" style="display: none;"> <!-- Hidden, handled by dynamic list below -->
                     <div class="form-floating">
                         <select class="form-select" name="participantesFinanciacion">
                             <option value="" selected disabled>Seleccionar...</option>
@@ -868,6 +931,37 @@
                         <label>Definir índole</label>
                     </div>
                 </div>
+
+                <!-- Participants Dynamic List -->
+                <div class="col-12">
+                     <h6 class="text-secondary border-bottom pb-2 mt-3">Participantes</h6>
+                     <div class="p-3 bg-light rounded border">
+                        <div class="row g-2 align-items-center mb-2">
+                             <div class="col-md-4">
+                                <input type="text" class="form-control form-control-sm" id="partFinName" placeholder="Nombre">
+                             </div>
+                             <div class="col-md-4">
+                                <div class="btn-group w-100" role="group">
+                                    <input type="radio" class="btn-check" name="tipoPartFin" id="tipoPartAcad" value="Academico">
+                                    <label class="btn btn-outline-primary btn-sm" for="tipoPartAcad">Académico</label>
+                                    
+                                    <input type="radio" class="btn-check" name="tipoPartFin" id="tipoPartEst" value="Estudiante">
+                                    <label class="btn btn-outline-primary btn-sm" for="tipoPartEst">Estudiante</label>
+                                </div>
+                             </div>
+                             <div class="col-md-3">
+                                 <input type="text" class="form-control form-control-sm" id="partFinInst" placeholder="Institución">
+                             </div>
+                             <div class="col-md-1">
+                                <button type="button" class="btn btn-primary btn-sm w-100" id="btnAddPartFin"><i class="bi bi-plus-lg"></i></button>
+                             </div>
+                        </div>
+                        <!-- List Container -->
+                        <div id="participantesFinList" class="mt-2">
+                            <!-- Items will be added here -->
+                        </div>
+                     </div>
+                </div>
             </div>
 
             <div class="d-flex justify-content-end mt-4">
@@ -882,7 +976,7 @@
 {% macro finance() %}
     <div class="card shadow border-0 rounded-3 mb-4">
         <div class="card-header bg-white border-0 pt-4 px-4">
-            <h4 class="text-primary fw-bold"><i class="bi bi-cash-coin me-2"></i> Financiación</h4>
+            <h4 class="text-primary fw-bold"><i class="bi bi-cash-coin me-2"></i>Financiados</h4>
         </div>
         <div class="card-body">
             {{ body_finance() }}
