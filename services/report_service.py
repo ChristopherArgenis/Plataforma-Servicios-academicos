@@ -111,30 +111,38 @@ class ReportService:
     def _guardar_libros(self, data, cliente_id):
         """
         Guarda libros científicos y capítulos de libro.
-        FORMULARIO DINÁMICO: Múltiples entradas guardadas como JSON.
+        FORMULARIO DINÁMICO: múltiples filas por cliente.
         
         Args:
-            data (dict): {
-                'libros_cientificos': [...],
-                'capitulos_libro': [...]
-            }
+            data: Objeto con método getlist() (request.form o similar)
             cliente_id (int): ID del cliente
         """
-        # Buscar o crear registro único por cliente
-        record = Libro.query.filter_by(cliente_id=cliente_id).first()
-        if not record:
-            record = Libro(cliente_id=cliente_id)
-            self.db.add(record)
+        # Obtener arrays de datos
+        libros = data.get('libros_cientificos', []) if isinstance(data, dict) else []
+        capitulos = data.get('capitulos_libro', []) if isinstance(data, dict) else []
         
-        # Guardar arrays como JSON
-        record.libros_cientificos = json.dumps(
-            data.get('libros_cientificos', []), 
-            ensure_ascii=False
-        )
-        record.capitulos_libro = json.dumps(
-            data.get('capitulos_libro', []), 
-            ensure_ascii=False
-        )
+        # Validar que hay datos
+        if not libros and not capitulos:
+            return
+        
+        # Estrategia overwrite controlado: eliminar registros anteriores
+        Libro.query.filter_by(cliente_id=cliente_id).delete()
+        
+        # Crear una fila por cada par libro/capítulo
+        # Usar zip_longest para manejar arrays de diferente longitud
+        from itertools import zip_longest
+        
+        for libro, capitulo in zip_longest(libros, capitulos, fillvalue=''):
+            # Saltar filas completamente vacías
+            if not libro and not capitulo:
+                continue
+            
+            registro = Libro(
+                cliente_id=cliente_id,
+                libros_cientificos=libro.strip() if libro else None,
+                capitulos_libro=capitulo.strip() if capitulo else None
+            )
+            self.db.add(registro)
     
     def _guardar_tesis(self, data, cliente_id):
         """
@@ -154,16 +162,31 @@ class ReportService:
     def _guardar_cursos(self, data, cliente_id):
         """
         Guarda información de cursos impartidos.
+        FORMULARIO DINÁMICO: múltiples filas por cliente.
         """
-        record = Curso.query.filter_by(cliente_id=cliente_id).first()
-        if not record:
-            record = Curso(cliente_id=cliente_id)
-            self.db.add(record)
+        materias = data.get('materia', [])
+        niveles = data.get('nivel', [])
+        periodos = data.get('periodo', [])
         
-        # Guardar arrays como JSON
-        record.materia = json.dumps(data.get('materia', []), ensure_ascii=False)
-        record.nivel = json.dumps(data.get('nivel', []), ensure_ascii=False)
-        record.periodo = json.dumps(data.get('periodo', []), ensure_ascii=False)
+        if not materias:
+            return
+        
+        # Eliminar registros anteriores
+        Curso.query.filter_by(cliente_id=cliente_id).delete()
+        
+        # Crear una fila por cada curso
+        from itertools import zip_longest
+        for materia, nivel, periodo in zip_longest(materias, niveles, periodos, fillvalue=''):
+            if not materia:
+                continue
+            
+            registro = Curso(
+                cliente_id=cliente_id,
+                materia=materia.strip(),
+                nivel=nivel.strip() if nivel else None,
+                periodo=periodo.strip() if periodo else None
+            )
+            self.db.add(registro)
     
     def _guardar_comites(self, data, cliente_id):
         """
@@ -180,24 +203,53 @@ class ReportService:
     def _guardar_difusion(self, data, cliente_id):
         """
         Guarda información de congresos y eventos.
+        FORMULARIO DINÁMICO: múltiples filas por cliente.
         """
-        # Congresos
-        congresos_data = data.get('congresos', [])
-        if congresos_data:
-            record = Congreso.query.filter_by(cliente_id=cliente_id).first()
-            if not record:
-                record = Congreso(cliente_id=cliente_id)
-                self.db.add(record)
-            record.data = json.dumps(congresos_data, ensure_ascii=False)
+        # CONGRESOS
+        titulos_congreso = data.get('tituloCongreso', [])
+        if titulos_congreso:
+            Congreso.query.filter_by(cliente_id=cliente_id).delete()
+            
+            autores = data.get('autoresCongreso', [])
+            nombres = data.get('nombreCongreso', [])
+            lugares = data.get('lugarCongreso', [])
+            
+            from itertools import zip_longest
+            for titulo, autor, nombre, lugar in zip_longest(titulos_congreso, autores, nombres, lugares, fillvalue=''):
+                if not titulo:
+                    continue
+                
+                registro = Congreso(
+                    cliente_id=cliente_id,
+                    titulo=titulo.strip(),
+                    autores=autor.strip() if autor else None,
+                    nombre=nombre.strip() if nombre else None,
+                    lugar=lugar.strip() if lugar else None
+                )
+                self.db.add(registro)
         
-        # Eventos
-        eventos_data = data.get('eventos', [])
-        if eventos_data:
-            record = Evento.query.filter_by(cliente_id=cliente_id).first()
-            if not record:
-                record = Evento(cliente_id=cliente_id)
-                self.db.add(record)
-            record.data = json.dumps(eventos_data, ensure_ascii=False)
+        # EVENTOS
+        tipos_evento = data.get('tipoEvento', [])
+        if tipos_evento:
+            Evento.query.filter_by(cliente_id=cliente_id).delete()
+            
+            nombres = data.get('nombreEventoSimple', [])
+            num_ponentes = data.get('numPonentes', [])
+            num_asistentes = data.get('numAsistentes', [])
+            
+            from itertools import zip_longest
+            for tipo, nombre, ponentes, asistentes in zip_longest(tipos_evento, nombres, num_ponentes, num_asistentes, fillvalue=''):
+                if not tipo:
+                    continue
+                
+                registro = Evento(
+                    cliente_id=cliente_id,
+                    tipo=tipo.strip(),
+                    nombre=nombre.strip() if nombre else None,
+                    num_ponentes=int(ponentes) if ponentes and ponentes.isdigit() else None,
+                    num_asistentes=int(asistentes) if asistentes and asistentes.isdigit() else None
+                )
+                self.db.add(registro)
     
     def _guardar_financiacion(self, data, cliente_id):
         """
@@ -275,21 +327,59 @@ class ReportService:
     def _guardar_divulgacion(self, data, cliente_id):
         """
         Guarda información de divulgación.
+        FORMULARIO DINÁMICO: múltiples filas por cliente.
         """
-        record = Divulgacion.query.filter_by(cliente_id=cliente_id).first()
-        if not record:
-            record = Divulgacion(cliente_id=cliente_id)
-            self.db.add(record)
+        tipos = data.get('tipoDivulgacion', [])
+        if not tipos:
+            return
         
-        record.data = json.dumps(data.get('divulgacion', []), ensure_ascii=False)
+        Divulgacion.query.filter_by(cliente_id=cliente_id).delete()
+        
+        autores = data.get('autoresDivulgacion', [])
+        revistas = data.get('revistaDivulgacion', [])
+        tipos_evento = data.get('tipoEventoDivulgacion', [])
+        modalidades = data.get('modalidadDivulgacion', [])
+        
+        from itertools import zip_longest
+        for tipo, autor, revista, tipo_ev, modalidad in zip_longest(tipos, autores, revistas, tipos_evento, modalidades, fillvalue=''):
+            if not tipo:
+                continue
+            
+            registro = Divulgacion(
+                cliente_id=cliente_id,
+                tipo_actividad=tipo.strip(),
+                autores=autor.strip() if autor else None,
+                revista=revista.strip() if revista else None,
+                tipo_evento=tipo_ev.strip() if tipo_ev else None,
+                modalidad=modalidad.strip() if modalidad else None
+            )
+            self.db.add(registro)
     
     def _guardar_estancias(self, data, cliente_id):
         """
         Guarda información de estancias.
+        FORMULARIO DINÁMICO: múltiples filas por cliente.
         """
-        record = Estancia.query.filter_by(cliente_id=cliente_id).first()
-        if not record:
-            record = Estancia(cliente_id=cliente_id)
-            self.db.add(record)
+        tipos = data.get('tipoEstancia', [])
+        if not tipos:
+            return
         
-        record.data = json.dumps(data.get('estancias', []), ensure_ascii=False)
+        Estancia.query.filter_by(cliente_id=cliente_id).delete()
+        
+        nombres = data.get('nombreEstancia', [])
+        origenes = data.get('origenEstancia', [])
+        instituciones = data.get('institucionProcedencia', [])
+        
+        from itertools import zip_longest
+        for tipo, nombre, origen, institucion in zip_longest(tipos, nombres, origenes, instituciones, fillvalue=''):
+            if not tipo:
+                continue
+            
+            registro = Estancia(
+                cliente_id=cliente_id,
+                tipo=tipo.strip(),
+                nombre=nombre.strip() if nombre else None,
+                origen=origen.strip() if origen else None,
+                institucion=institucion.strip() if institucion else None
+            )
+            self.db.add(registro)
