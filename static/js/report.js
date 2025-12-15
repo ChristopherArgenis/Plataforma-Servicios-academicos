@@ -1,167 +1,103 @@
 document.addEventListener('DOMContentLoaded', function() {
     const reportContainer = document.getElementById('Report');
-    if (reportContainer) {
-        // Event Delegation for Report container
-        reportContainer.addEventListener('click', function(event) {
-            // Add Book Button
-            const btnAddBook = event.target.closest('#btnAddBook');
-            if (btnAddBook) {
-                const librosContainer = document.getElementById('librosContainer');
-                if (librosContainer) {
-                    const rows = librosContainer.getElementsByClassName('dynamic-book-row');
-                    if (rows.length > 0) {
-                        const lastRow = rows[rows.length - 1];
-                        const newRow = lastRow.cloneNode(true);
-                        
-                        // Clear inputs in the new row
-                        const inputs = newRow.querySelectorAll('input');
-                        inputs.forEach(input => {
-                            input.value = '';
-                        });
-
-                        librosContainer.appendChild(newRow);
-                    }
-                }
-            }
-
-            // Open Save Books Modal
-            const btnOpenSaveBooksModal = event.target.closest('#btnOpenSaveBooksModal');
-            if (btnOpenSaveBooksModal) {
-                console.log('Opening modal...'); // Debug
-                const form = document.getElementById('formularioCientifico');
-                const librosInputs = form.querySelectorAll('input[name="librosCientificos[]"]');
-                const capitulosInputs = form.querySelectorAll('input[name="capitulosLibro[]"]');
-                
-                let countBooks = 0;
-                let countChapters = 0;
-
-                librosInputs.forEach(input => {
-                    if (input.value.trim() !== '') countBooks++;
-                });
-
-                capitulosInputs.forEach(input => {
-                    if (input.value.trim() !== '') countChapters++;
-                });
-
-                console.log('Books:', countBooks, 'Chapters:', countChapters); // Debug
-
-                document.getElementById('countBooks').textContent = countBooks;
-                document.getElementById('countChapters').textContent = countChapters;
-
-                const modalEl = document.getElementById('confirmSaveBooksModal');
-                if (modalEl && typeof bootstrap !== 'undefined') {
-                    const modal = new bootstrap.Modal(modalEl);
-                    modal.show();
-                    
-                    // Add event listener to confirm button when modal opens
-                    setupConfirmButton();
-                } else {
-                    console.error('Modal element or Bootstrap not found');
-                }
-            }
-        });
-    } else {
+    if (!reportContainer) {
         console.error('Report container not found');
+        return;
     }
+
+    // ========================================
+    // LIBROS SECTION - Clean Implementation
+    // ========================================
     
-    // Setup confirm button handler (called when modal opens)
-    function setupConfirmButton() {
-        const btnConfirmSaveBooks = document.getElementById('btnConfirmSaveBooks');
-        if (btnConfirmSaveBooks) {
-            // Remove any existing listeners to avoid duplicates
-            const newBtn = btnConfirmSaveBooks.cloneNode(true);
-            btnConfirmSaveBooks.parentNode.replaceChild(newBtn, btnConfirmSaveBooks);
+    const btnAddBook = document.getElementById('btnAddBook');
+    const btnSaveLibros = document.getElementById('btnSaveLibros');
+    const librosContainer = document.getElementById('librosContainer');
+    const formLibros = document.getElementById('formularioCientifico');
+    
+    // Add new book row
+    if (btnAddBook) {
+        btnAddBook.addEventListener('click', function() {
+            if (!librosContainer) return;
             
-            // Add fresh event listener
-            newBtn.addEventListener('click', function() {
-                console.log('Confirm button clicked!'); // Debug
-                const form = document.getElementById('formularioCientifico');
-                const formData = new FormData(form);
-
-                console.log('Sending data to server...'); // Debug
-                // Update to new explicit route
-                // Use 'libros' logical name route
-                const clientId = document.getElementById('Report')?.dataset.clienteId;
-                formData.append('cliente_id', clientId);
-
-                // Note: The new backend expects JSON payload {cliente_id, data: {libros_cientificos: [], ...}}
-                // But this legacy modal sends FormData directly? 
-                // The new route expects JSON. I need to adapt strictly!
-                
-                // Let's CONVERT FormData to the JSON structure expected by save_libros
-                const rawData = {};
-                for (let [key, value] of formData.entries()) {
-                     let dbKey = key;
-                     if (key.includes('librosCientificos')) dbKey = 'libros_cientificos';
-                     if (key.includes('capitulosLibro')) dbKey = 'capitulos_libro';
-                     
-                     if (key.endsWith('[]')) {
-                         if (!rawData[dbKey]) rawData[dbKey] = [];
-                         rawData[dbKey].push(value);
-                     } else {
-                         rawData[dbKey] = value;
-                     }
-                }
-                
-                const payload = {
-                    cliente_id: clientId,
-                    data: rawData
-                };
-
-                fetch('/Panel/Reporte/libros/guardar', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(payload)
-                })
-                .then(response => {
-                    console.log('Response received:', response); // Debug
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Data:', data); // Debug
-                    if (data.status === 'success') {
-                        console.log('Success! Clearing form and closing modal...'); // Debug
-                        
-                        // Close modal FIRST
-                        const modalEl = document.getElementById('confirmSaveBooksModal');
-                        if (modalEl) {
-                            const modal = bootstrap.Modal.getInstance(modalEl);
-                            if (modal) {
-                                modal.hide();
-                                console.log('Modal hidden'); // Debug
-                            }
-                        }
-                        
-                        // Wait a bit for modal to close, then clear form
-                        setTimeout(() => {
-                            // Clear form
-                            const form = document.getElementById('formularioCientifico');
-                            if (form) {
-                                form.reset();
-                                console.log('Form reset'); // Debug
-                            }
-                            
-                            // Remove extra rows, keep only one
-                            const librosContainer = document.getElementById('librosContainer');
-                            if (librosContainer) {
-                                const rows = librosContainer.getElementsByClassName('dynamic-book-row');
-                                while (rows.length > 1) {
-                                    librosContainer.removeChild(rows[rows.length - 1]);
-                                }
-                                console.log('Extra rows removed, rows remaining:', rows.length); // Debug
-                            }
-                            
-                            console.log('All cleanup completed!'); // Debug
-                        }, 300);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
+            const rows = librosContainer.querySelectorAll('.dynamic-book-row');
+            if (rows.length === 0) return;
+            
+            // Clone last row
+            const lastRow = rows[rows.length - 1];
+            const newRow = lastRow.cloneNode(true);
+            
+            // Clear all inputs
+            newRow.querySelectorAll('input').forEach(input => {
+                input.value = '';
             });
             
-            console.log('Confirm button listener attached'); // Debug
-        } else {
-            console.error('Confirm button not found');
-        }
+            // Append new row
+            librosContainer.appendChild(newRow);
+        });
+    }
+    
+    // Save Libros
+    if (btnSaveLibros) {
+        btnSaveLibros.addEventListener('click', function() {
+            if (!formLibros) return;
+            
+            // Get cliente_id
+            const clienteId = reportContainer.dataset.clienteId;
+            if (!clienteId) {
+                showToast('Error: Cliente ID no encontrado', 'error');
+                return;
+            }
+            
+            // Collect data from form
+            const formData = new FormData(formLibros);
+            
+            // Get all books and chapters (arrays)
+            const libros = formData.getAll('librosCientificos[]').filter(v => v.trim() !== '');
+            const capitulos = formData.getAll('capitulosLibro[]').filter(v => v.trim() !== '');
+            
+            // Validate at least one entry
+            if (libros.length === 0 && capitulos.length === 0) {
+                showToast('Debe agregar al menos un libro o capítulo', 'warning');
+                return;
+            }
+            
+            // Prepare payload
+            const payload = {
+                cliente_id: clienteId,
+                data: {
+                    libros_cientificos: libros,
+                    capitulos_libro: capitulos
+                }
+            };
+            
+            // Send to server
+            fetch('/Panel/Reporte/libros/guardar', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showToast('Libros guardados correctamente', 'success');
+                    
+                    // Clear form
+                    formLibros.reset();
+                    
+                    // Remove extra rows, keep only first
+                    const rows = librosContainer.querySelectorAll('.dynamic-book-row');
+                    for (let i = rows.length - 1; i > 0; i--) {
+                        rows[i].remove();
+                    }
+                } else {
+                    showToast('Error: ' + data.message, 'error');
+                }
+            })
+            .catch(err => {
+                console.error('Error saving libros:', err);
+                showToast('Error de conexión al guardar', 'error');
+            });
+        });
     }
 
     // === DIFUSION LOGIC ===
@@ -404,6 +340,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     setupDynamicList('btnAddTesis', 'tesisContainer', 'dynamic-tesis-row');
     setupDynamicList('btnAddCurso', 'cursosContainer', 'dynamic-course-row');
+    
+    // Difusión section
+    setupDynamicList('btnAddCongreso', 'congresoContainer', 'dynamic-congreso-row');
+    setupDynamicList('btnAddEvento', 'eventoContainer', 'dynamic-evento-row');
+    
+    // Comités section
+    setupDynamicList('btnAddComite', 'comitesContainer', 'dynamic-comite-row');
+    setupDynamicList('btnAddEstudiante', 'estudiantesContainer', 'dynamic-estudiante-row');
+    
+    // Divulgación section
+    setupDynamicList('btnAddDivulgacion', 'divulgacionContainer', 'dynamic-divulgacion-row');
+    
+    // Estancias section
+    setupDynamicList('btnAddEstancia', 'estanciaContainer', 'dynamic-estancia-row');
 
 
     // === GLOBAL FORM SUBMISSION HANDLERS ===
@@ -519,59 +469,70 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // === NAME EDIT LOGIC ===
-    const btnEditName = document.getElementById('btnEditName');
-    const userNameDisplay = document.getElementById('userNameDisplay');
-    const userInputContainer = document.getElementById('userInputContainer');
-    const userNameInput = document.getElementById('userNameInput');
-    let isEditingName = false;
+    // === SIMPLE SECTIONS SAVE LOGIC ===
+    
+    // 6. SAVE PATENTE (Step 7)
+    const formPatente = document.getElementById('formularioPatente');
+    if (formPatente) {
+        formPatente.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = {
+                descripcion: formData.get('descripcion')
+            };
+            sendReportData('/Panel/Reporte/patentes/guardar', data, 'Patente guardada');
+        });
+    }
 
-    if (btnEditName) {
-        btnEditName.addEventListener('click', function() {
-            if (!isEditingName) {
-                // Switch to Edit Mode
-                userNameDisplay.style.display = 'none';
-                userInputContainer.style.display = 'block';
-                userNameInput.focus();
-                this.innerHTML = '<i class="bi bi-save"></i>';
-                this.classList.remove('btn-outline-secondary');
-                this.classList.add('btn-success', 'text-white');
-                isEditingName = true;
-            } else {
-                // Save Changes
-                const newName = userNameInput.value.trim();
-                if (!newName) {
-                    alert('El nombre no puede estar vacío');
-                    return;
-                }
-                
-                // AJAX call to save
-                fetch('/Panel/Info/UpdateName', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ nombre: newName })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        userNameDisplay.textContent = newName;
-                        // Switch back to View Mode
-                        userNameDisplay.style.display = 'block';
-                        userInputContainer.style.display = 'none';
-                        btnEditName.innerHTML = '<i class="bi bi-pencil-fill"></i>';
-                        btnEditName.classList.remove('btn-success', 'text-white');
-                        btnEditName.classList.add('btn-outline-secondary');
-                        isEditingName = false;
-                        alert('Nombre actualizado correctamente');
-                    } else {
-                        alert('Error: ' + data.message);
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    alert('Error de conexión');
-                });
-            }
+    // 7. SAVE COMISIONES (Step 10)
+    const formComisiones = document.getElementById('formularioComisiones');
+    if (formComisiones) {
+        formComisiones.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = {
+                descripcion: formData.get('descripcion')
+            };
+            sendReportData('/Panel/Reporte/comisiones/guardar', data, 'Comisión guardada');
+        });
+    }
+
+    // 8. SAVE VINCULACION (Step 11)
+    const formVinculacion = document.getElementById('formularioVinculacion');
+    if (formVinculacion) {
+        formVinculacion.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = {
+                descripcion: formData.get('descripcion')
+            };
+            sendReportData('/Panel/Reporte/vinculacion/guardar', data, 'Vinculación guardada');
+        });
+    }
+
+    // 9. SAVE DISTINCIONES (Step 12)
+    const formDistinciones = document.getElementById('formularioDistinciones');
+    if (formDistinciones) {
+        formDistinciones.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = {
+                descripcion: formData.get('descripcion')
+            };
+            sendReportData('/Panel/Reporte/distinciones/guardar', data, 'Distinción guardada');
+        });
+    }
+
+    // 10. SAVE LOGROS (Step 13)
+    const formLogros = document.getElementById('formularioLogros');
+    if (formLogros) {
+        formLogros.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = {
+                descripcion: formData.get('descripcion')
+            };
+            sendReportData('/Panel/Reporte/logros/guardar', data, 'Logro guardado');
         });
     }
 
@@ -579,7 +540,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function sendReportData(url, dataObject, successMessage) {
         const clienteId = document.getElementById('Report')?.dataset.clienteId;
         if (!clienteId) {
-            alert('Error: Cliente ID no encontrado');
+            showToast('Error: Cliente ID no encontrado', 'error');
             return;
         }
 
@@ -596,14 +557,14 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(res => res.json())
         .then(data => {
             if (data.status === 'success') {
-                alert(successMessage || 'Guardado correctamente');
+                showToast(successMessage || 'Guardado correctamente', 'success');
             } else {
-                alert('Error al guardar: ' + data.message);
+                showToast('Error al guardar: ' + data.message, 'error');
             }
         })
         .catch(err => {
             console.error(err);
-            alert('Error de red al guardar');
+            showToast('Error de red al guardar', 'error');
         });
     }
 });
