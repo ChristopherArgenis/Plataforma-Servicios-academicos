@@ -154,6 +154,8 @@ def save_comite():
         record.nivel_academico = data.get('nivel_academico')
         record.programa_posgrado = data.get('programa_posgrado')
         record.participacion = data.get('participacion') # Texto consolidado (e.g. "comite: Tesis")
+        record.titulo_tesis = data.get('titulo_tesis')
+        record.nombre_estudiante = data.get('nombre_estudiante')
 
         db.session.commit()
         return {'status': 'success', 'message': 'Participación (Comité/Jurado) guardada'}
@@ -261,7 +263,32 @@ def save_estancias():
 
 @report.route('/Panel/Reporte/financiacion/guardar', methods=['POST'])
 def save_financiacion():
-    return {'status': 'success', 'message': 'Financiación guardada (Placeholder)'}
+    try:
+        req_data = request.get_json()
+        cliente_id = req_data.get('cliente_id')
+        data = req_data.get('data', {})
+        if not cliente_id: return {'status': 'error', 'message': 'ID requerido'}, 400
+
+        record = Financiamiento.query.filter_by(cliente_id=cliente_id).first()
+        if not record:
+            record = Financiamiento(cliente_id=cliente_id)
+            db.session.add(record)
+
+        # Basic fields
+        record.titulo = data.get('tituloFinanciacion')
+        record.fuente = data.get('fuenteFinanciamiento')
+        record.clasificado = data.get('clasificacionFinanciacion')
+        record.indole = data.get('indoleFinanciacion')
+        
+        # Participants list stored as JSON string in 'participantes' column
+        participantes_list = data.get('participantesLista', [])
+        record.participantes = json.dumps(participantes_list, ensure_ascii=False)
+
+        db.session.commit()
+        return {'status': 'success', 'message': 'Financiación guardada'}
+    except Exception as e:
+        db.session.rollback()
+        return {'status': 'error', 'message': str(e)}, 500
 
 @report.route('/Panel/Reporte/patentes/guardar', methods=['POST'])
 def save_patentes():
