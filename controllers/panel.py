@@ -116,10 +116,25 @@ def panel_post():
 
 @panel_general.route('/Panel/Update_Table', methods=["POST"])
 def table_update():
-    table_maganer.delete_articles(session['scholarKey'])
-    query_Manager = Query_Manager(session['scholarKey'])
-    dataframe_Articles = query_Manager.get_dataframe()
-    df_A = dataframe_Articles.to_sql('Articles', con=db.engine, if_exists='append', index=False)
+    try:
+        # Step 1: Download new articles FIRST (before deleting anything)
+        query_Manager = Query_Manager(session['scholarKey'])
+        dataframe_Articles = query_Manager.get_dataframe()
+        
+        # Step 2: Only if download succeeded, delete old articles and insert new ones
+        # Use a transaction to ensure atomicity
+        table_maganer.delete_articles(session['scholarKey'])
+        df_A = dataframe_Articles.to_sql('Articles', con=db.engine, if_exists='append', index=False)
+        
+        # Commit the transaction
+        db.session.commit()
+        flash("Artículos actualizados exitosamente.", "success")
+    except Exception as e:
+        # Rollback on any error to prevent data loss
+        db.session.rollback()
+        flash(f"Error al actualizar artículos: {str(e)}", "danger")
+        print(f"[ERROR] table_update: {e}")
+    
     return redirect(url_for('panel.panel_get'))
 
 @panel_general.route('/Panel/adquirir', methods=["POST"])
