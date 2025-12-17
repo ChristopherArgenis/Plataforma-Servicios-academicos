@@ -1,4 +1,4 @@
-from models.user import Cliente, Usuario, Articles_Keys, Articles, db
+from models.user import Cliente, Usuario, Articles_Keys, Articles, Relevantes, db
 
 class LobbyService:
     @staticmethod
@@ -132,6 +132,15 @@ class Check_Article:
         article_clean = []
         for key in send_array:
             process_repeat = Articles.query.filter_by(id_Articles=key).first()
+            if not process_repeat:
+                article_clean.append(key)
+        return article_clean
+    
+    @staticmethod
+    def repeat_relevantes(send_array):
+        article_clean = []
+        for key in send_array:
+            process_repeat = Relevantes.query.filter_by(id_Articles=key).first()
             if not process_repeat:
                 article_clean.append(key)
         return article_clean

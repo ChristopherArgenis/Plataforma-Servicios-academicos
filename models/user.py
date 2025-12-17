@@ -54,6 +54,19 @@ class Articles(db.Model):
     year = db.Column(db.Integer, default=0)
 
 
+class Relevantes(db.Model):
+    __tablename__ = 'Relevantes'
+
+    id = db.Column(db.Integer, primary_key=True)
+    id_Articles = db.Column(db.String(100), nullable=False)
+    title = db.Column(db.String(150), nullable=False)
+    authors = db.Column(db.String(500), nullable=True)
+    journal = db.Column(db.String(100), nullable=True)
+    volume = db.Column(db.Integer, nullable=True)
+    pages = db.Column(db.String(20), nullable=False)
+    year = db.Column(db.Integer, default=0)
+
+
 class InformationAcademic(db.Model):
     __tablename__ = 'InformationAcademic'
 
