@@ -72,20 +72,43 @@ class Router:
             article (dict): Información del artículo en formato diccionario.
 
         Returns:
-            dict: Diccionario con los campos principales del artículo (id, título, autores, revista, volumen, páginas, año).
+            dict: Diccionario con los campos principales del artículo.
         """
-        if article['publication_date'] is None: 
-            date = 0
+        # Safely get publication date
+        pub_date = article.get('publication_date')
+        if pub_date:
+            try:
+                date = int(str(pub_date)[:4])
+            except (ValueError, TypeError):
+                date = 0
         else:
-            date = int(article['publication_date'][:4])
+            date = 0
 
         article_schema = {
             "id_Articles": clave,
-            "title": article['title'],
-            "authors": article['authors'],
-            "journal": article['journal'],
-            "volume": article['volume'],
-            "pages": article['pages'],
+            "title": article.get('title', 'Sin título'),
+            "authors": article.get('authors', ''),
+            "journal": article.get('journal', ''),
+            "volume": article.get('volume', 0), # Volume can be int or string, safe 0? Or None? Model has Integer.
+            # If model expects Integer for volume, we should be careful. 
+            # Looking at models/user.py: volume = db.Column(db.Integer, nullable=True)
+            # scholarly might return '12(3)' or valid int. Best to try parse or leave None?
+            # Let's use None if missing so SQL handles it.
+            "pages": article.get('pages', ''),
             "year": date
         }
+        
+        # Safe cast for volume if present
+        vol = article.get('volume')
+        if vol:
+            try:
+                # If it's a string like "12", int works. If "12(3)", int fails.
+                # If db model is Integer, we must ensure it's int or None.
+                # Simplest fix for now: try int, else None.
+                article_schema["volume"] = int(vol)
+            except:
+                article_schema["volume"] = None
+        else:
+             article_schema["volume"] = None
+             
         return article_schema
