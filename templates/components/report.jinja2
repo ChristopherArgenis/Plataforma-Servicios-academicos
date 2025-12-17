@@ -332,7 +332,7 @@
             </div>
 
             <div class="d-flex justify-content-end mt-4">
-                <button type="button" class="btn btn-success text-white shadow-sm" id="btnSaveLibros">
+                <button type="submit" class="btn btn-success text-white shadow-sm" id="btnSaveLibros">
                     <i class="bi bi-save me-2"></i> Guardar Cambios
                 </button>
             </div>
@@ -525,7 +525,7 @@
                 </div>
                 <div class="card-body">
                     <form id="formCongresos" action="{{ url_for('reports.save_congresos') }}" method="POST">
-                        <input type="hidden" name="cliente_id" value="{{ client.id if client else '' }}">
+                        <input type="hidden" name="{{ cliente_id }}" value="{{ cliente_id }}">
                         <div id="congresoContainer">
                             <div class="dynamic-congreso-row border rounded p-3 mb-3 bg-light position-relative">
                                 <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
@@ -589,7 +589,7 @@
                 </div>
                 <div class="card-body">
                     <form id="formEventos" action="{{ url_for('reports.save_eventos') }}" method="POST">
-                        <input type="hidden" name="cliente_id" value="{{ client.id if client else '' }}">
+                        <input type="hidden" name="{{ cliente_id }}" value="{{ cliente_id }}">
                         <div id="eventoContainer">
                             <div class="dynamic-evento-row border rounded p-3 mb-3 bg-light position-relative">
                                 <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
@@ -658,7 +658,7 @@
                 </div>
                 <div class="card-body">
                     <form id="formComites" action="{{ url_for('reports.save_comite') }}" method="POST">
-                        <input type="hidden" name="cliente_id" value="{{ client.id if client else '' }}">
+                        <input type="hidden" name="{{ cliente_id }}" value="{{ cliente_id }}">
                         <div id="comitesContainer">
                             <div class="dynamic-comite-row border rounded p-3 mb-3 bg-light position-relative">
                                 <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
@@ -732,7 +732,7 @@
                 </div>
                 <div class="card-body">
                     <form id="formEstudiantes" action="{{ url_for('reports.save_estudiantes') }}" method="POST">
-                        <input type="hidden" name="cliente_id" value="{{ client.id if client else '' }}">
+                        <input type="hidden" name="{{ cliente_id }}" value="{{ cliente_id }}">
                         <div id="estudiantesContainer">
                             <div class="dynamic-estudiante-row border rounded p-3 mb-3 bg-light position-relative">
                                 <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
@@ -781,93 +781,95 @@
 
 {% macro body_finance() %}
     <div class="p-4 bg-white">
+    <div class="p-4 bg-white">
         <form id="formularioFinanciacion">
+            <input type="hidden" name="{{ cliente_id }}" value="{{ cliente_id }}">
             <h5 class="mb-4 text-secondary border-bottom pb-2">Proyectos Financiados</h5>
             
-            <div class="row g-3">
-                <div class="col-md-12">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" name="tituloFinanciacion" placeholder="Título">
-                        <label>Título</label>
-                    </div>
-                </div>
+            <div id="financeContainer">
+                <div class="dynamic-finance-row border rounded p-3 mb-3 bg-light position-relative">
+                    <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="tituloFinanciacion[]" placeholder="Título">
+                                <label>Título</label>
+                            </div>
+                        </div>
 
-                <div class="col-md-6" style="display: none;"> <!-- Hidden, handled by dynamic list below -->
-                    <div class="form-floating">
-                        <select class="form-select" name="participantesFinanciacion">
-                            <option value="" selected disabled>Seleccionar...</option>
-                            <option value="Academicos">Académicos</option>
-                            <option value="Estudiantes">Estudiantes</option>
-                            <option value="Instituciones">Instituciones</option>
-                        </select>
-                        <label>Participantes</label>
-                    </div>
-                </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="fuenteFinanciamiento[]" placeholder="Fuente de Financiamiento">
+                                <label>Fuente de Financiamiento</label>
+                            </div>
+                        </div>
 
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" name="fuenteFinanciamiento" placeholder="Fuente de Financiamiento">
-                        <label>Fuente de Financiamiento</label>
-                    </div>
-                </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" name="clasificacionFinanciacion[]">
+                                    <option value="" selected disabled>Seleccionar...</option>
+                                    <option value="Basico">Básico</option>
+                                    <option value="Aplicado">Aplicado</option>
+                                    <option value="Desarrollo Tecnologico">Desarrollo Tecnológico</option>
+                                    <option value="Innovación">Innovación</option>
+                                    <option value="Frontera">Frontera</option>
+                                </select>
+                                <label>Clasificar como</label>
+                            </div>
+                        </div>
 
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <select class="form-select" name="clasificacionFinanciacion">
-                            <option value="" selected disabled>Seleccionar...</option>
-                            <option value="Basico">Básico</option>
-                            <option value="Aplicado">Aplicado</option>
-                            <option value="Desarrollo Tecnologico">Desarrollo Tecnológico</option>
-                            <option value="Innovación">Innovación</option>
-                            <option value="Frontera">Frontera</option>
-                        </select>
-                        <label>Clasificar como</label>
-                    </div>
-                </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" name="indoleFinanciacion[]">
+                                    <option value="" selected disabled>Seleccionar...</option>
+                                    <option value="Investigación">Investigación</option>
+                                    <option value="infraestructura">Infraestructura</option>
+                                    <option value="vinculación">Vinculación</option>
+                                    <option value="Divulgacion">Divulgación</option>
+                                </select>
+                                <label>Definir índole</label>
+                            </div>
+                        </div>
 
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <select class="form-select" name="indoleFinanciacion">
-                            <option value="" selected disabled>Seleccionar...</option>
-                            <option value="Investigación">Investigación</option>
-                            <option value="infraestructura">Infraestructura</option>
-                            <option value="vinculación">Vinculación</option>
-                            <option value="Divulgacion">Divulgación</option>
-                        </select>
-                        <label>Definir índole</label>
-                    </div>
-                </div>
+                        <!-- Hidden Input for Participants JSON -->
+                        <input type="hidden" name="participantesLista[]" class="participantes-json">
 
-                <!-- Participants Dynamic List -->
-                <div class="col-12">
-                     <h6 class="text-secondary border-bottom pb-2 mt-3">Participantes</h6>
-                     <div class="p-3 bg-light rounded border">
-                        <div class="row g-2 align-items-center mb-2">
-                             <div class="col-md-4">
-                                <input type="text" class="form-control form-control-sm" id="partFinName" placeholder="Nombre">
-                             </div>
-                             <div class="col-md-4">
-                                <div class="btn-group w-100" role="group">
-                                    <input type="radio" class="btn-check" name="tipoPartFin" id="tipoPartAcad" value="Academico">
-                                    <label class="btn btn-outline-primary btn-sm" for="tipoPartAcad">Académico</label>
-                                    
-                                    <input type="radio" class="btn-check" name="tipoPartFin" id="tipoPartEst" value="Estudiante">
-                                    <label class="btn btn-outline-primary btn-sm" for="tipoPartEst">Estudiante</label>
+                        <!-- Participants Dynamic List Interface -->
+                        <div class="col-12">
+                             <h6 class="text-secondary border-bottom pb-2 mt-3">Participantes</h6>
+                             <div class="p-3 bg-white rounded border">
+                                <div class="row g-2 align-items-center mb-2 input-group-participante">
+                                     <div class="col-md-4">
+                                        <input type="text" class="form-control form-control-sm part-name" placeholder="Nombre">
+                                     </div>
+                                     <div class="col-md-4">
+                                        <select class="form-select form-select-sm part-tipo">
+                                            <option value="Academico">Académico</option>
+                                            <option value="Estudiante">Estudiante</option>
+                                        </select>
+                                     </div>
+                                     <div class="col-md-3">
+                                         <input type="text" class="form-control form-control-sm part-inst" placeholder="Institución">
+                                     </div>
+                                     <div class="col-md-1">
+                                        <button type="button" class="btn btn-primary btn-sm w-100 btn-add-part"><i class="bi bi-plus-lg"></i></button>
+                                     </div>
+                                </div>
+                                <!-- List Container -->
+                                <div class="participantes-list mt-2">
+                                    <!-- Items will be added here via JS -->
                                 </div>
                              </div>
-                             <div class="col-md-3">
-                                 <input type="text" class="form-control form-control-sm" id="partFinInst" placeholder="Institución">
-                             </div>
-                             <div class="col-md-1">
-                                <button type="button" class="btn btn-primary btn-sm w-100" id="btnAddPartFin"><i class="bi bi-plus-lg"></i></button>
-                             </div>
                         </div>
-                        <!-- List Container -->
-                        <div id="participantesFinList" class="mt-2">
-                            <!-- Items will be added here -->
-                        </div>
-                     </div>
+                    </div>
                 </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-3">
+                 <button type="button" class="btn btn-outline-primary" id="btnAddFinance">
+                    <i class="bi bi-plus-lg me-2"></i> Agregar Proyecto
+                </button>
             </div>
 
             <div class="d-flex justify-content-end mt-4">

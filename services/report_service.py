@@ -69,25 +69,28 @@ class ReportService:
         data = {}
         
         if collection_name == 'financiacion':
-            record = Financiamiento.query.filter_by(cliente_id=cliente_id).first()
-            if record:
-                # Reconstruir lista de participantes si es JSON
-                participantes = []
-                if record.participantes:
-                    try:
-                        import json
-                        participantes = json.loads(record.participantes)
-                    except:
-                        # Fallback por si es texto plano antiguo
-                        participantes = [{'nombre': record.participantes, 'tipo': 'N/A', 'institucion': ''}]
-                
-                data = {
-                    'tituloFinanciacion': record.titulo,
-                    'fuenteFinanciamiento': record.fuente,
-                    'clasificacionFinanciacion': record.clasificado,
-                    'indoleFinanciacion': record.indole,
-                    'participantesLista': participantes
-                }
+            records = Financiamiento.query.filter_by(cliente_id=cliente_id).all()
+            data = []  # Start as list
+            if records:
+                for record in records:
+                    # Reconstruir lista de participantes si es JSON
+                    participantes = []
+                    if record.participantes:
+                        try:
+                            # If it's already a JSON string in DB, we keep it as list for frontend?
+                            # Frontend expects list of objects in 'participantesLista' key
+                            participantes = json.loads(record.participantes)
+                        except:
+                            # Fallback
+                            participantes = [{'nombre': record.participantes, 'tipo': 'N/A', 'institucion': ''}]
+                    
+                    data.append({
+                        'tituloFinanciacion': record.titulo,
+                        'fuenteFinanciamiento': record.fuente,
+                        'clasificacionFinanciacion': record.clasificado,
+                        'indoleFinanciacion': record.indole,
+                        'participantesLista': participantes
+                    })
         
         return data  # Retorna dict vacío si no hay datos
     
@@ -276,18 +279,30 @@ class ReportService:
             self.db.add(registro)
     
     def _guardar_financiacion(self, data, cliente_id):
-        record = Financiamiento.query.filter_by(cliente_id=cliente_id).first()
-        if not record:
-            record = Financiamiento(cliente_id=cliente_id)
-            self.db.add(record)
+        # Multiple records strategy
+        Financiamiento.query.filter_by(cliente_id=cliente_id).delete()
         
-        record.titulo = data.get('tituloFinanciacion')
-        record.fuente = data.get('fuenteFinanciamiento')
-        record.clasificado = data.get('clasificacionFinanciacion')
-        record.indole = data.get('indoleFinanciacion')
+        titulos = data.getlist('tituloFinanciacion[]')
+        fuentes = data.getlist('fuenteFinanciamiento[]')
+        clasificaciones = data.getlist('clasificacionFinanciacion[]')
+        indoles = data.getlist('indoleFinanciacion[]')
+        participantes_json_list = data.getlist('participantesLista[]')
         
-        # Participantes viene como JSON string desde el frontend (form.append)
-        record.participantes = data.get('participantesLista')
+        from itertools import zip_longest
+        for titulo, fuente, clas, indole, parts_json in zip_longest(
+            titulos, fuentes, clasificaciones, indoles, participantes_json_list, fillvalue=''
+        ):
+            if not titulo: continue
+            
+            registro = Financiamiento(
+                cliente_id=cliente_id,
+                titulo=titulo.strip(),
+                fuente=fuente.strip(),
+                clasificado=clas.strip(),
+                indole=indole.strip(),
+                participantes=parts_json # Save raw JSON string
+            )
+            self.db.add(registro)
     
     def _guardar_patentes(self, data, cliente_id):
         record = Patente.query.filter_by(cliente_id=cliente_id).first()
