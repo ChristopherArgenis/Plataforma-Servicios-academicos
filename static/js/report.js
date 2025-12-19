@@ -78,24 +78,54 @@
 
             const uniqueId = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
             const hiddenInput = row.querySelector('.tipo-participacion-hidden');
-            const radios = row.querySelectorAll('.comite-radio');
+            const radioComite = row.querySelector('[data-radio-comite]');
+            const radioJurado = row.querySelector('[data-radio-jurado]');
+            const labelComite = row.querySelector('.comite-label');
+            const labelJurado = row.querySelector('.jurado-label');
 
-            if (!hiddenInput || radios.length === 0) return;
+            // Defensive verification
+            if (!hiddenInput) {
+                console.warn('[Report] initComiteRow: Hidden input not found in row', row);
+                return;
+            }
+            if (!radioComite || !radioJurado) {
+                console.warn('[Report] initComiteRow: Radio buttons not found in row', row);
+                return;
+            }
+            if (!labelComite || !labelJurado) {
+                console.warn('[Report] initComiteRow: Labels not found in row', row);
+                return;
+            }
 
+            // Generate unique IDs
+            const comiteId = `tipoPartComite_${uniqueId}`;
+            const juradoId = `tipoPartJurado_${uniqueId}`;
             const radioName = `participacion_radio_${uniqueId}`;
-            
-            radios.forEach(radio => {
-                radio.name = radioName;
-                radio.addEventListener('change', function() {
-                    if (this.checked) {
-                        hiddenInput.value = this.value;
-                    }
-                });
 
-                if (radio.checked) {
-                    hiddenInput.value = radio.value;
+            // Set unique IDs and names
+            radioComite.id = comiteId;
+            radioComite.name = radioName;
+            radioJurado.id = juradoId;
+            radioJurado.name = radioName;
+
+            // Link labels to inputs
+            labelComite.setAttribute('for', comiteId);
+            labelJurado.setAttribute('for', juradoId);
+
+            // Sync with hidden input
+            const syncHidden = () => {
+                if (radioComite.checked) {
+                    hiddenInput.value = 'comite';
+                } else if (radioJurado.checked) {
+                    hiddenInput.value = 'jurado';
                 }
-            });
+            };
+
+            radioComite.addEventListener('change', syncHidden);
+            radioJurado.addEventListener('change', syncHidden);
+
+            // Initialize hidden input value
+            syncHidden();
         }
 
         function initFinanceRow(row) {
@@ -355,27 +385,9 @@
 
                 // Initialize row if needed
                 if (config.init === 'comite') {
-                    const reportContainer = document.getElementById('Report');
-                    if (reportContainer && reportContainer.dataset.initialized === 'true') {
-                        // Re-run init logic for this specific row
-                        const uniqueId = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                        const hiddenInput = newRow.querySelector('.tipo-participacion-hidden');
-                        const radios = newRow.querySelectorAll('.comite-radio');
-                        if (hiddenInput && radios.length > 0) {
-                            const radioName = `participacion_radio_${uniqueId}`;
-                            radios.forEach(radio => {
-                                radio.name = radioName;
-                                radio.addEventListener('change', function() {
-                                    if (this.checked) hiddenInput.value = this.value;
-                                });
-                                if (radio.checked) hiddenInput.value = radio.value;
-                            });
-                        }
-                        newRow.dataset.comiteInitialized = 'true';
-                    }
+                    initComiteRow(newRow);
                 } else if (config.init === 'finance') {
-                    // Finance row init handled inline
-                    newRow.dataset.financeInitialized = 'true';
+                    initFinanceRow(newRow);
                 }
 
                 return;

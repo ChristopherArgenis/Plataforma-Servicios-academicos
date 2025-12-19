@@ -309,7 +309,7 @@
             
             <div id="librosContainer">
                 <div class="row g-3 dynamic-book-row mb-3">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <div class="form-floating">
                             <input type="text" class="form-control" name="librosCientificos[]" placeholder="Libros científicos">
                             <label>Libros científicos</label>
@@ -321,6 +321,12 @@
                             <input type="text" class="form-control" name="capitulosLibro[]" placeholder="Capítulos del libro">
                             <label>Capítulos del libro</label>
                         </div>
+                    </div>
+
+                    <div class="col-md-1 d-flex align-items-center">
+                        <button type="button" class="btn btn-outline-danger w-100 h-100 delete-row-btn" style="display: none;">
+                            <i class="bi bi-trash"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -667,13 +673,15 @@
                                     <!-- Selector Tipo (Radio) -->
                                     <div class="col-12">
                                         <label class="form-label fw-bold small d-block">Participación como:</label>
-                                        <div class="btn-group w-100" role="group">
-                                            <input type="radio" class="btn-check" name="tipoParticipacion[]" id="tipoPartComite" value="comite" checked>
-                                            <label class="btn btn-outline-primary" for="tipoPartComite">Comité</label>
+                                        <div class="btn-group w-100" role="group" data-radio-group>
+                                            <input type="radio" class="btn-check comite-radio" data-radio-comite value="comite" checked>
+                                            <label class="btn btn-outline-primary comite-label">Comité</label>
                                             
-                                            <input type="radio" class="btn-check" name="tipoParticipacion[]" id="tipoPartJurado" value="jurado">
-                                            <label class="btn btn-outline-primary" for="tipoPartJurado">Jurado</label>
+                                            <input type="radio" class="btn-check comite-radio" data-radio-jurado value="jurado">
+                                            <label class="btn btn-outline-primary jurado-label">Jurado</label>
                                         </div>
+                                        <!-- Hidden input for backend submission -->
+                                        <input type="hidden" name="tipoParticipacion[]" class="tipo-participacion-hidden" value="comite">
                                     </div>
 
                                      <div class="col-12 comite-subtype-group">
@@ -780,7 +788,8 @@
 
 
 {% macro body_finance() %}
-    <div class="p-4 bg-white">
+    {# IMPORTANT: HTML structure errors in macros can affect rendering of subsequent steps.
+       This macro had a duplicate <div> tag that broke the DOM hierarchy. #}
     <div class="p-4 bg-white">
         <form id="formularioFinanciacion">
             <input type="hidden" name="{{ cliente_id }}" value="{{ cliente_id }}">
