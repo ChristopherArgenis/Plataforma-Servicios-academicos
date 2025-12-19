@@ -88,5 +88,5 @@ Distinciones, premios y reconocimientos.""",
 
 Logros relevantes a lo largo de la carrera académica.""",
 
-    "ArticulosRelevantes": """12. Tres Artículos Más Importantes / Relevantes"""
+    "ArticulosRelevantes": """12. 3 Artículos Más Importantes / Relevantes"""
 }
