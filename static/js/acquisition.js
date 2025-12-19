@@ -76,20 +76,37 @@
     }
 
     // ========================================
-    // HTMX-AWARE INITIALIZATION
+    // EVENT LISTENER: content:ready (from htmx-cleanup.js)
     // ========================================
-    
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initializeAcquisition);
-    } else {
-        initializeAcquisition();
-    }
-
-    document.body.addEventListener('htmx:load', function(e) {
-        if (e.detail.elt.id === 'Adquisicion' || e.detail.elt.querySelector('#Adquisicion')) {
+    document.addEventListener('content:ready', function(evt) {
+        const container = evt.detail.container;
+        const acquisitionContainer = container.querySelector('#Adquisicion');
+        
+        if (acquisitionContainer) {
+            console.log('[Acquisition] content:ready event received, initializing...');
             initializeAcquisition();
         }
     });
+
+    // ========================================
+    // FALLBACK: DOMContentLoaded for direct page loads
+    // ========================================
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            const acquisitionContainer = document.getElementById('Adquisicion');
+            if (acquisitionContainer) {
+                console.log('[Acquisition] DOMContentLoaded, initializing...');
+                initializeAcquisition();
+            }
+        });
+    } else {
+        // DOM already loaded
+        const acquisitionContainer = document.getElementById('Adquisicion');
+        if (acquisitionContainer) {
+            console.log('[Acquisition] DOM already loaded, initializing...');
+            initializeAcquisition();
+        }
+    }
 
     console.log('[Acquisition] Module loaded and ready');
 

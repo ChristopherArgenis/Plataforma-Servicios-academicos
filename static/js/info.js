@@ -80,20 +80,37 @@
     }
 
     // ========================================
-    // HTMX-AWARE INITIALIZATION
+    // EVENT LISTENER: content:ready (from htmx-cleanup.js)
     // ========================================
-    
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initializeInfo);
-    } else {
-        initializeInfo();
-    }
-
-    document.body.addEventListener('htmx:load', function(e) {
-        if (e.detail.elt.querySelector('#btnEditName')) {
+    document.addEventListener('content:ready', function(evt) {
+        const container = evt.detail.container;
+        const btnEditName = container.querySelector('#btnEditName');
+        
+        if (btnEditName) {
+            console.log('[Info] content:ready event received, initializing...');
             initializeInfo();
         }
     });
+
+    // ========================================
+    // FALLBACK: DOMContentLoaded for direct page loads
+    // ========================================
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnEditName = document.getElementById('btnEditName');
+            if (btnEditName) {
+                console.log('[Info] DOMContentLoaded, initializing...');
+                initializeInfo();
+            }
+        });
+    } else {
+        // DOM already loaded
+        const btnEditName = document.getElementById('btnEditName');
+        if (btnEditName) {
+            console.log('[Info] DOM already loaded, initializing...');
+            initializeInfo();
+        }
+    }
 
     console.log('[Info] Module loaded and ready');
 

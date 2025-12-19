@@ -4,6 +4,9 @@
 (function() {
     'use strict';
 
+    // Store original templates before initialization
+    const originalTemplates = {};
+
     // ========================================
     // INITIALIZATION FUNCTION
     // ========================================
@@ -73,7 +76,12 @@
         // ========================================
 
         function initComiteRow(row) {
-            if (row.dataset.comiteInitialized === 'true') return;
+            if (row.dataset.comiteInitialized === 'true') {
+                console.log('[Report] initComiteRow: Already initialized, skipping');
+                return;
+            }
+            
+            console.log('[Report] initComiteRow: Initializing row');
             row.dataset.comiteInitialized = 'true';
 
             const uniqueId = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
@@ -198,14 +206,30 @@
             const container = document.getElementById(containerId);
             if (!container) return;
 
+            const rows = container.getElementsByClassName(rowClass);
+            
+            // Store original template BEFORE any initialization
+            if (rows.length > 0 && !originalTemplates[rowClass]) {
+                originalTemplates[rowClass] = rows[0].cloneNode(true);
+                console.log('[Report] Stored original template for:', rowClass);
+            }
+
             // Initialize existing rows
             const existingRows = container.getElementsByClassName(rowClass);
-            Array.from(existingRows).forEach(row => {
+            Array.from(existingRows).forEach((row, index) => {
                  const deleteBtn = row.querySelector('.delete-row-btn');
                  if (deleteBtn) {
-                     deleteBtn.style.display = 'block';
+                     // NEVER show delete on first row
+                     deleteBtn.style.display = index === 0 ? 'none' : 'block';
                  }
-                 if (onRowInit) onRowInit(row);
+                 
+                 // Force initialization even if already initialized
+                 if (onRowInit) {
+                     // Clear flags to force re-init
+                     delete row.dataset.comiteInitialized;
+                     delete row.dataset.financeInitialized;
+                     onRowInit(row);
+                 }
             });
 
             // Note: Add button click is handled by global event delegation
@@ -321,6 +345,39 @@
     }
 
     // ========================================
+    // EVENT LISTENER: content:ready (from htmx-cleanup.js)
+    // ========================================
+    document.addEventListener('content:ready', function(evt) {
+        const container = evt.detail.container;
+        const reportContainer = container.querySelector('#Report');
+        
+        if (reportContainer) {
+            console.log('[Report] content:ready event received, initializing...');
+            initializeReport();
+        }
+    });
+
+    // ========================================
+    // FALLBACK: DOMContentLoaded for direct page loads
+    // ========================================
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            const reportContainer = document.getElementById('Report');
+            if (reportContainer) {
+                console.log('[Report] DOMContentLoaded, initializing...');
+                initializeReport();
+            }
+        });
+    } else {
+        // DOM already loaded
+        const reportContainer = document.getElementById('Report');
+        if (reportContainer) {
+            console.log('[Report] DOM already loaded, initializing...');
+            initializeReport();
+        }
+    }
+
+    // ========================================
     // CENTRALIZED EVENT DELEGATION
     // ========================================
     document.addEventListener('click', function(e) {
@@ -349,7 +406,8 @@
                 const rows = container.getElementsByClassName(config.rowClass);
                 if (rows.length === 0) continue;
 
-                const templateRow = rows[0];
+                // Use stored original template or fallback to first row
+                const templateRow = originalTemplates[config.rowClass] || rows[0];
                 const newRow = templateRow.cloneNode(true);
                 
                 // Clear initialization flags
@@ -413,14 +471,6 @@
     } else {
         initializeReport();
     }
-
-    // Re-initialize when HTMX loads new content
-    document.body.addEventListener('htmx:load', function(e) {
-        // Only initialize if the loaded content contains Report
-        if (e.detail.elt.id === 'Report' || e.detail.elt.querySelector('#Report')) {
-            initializeReport();
-        }
-    });
 
     console.log('[Report] Module loaded and ready');
 
