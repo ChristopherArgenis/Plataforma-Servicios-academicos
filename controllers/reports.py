@@ -1,12 +1,10 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify, url_for, session
 from services.report_service import ReportService
+from services.reportlab.report_service import ReportService as PDFReportService
 from models import db
+import os
 
 report = Blueprint('reports', __name__)
-
-# ==========================================
-# RUTAS DE GUARDADO - USANDO SERVICIO
-# ==========================================
 
 # ==========================================
 # RUTAS DE GUARDADO - USANDO SERVICIO
@@ -118,3 +116,64 @@ def save_distinciones():
 @report.route('/Panel/Reporte/logros/guardar', methods=['POST'])
 def save_logros():
     return _handle_save_request('logros')
+
+# ==========================================
+# GENERACIÓN DE PDF
+# ==========================================
+
+@report.route('/Panel/Reporte/generar-pdf', methods=['POST'])
+def generar_pdf():
+    """Genera el PDF del informe para el cliente actual."""
+    try:
+        # Get cliente_id from session
+        cliente_id = session.get('userID')
+        
+        if not cliente_id:
+            # Fallback if session variable is missing but username exists
+            username = session.get('username')
+            if username:
+                from models.user import Cliente
+                client = Cliente.query.filter_by(nombre=username).first()
+                if client:
+                    cliente_id = client.id
+                    session['userID'] = cliente_id
+            
+        if not cliente_id:
+            return jsonify({
+                'success': False,
+                'message': 'Error: No se encontró la sesión del usuario. Por favor, inicia sesión nuevamente.'
+            }), 401
+        
+        # Generate filename
+        filename = f"informe_cliente_{cliente_id}.pdf"
+        
+        # Ensure reportes directory exists
+        reportes_dir = os.path.join('static', 'reportes')
+        os.makedirs(reportes_dir, exist_ok=True)
+        
+        filepath = os.path.join(reportes_dir, filename)
+        
+        # Generate PDF
+        pdf_service = PDFReportService(cliente_id)
+        pdf_service.generar_reporte(filepath)
+        
+        # Verify file was created
+        if not os.path.exists(filepath):
+            return jsonify({
+                'success': False,
+                'message': 'Error: El archivo PDF no se generó correctamente'
+            }), 500
+        
+        return jsonify({
+            'success': True,
+            'message': 'Reporte generado exitosamente',
+            'filename': filename,
+            'download_url': url_for('static', filename=f'reportes/{filename}', _external=True)
+        })
+        
+    except Exception as e:
+        print(f"[ERROR] generar_pdf: {e}")
+        return jsonify({
+            'success': False,
+            'message': f'Error al generar reporte: {str(e)}'
+        }), 500

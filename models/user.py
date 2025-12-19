@@ -58,6 +58,7 @@ class Relevantes(db.Model):
     __tablename__ = 'Relevantes'
 
     id = db.Column(db.Integer, primary_key=True)
+    cliente_id = db.Column(db.Integer, db.ForeignKey('Cliente.id'), nullable=False)
     id_Articles = db.Column(db.String(100), nullable=False)
     title = db.Column(db.String(150), nullable=False)
     authors = db.Column(db.String(500), nullable=True)
@@ -65,6 +66,8 @@ class Relevantes(db.Model):
     volume = db.Column(db.Integer, nullable=True)
     pages = db.Column(db.String(20), nullable=False)
     year = db.Column(db.Integer, default=0)
+
+    cliente = db.relationship('Cliente', backref=db.backref('relevantes', uselist=False))
 
 
 class InformationAcademic(db.Model):

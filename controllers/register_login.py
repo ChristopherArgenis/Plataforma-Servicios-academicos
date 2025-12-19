@@ -76,13 +76,13 @@ def login():
     # # If successful, add user.id to session and redirect to the list page
     if customer and customer.rol != 0:
         session['username'] = customer.nombre
+        session['userID'] = customer.id  # Set it consistently here
         user = UserService.checkUser(customer.id)
         if user:
             session['scholarKey'] = user.profile_id
             session['CustomerRol'] = customer.rol
             return redirect(url_for('panel.panel_get'))
         else:
-            session["userID"] = customer.id
             return redirect(url_for('user.key_view'))
     elif customer and customer.rol == 0:
         flash("Acceso Denegado: No tiene permisos de usuario", "warning")

@@ -1,10 +1,18 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
+import json
+from datetime import datetime
 from services.user_service import Tables_Service, Check_Article, UserService
 from services.table_maganer import Table_Maganer
 from services.query_maganer import Query_Manager
 from services.articles_maganer import Articles_Maganer
 from models import db
-from models.user import Cliente, InformationAcademic
+from models.user import (
+    Cliente, InformationAcademic, Libro, ArticuloInforme, Curso, 
+    ComiteJurado, Estudiante, Congreso, Evento, Divulgacion, 
+    Estancia, Financiamiento, Patente, Comision, Vinculacion, 
+    Distincion, Logro, Relevantes
+)
+from services.informe_update_service import InformeUpdateService
 
 table_maganer = Table_Maganer()
 articles_maganer = Articles_Maganer()
@@ -74,6 +82,39 @@ def panel_report():
     
     if request.headers.get('HX-Request'):
         return render_template('partials/report.html', **context)
+    
+    return render_template('base_panel.html', **context)
+
+@panel_general.route('/Panel/Informe', methods=["GET"])
+def panel_informe():
+    """Vista de visualización del informe anual (Solo Lectura)."""
+    cliente_id = session.get('userID')
+    username = session.get('username')
+    
+    if not cliente_id:
+        # Fallback de seguridad si el userID no está en sesión
+        client = Cliente.query.filter_by(nombre=username).first()
+        if client:
+            cliente_id = client.id
+            session['userID'] = cliente_id
+        else:
+            flash("Error: No se pudo identificar al usuario.", "danger")
+            return redirect(url_for('user.auth_page'))
+
+    # Usar el servicio para obtener los datos
+    informe_service = InformeUpdateService()
+    data = informe_service.get_informe_data(cliente_id)
+    
+    context = {
+        'user': username,
+        'rol': session['CustomerRol'],
+        'active_page': 'informe',
+        'data': data,
+        'current_year': datetime.now().year
+    }
+    
+    if request.headers.get('HX-Request'):
+        return render_template('partials/informe.html', **context)
     
     return render_template('base_panel.html', **context)
 
@@ -241,6 +282,8 @@ def admin_delete():
                 return redirect(url_for('panel.admin_read', table=table))
             else:
                 print("No existe el id")
+
+
         case "Usuario":
             user = Tables_Service.deleteUser(id)
             if user:
