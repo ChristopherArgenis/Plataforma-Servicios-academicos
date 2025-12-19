@@ -3,9 +3,9 @@
 from datetime import datetime
 
 REPORT_TEXTS = {
-    "header": f"INFORME ANUAL {datetime.now().year}\nINVESTIGADORES",
+    "header": f"INFORME ANUAL {datetime.now().year}\n INVESTIGADORES",
     
-    "Investigacion": """1. INVESTIGACIÓN
+    "Investigacion": """1. Investigación
 
 Sólo artículos publicados en el año que se evalúa. En todos los casos, dar la referencia completa (título, autores, nombre de la revista, volumen, página, año), DOI, ISSN, factor de impacto y cuartil.
 
@@ -15,7 +15,7 @@ Sólo artículos publicados en el año que se evalúa. En todos los casos, dar l
 1.4 Libros científicos
 1.5 Capítulos de libros científicos""",
 
-    "Docencia": """2. DOCENCIA
+    "Docencia": """2. Docencia
 
 2.1 Dirección de tesis y nivel (concluidas y en proceso)
     2.1.1 Doctorado
@@ -32,7 +32,7 @@ Sólo artículos publicados en el año que se evalúa. En todos los casos, dar l
 
 2.6 Estudiantes de servicio social durante el período (nombre y procedencia)""",
 
-    "Difusion": """3. DIFUSIÓN
+    "Difusion": """3. Difusión
 
 3.1 Organización de eventos dirigidos a pares (coloquios, conferencias, congresos, cursos, diplomados, foros, mesas redondas, seminarios, simposios, talleres, otros)
 
@@ -46,7 +46,7 @@ Sólo artículos publicados en el año que se evalúa. En todos los casos, dar l
 
 3.4 Participación en otros eventos""",
 
-    "Divulgacion": """4. DIVULGACIÓN
+    "Divulgacion": """4. Divulgación
 
 4.1 Artículos en revistas de divulgación (referencia completa)
 
@@ -56,37 +56,37 @@ Sólo artículos publicados en el año que se evalúa. En todos los casos, dar l
 
 4.4 Participación en eventos""",
 
-    "Patentes": """5. PATENTES
+    "Patentes": """5. Patentes
 
 Patentes solicitadas u otorgadas en el período.""",
 
-    "IntercambioAcademico": """6. INTERCAMBIO ACADÉMICO
+    "IntercambioAcademico": """6. Intercambio Académico
 
 6.1 Visitantes recibidos, extranjeros y nacionales (nombre, institución de procedencia y período de la estancia)
 
 6.2 Visitas y/o estancias académicas realizadas en el extranjero o nacionales (nombre de la institución y período de la estancia)""",
 
-    "ProyectosFinanciados": """7. PROYECTOS FINANCIADOS
+    "ProyectosFinanciados": """7. Proyectos Financiados
 
 Título, participantes (académicos y estudiantes), instituciones, fuente de financiamiento y vigencia.
 
 Clasificar como: Básico, Aplicado, Desarrollo Tecnológico, Innovación""",
 
-    "Comisiones": """8. PARTICIPACIÓN EN COMISIONES ACADÉMICAS
+    "Comisiones": """8. Participación en Comisiones Académicas
 
 Tanto en la UNAM como externas.""",
 
-    "Vinculacion": """9. ACTIVIDADES DE VINCULACIÓN
+    "Vinculacion": """9. Actividades de Vinculación
 
 Servicios técnicos y/o proyectos realizados. Convenios de colaboración institucionales.""",
 
-    "Otros": """10. OTROS
+    "Otros": """10. Otros
 
 Distinciones, premios y reconocimientos.""",
 
-    "Logros": """11. LOGROS IMPORTANTES
+    "Logros": """11. Logros Importantes
 
 Logros relevantes a lo largo de la carrera académica.""",
 
-    "ArticulosRelevantes": """12. TRES ARTÍCULOS MÁS IMPORTANTES / RELEVANTES"""
+    "ArticulosRelevantes": """12. Tres Artículos Más Importantes / Relevantes"""
 }
