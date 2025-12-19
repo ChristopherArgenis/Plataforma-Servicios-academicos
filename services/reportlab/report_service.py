@@ -234,7 +234,7 @@ class ReportService:
         # =========================
         # 12. ARTÍCULOS RELEVANTES
         # =========================
-        relevantes = Relevantes.query.filter_by(cliente_id=self.cliente_id).limit(3).all()
+        relevantes = Relevantes.query.filter_by(cliente_id=self.cliente_id).all()
         rel_items = [
             f"<b>{r.title}</b><br/>"
             f"{r.authors or '—'}<br/>"
