@@ -77,14 +77,13 @@
 
         function initComiteRow(row) {
             if (row.dataset.comiteInitialized === 'true') {
-                console.log('[Report] initComiteRow: Already initialized, skipping');
                 return;
             }
             
-            console.log('[Report] initComiteRow: Initializing row');
             row.dataset.comiteInitialized = 'true';
 
-            const uniqueId = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            // Robust unique ID generation
+            const uniqueId = Math.random().toString(36).substring(2, 11) + Date.now();
             const hiddenInput = row.querySelector('.tipo-participacion-hidden');
             const radioComite = row.querySelector('[data-radio-comite]');
             const radioJurado = row.querySelector('[data-radio-jurado]');
@@ -411,8 +410,10 @@
                 const newRow = templateRow.cloneNode(true);
                 
                 // Clear initialization flags
-                delete newRow.dataset.comiteInitialized;
-                delete newRow.dataset.financeInitialized;
+                newRow.removeAttribute('data-comite-initialized');
+                newRow.removeAttribute('data-finance-initialized');
+                newRow.dataset.comiteInitialized = 'false';
+                newRow.dataset.financeInitialized = 'false';
                 
                 // Clear inputs
                 newRow.querySelectorAll('input, select, textarea').forEach(input => {

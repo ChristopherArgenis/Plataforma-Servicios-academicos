@@ -161,18 +161,21 @@
 {% endmacro %}
 
 {% macro simple_step_card(title, placeholder, icon_class, form_id) %}
-    <div class="card shadow border-0 rounded-3 mb-4">
-        <div class="card-header bg-white border-0 pt-4 px-4">
-            <h4 class="text-primary fw-bold"><i class="bi {{ icon_class }} me-2"></i> {{ title }}</h4>
+    <div class="card shadow-sm border-0 border-start border-4 rounded-3 mb-5" style="border-color: #002855 !important;">
+        <div class="card-header bg-white border-0 pt-4 px-4 d-flex align-items-center">
+            <div class="rounded-circle bg-light p-2 text-primary me-3">
+                <i class="bi {{ icon_class }} fs-4" style="color: #002855;"></i>
+            </div>
+            <h4 class="mb-0 fw-bold" style="color: #002855;">{{ title }}</h4>
         </div>
         <div class="card-body p-4">
              <form id="{{ form_id }}">
-                 <div class="form-floating mb-3">
-                    <textarea class="form-control" name="descripcion" placeholder="{{ placeholder }}" style="height: 200px"></textarea>
-                    <label>{{ placeholder }}</label>
+                 <div class="mb-4">
+                    <label class="form-label text-muted small fw-bold text-uppercase mb-2">{{ placeholder }}</label>
+                    <textarea class="form-control border-light-subtle shadow-none" name="descripcion" placeholder="Escribe aquí los detalles..." style="height: 180px; background-color: #fbfbfb; border-radius: 12px;"></textarea>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-success text-white shadow-sm">
+                    <button type="submit" class="btn btn-primary px-4 rounded-pill shadow-sm" style="background-color: #002855; border-color: #002855;">
                         <i class="bi bi-save me-2"></i> Guardar Cambios
                     </button>
                 </div>
@@ -327,12 +330,12 @@
 {% endmacro %}
 
 {% macro button_report() %}
-  <!-- Botones -->
-  <div class="d-flex justify-content-center gap-3 mt-5 mx-auto" style="max-width: 1000px;">
-    <button id="btnAnterior" class="btn btn-outline-secondary px-4 rounded-pill shadow-sm" disabled>
+  <!-- Botones de Navegación -->
+  <div class="d-flex justify-content-center gap-4 mt-5 mb-5 mx-auto" style="max-width: 1000px; padding-bottom: 50px;">
+    <button id="btnAnterior" class="btn btn-outline-secondary px-5 rounded-pill border-2 fw-medium transition-all" disabled>
         <i class="bi bi-arrow-left me-2"></i> Anterior
     </button>
-    <button id="btnSiguiente" class="btn btn-primary px-4 rounded-pill shadow-sm">
+    <button id="btnSiguiente" class="btn btn-outline-primary px-5 rounded-pill border-2 fw-medium transition-all">
         Siguiente <i class="bi bi-arrow-right ms-2"></i>
     </button>
   </div>
@@ -368,13 +371,13 @@
             </div>
 
             <div class="d-flex justify-content-start mb-3">
-                <button type="button" class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" id="btnAddBook" title="Agregar otro libro">
-                    <i class="bi bi-plus-lg"></i>
+                <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 shadow-sm" id="btnAddBook" title="Agregar otro libro">
+                    <i class="bi bi-plus-lg me-2"></i> Agregar Otro
                 </button>
             </div>
 
             <div class="d-flex justify-content-end mt-4">
-                <button type="submit" class="btn btn-success text-white shadow-sm" id="btnSaveLibros">
+                <button type="submit" class="btn btn-primary px-4 rounded-pill shadow-sm" id="btnSaveLibros" style="background-color: #002855; border-color: #002855;">
                     <i class="bi bi-save me-2"></i> Guardar Cambios
                 </button>
             </div>
@@ -383,9 +386,12 @@
 {% endmacro %}
 
 {% macro book_science() %}
-    <div class="card shadow border-0 rounded-3 mb-4">
-        <div class="card-header bg-white border-0 pt-4 px-4">
-            <h4 class="text-primary fw-bold"><i class="bi bi-book-half me-2"></i> Producción Científica</h4>
+    <div class="card shadow-sm border-0 border-start border-4 rounded-3 mb-5" style="border-color: #002855 !important;">
+        <div class="card-header bg-white border-0 pt-4 px-4 d-flex align-items-center">
+             <div class="rounded-circle bg-light p-2 text-primary me-3">
+                <i class="bi bi-book-half fs-4" style="color: #002855;"></i>
+            </div>
+            <h4 class="mb-0 fw-bold" style="color: #002855;">Producción Científica</h4>
         </div>
         <div class="card-body">
             {{ body_book_science() }}
@@ -453,13 +459,13 @@
             </div>
 
             <div class="d-flex justify-content-between mt-3">
-                 <button type="button" class="btn btn-outline-primary" id="btnAddTesis">
+                 <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3" id="btnAddTesis">
                     <i class="bi bi-plus-lg me-2"></i> Agregar Tesis
                 </button>
             </div>
 
             <div class="d-flex justify-content-end mt-4">
-                <button type="submit" class="btn btn-success text-white shadow-sm">
+                <button type="submit" class="btn btn-primary px-4 rounded-pill shadow-sm" style="background-color: #002855; border-color: #002855;">
                     <i class="bi bi-save me-2"></i> Guardar Cambios
                 </button>
             </div>
@@ -468,9 +474,12 @@
 {% endmacro %}
 
 {% macro Tesis_Teaching() %}
-    <div class="card shadow border-0 rounded-3 mb-4">
-        <div class="card-header bg-white border-0 pt-4 px-4">
-            <h4 class="text-primary fw-bold"><i class="bi bi-mortarboard me-2"></i> Tesis y Docencia</h4>
+    <div class="card shadow-sm border-0 border-start border-4 rounded-3 mb-5" style="border-color: #002855 !important;">
+        <div class="card-header bg-white border-0 pt-4 px-4 d-flex align-items-center">
+            <div class="rounded-circle bg-light p-2 text-primary me-3">
+                <i class="bi bi-mortarboard fs-4" style="color: #002855;"></i>
+            </div>
+            <h4 class="mb-0 fw-bold" style="color: #002855;">Tesis y Docencia</h4>
         </div>
         <div class="card-body">
             {{ body_Tesis_Teaching() }}
@@ -532,13 +541,13 @@
             </div>
 
             <div class="d-flex justify-content-between mt-3">
-                 <button type="button" class="btn btn-outline-primary" id="btnAddCurso">
+                 <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3" id="btnAddCurso">
                     <i class="bi bi-plus-lg me-2"></i> Agregar Curso
                 </button>
             </div>
 
             <div class="d-flex justify-content-end mt-4">
-                <button type="submit" class="btn btn-success text-white shadow-sm">
+                <button type="submit" class="btn btn-primary px-4 rounded-pill shadow-sm" style="background-color: #002855; border-color: #002855;">
                     <i class="bi bi-save me-2"></i> Guardar Cambios
                 </button>
             </div>
@@ -547,9 +556,12 @@
 {% endmacro %}
 
 {% macro courses() %}
-    <div class="card shadow border-0 rounded-3 mb-4">
-        <div class="card-header bg-white border-0 pt-4 px-4">
-            <h4 class="text-primary fw-bold"><i class="bi bi-easel me-2"></i> Cursos</h4>
+    <div class="card shadow-sm border-0 border-start border-4 rounded-3 mb-5" style="border-color: #002855 !important;">
+        <div class="card-header bg-white border-0 pt-4 px-4 d-flex align-items-center">
+            <div class="rounded-circle bg-light p-2 text-primary me-3">
+                <i class="bi bi-easel fs-4" style="color: #002855;"></i>
+            </div>
+            <h4 class="mb-0 fw-bold" style="color: #002855;">Cursos</h4>
         </div>
         <div class="card-body">
             {{ body_courses() }}
@@ -694,27 +706,30 @@
     <div class="row">
         <!-- CARD 1: COMITÉS Y JURADOS (Consolidado) -->
         <div class="col-12 mb-4">
-            <div class="card shadow border-0 rounded-3 h-100">
-                <div class="card-header bg-white border-0 pt-4 px-4">
-                    <h4 class="text-primary fw-bold"><i class="bi bi-people me-2"></i> Comités y Jurados</h4>
+            <div class="card shadow-sm border-0 border-start border-4 rounded-3 mb-5" style="border-color: #002855 !important;">
+                <div class="card-header bg-white border-0 pt-4 px-4 d-flex align-items-center">
+                    <div class="rounded-circle bg-light p-2 text-primary me-3">
+                        <i class="bi bi-people fs-4" style="color: #002855;"></i>
+                    </div>
+                    <h4 class="mb-0 fw-bold" style="color: #002855;">Comités y Jurados</h4>
                 </div>
                 <div class="card-body">
                     <form id="formComites" action="{{ url_for('reports.save_comite') }}" method="POST">
                         <input type="hidden" name="{{ cliente_id }}" value="{{ cliente_id }}">
                         <div id="comitesContainer">
-                            <div class="dynamic-comite-row border rounded p-3 mb-3 bg-light position-relative">
-                                <button type="button" class="btn-close position-absolute top-0 end-0 m-2 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
+                            <div class="dynamic-comite-row border-0 border-bottom rounded-0 p-4 mb-4 bg-white position-relative">
+                                <button type="button" class="btn-close position-absolute top-0 end-0 m-3 delete-row-btn" aria-label="Eliminar" style="display: none;"></button>
                                 
-                                <div class="row g-3">
+                                <div class="row g-4">
                                     <!-- Selector Tipo (Radio) -->
                                     <div class="col-12">
-                                        <label class="form-label fw-bold small d-block">Participación como:</label>
+                                        <label class="form-label text-muted small fw-bold text-uppercase mb-3 d-block">Participación como:</label>
                                         <div class="btn-group w-100" role="group" data-radio-group>
                                             <input type="radio" class="btn-check comite-radio" data-radio-comite value="comite" checked>
-                                            <label class="btn btn-outline-primary comite-label">Comité</label>
+                                            <label class="btn btn-outline-primary comite-label border-2">Comité</label>
                                             
                                             <input type="radio" class="btn-check comite-radio" data-radio-jurado value="jurado">
-                                            <label class="btn btn-outline-primary jurado-label">Jurado</label>
+                                            <label class="btn btn-outline-primary jurado-label border-2">Jurado</label>
                                         </div>
                                         <!-- Hidden input for backend submission -->
                                         <input type="hidden" name="tipoParticipacion[]" class="tipo-participacion-hidden" value="comite">
@@ -755,12 +770,12 @@
                                 </div>
                             </div>
                         </div>
-                         <div class="d-flex justify-content-between mt-3">
-                            <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddComite">
-                                <i class="bi bi-plus-lg me-2"></i> Agregar
+                         <div class="d-flex justify-content-between mt-4">
+                            <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3" id="btnAddComite">
+                                <i class="bi bi-plus-lg me-2"></i> Agregar Otro
                             </button>
-                            <button type="submit" class="btn btn-primary btn-sm text-white">
-                                <i class="bi bi-save me-2"></i> Guardar
+                            <button type="submit" class="btn btn-primary btn-sm text-white rounded-pill px-4" style="background-color: #002855; border-color: #002855;">
+                                <i class="bi bi-save me-2"></i> Guardar Todo
                             </button>
                         </div>
                     </form>
@@ -770,9 +785,12 @@
 
         <!-- CARD 2: ESTUDIANTES (Separada) -->
         <div class="col-12 mb-4">
-             <div class="card shadow border-0 rounded-3 h-100">
-                <div class="card-header bg-white border-0 pt-4 px-4">
-                    <h4 class="text-primary fw-bold"><i class="bi bi-mortarboard me-2"></i> Estudiantes</h4>
+             <div class="card shadow-sm border-0 border-start border-4 rounded-3 mb-5" style="border-color: #002855 !important;">
+                <div class="card-header bg-white border-0 pt-4 px-4 d-flex align-items-center">
+                    <div class="rounded-circle bg-light p-2 text-primary me-3">
+                        <i class="bi bi-mortarboard fs-4" style="color: #002855;"></i>
+                    </div>
+                    <h4 class="mb-0 fw-bold" style="color: #002855;">Estudiantes</h4>
                 </div>
                 <div class="card-body">
                     <form id="formEstudiantes" action="{{ url_for('reports.save_estudiantes') }}" method="POST">
@@ -796,13 +814,13 @@
                                      </div>
 
                                       <div class="col-12">
-                                        <label class="form-label fw-bold small">Procedencia</label>
-                                        <input type="text" class="form-control" name="procedenciaServicio[]" placeholder="Procedencia (Servicio)">
+                                        <label class="form-label text-muted small fw-bold text-uppercase mb-2">Procedencia</label>
+                                        <input type="text" class="form-control border-light-subtle shadow-none" name="procedenciaServicio[]" placeholder="Procedencia (Servicio)" style="background-color: #fbfbfb; border-radius: 8px;">
                                      </div>
 
                                       <div class="col-12">
-                                        <label class="form-label fw-bold small">Título del Proyecto</label>
-                                        <input type="text" class="form-control" name="tituloProyectoEstudiante[]" placeholder="Proyecto">
+                                        <label class="form-label text-muted small fw-bold text-uppercase mb-2">Título del Proyecto</label>
+                                        <input type="text" class="form-control border-light-subtle shadow-none" name="tituloProyectoEstudiante[]" placeholder="Proyecto" style="background-color: #fbfbfb; border-radius: 8px;">
                                      </div>
                                 </div>
                             </div>
@@ -912,13 +930,13 @@
             </div>
 
             <div class="d-flex justify-content-between mt-3">
-                 <button type="button" class="btn btn-outline-primary" id="btnAddFinance">
+                 <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3" id="btnAddFinance">
                     <i class="bi bi-plus-lg me-2"></i> Agregar Proyecto
                 </button>
             </div>
 
             <div class="d-flex justify-content-end mt-4">
-                <button type="submit" class="btn btn-success text-white shadow-sm">
+                <button type="submit" class="btn btn-primary px-4 rounded-pill shadow-sm" style="background-color: #002855; border-color: #002855;">
                     <i class="bi bi-save me-2"></i> Guardar Cambios
                 </button>
             </div>
@@ -927,9 +945,12 @@
 {% endmacro %}
 
 {% macro finance() %}
-    <div class="card shadow border-0 rounded-3 mb-4">
-        <div class="card-header bg-white border-0 pt-4 px-4">
-            <h4 class="text-primary fw-bold"><i class="bi bi-cash-coin me-2"></i>Financiados</h4>
+    <div class="card shadow-sm border-0 border-start border-4 rounded-3 mb-5" style="border-color: #002855 !important;">
+        <div class="card-header bg-white border-0 pt-4 px-4 d-flex align-items-center">
+            <div class="rounded-circle bg-light p-2 text-primary me-3">
+                <i class="bi bi-cash-coin fs-4" style="color: #002855;"></i>
+            </div>
+            <h4 class="mb-0 fw-bold" style="color: #002855;">Financiados</h4>
         </div>
         <div class="card-body">
             {{ body_finance() }}
@@ -1001,9 +1022,12 @@
 {% endmacro %}
 
 {% macro estancia() %}
-    <div class="card shadow border-0 rounded-3 mb-4">
-        <div class="card-header bg-white border-0 pt-4 px-4">
-            <h4 class="text-primary fw-bold"><i class="bi bi-geo-alt me-2"></i> Estancias</h4>
+    <div class="card shadow-sm border-0 border-start border-4 rounded-3 mb-5" style="border-color: #002855 !important;">
+        <div class="card-header bg-white border-0 pt-4 px-4 d-flex align-items-center">
+            <div class="rounded-circle bg-light p-2 text-primary me-3">
+                <i class="bi bi-geo-alt fs-4" style="color: #002855;"></i>
+            </div>
+            <h4 class="mb-0 fw-bold" style="color: #002855;">Estancias</h4>
         </div>
         <div class="card-body">
             {{ body_estancia() }}
@@ -1087,9 +1111,12 @@
 {% endmacro %}
 
 {% macro divulgacion() %}
-    <div class="card shadow border-0 rounded-3 mb-4">
-        <div class="card-header bg-white border-0 pt-4 px-4">
-            <h4 class="text-primary fw-bold"><i class="bi bi-broadcast me-2"></i> Divulgación</h4>
+    <div class="card shadow-sm border-0 border-start border-4 rounded-3 mb-5" style="border-color: #002855 !important;">
+        <div class="card-header bg-white border-0 pt-4 px-4 d-flex align-items-center">
+             <div class="rounded-circle bg-light p-2 text-primary me-3">
+                <i class="bi bi-broadcast fs-4" style="color: #002855;"></i>
+            </div>
+            <h4 class="mb-0 fw-bold" style="color: #002855;">Divulgación</h4>
         </div>
         <div class="card-body">
             {{ body_divulgacion() }}
