@@ -26,11 +26,11 @@ class BasePDF:
         self.styles.add(ParagraphStyle(
             name="ReportTitle",
             fontName="Times-Bold",
-            fontSize=22,
+            fontSize=18,
             bold=True,
             spaceAfter=20,
             spaceBefore=10,
-            leading=24,
+            leading=20,
             alignment=TA_CENTER
         ))
         
@@ -68,12 +68,12 @@ class BasePDF:
             leading=12
         ))
         
-        # Normal paragraph (Static text)
+        # Normal Paragraph (Main Narrative)
         self.styles.add(ParagraphStyle(
             name="NormalParagraph",
             fontName="Times-Roman",
             fontSize=10,
-            spaceAfter=6,
+            spaceAfter=8,
             leading=12,
             alignment=TA_JUSTIFY
         ))
@@ -83,12 +83,12 @@ class BasePDF:
             name="DynamicContent",
             fontName="Times-Roman",
             fontSize=10,
-            textColor="blue",
+            textColor="#000080",  # Navy Blue
             spaceAfter=4,
             leading=12,
             leftIndent=10
         ))
-        
+
         # Legacy styles
         self.styles.add(ParagraphStyle(
             name="Section",
@@ -144,7 +144,7 @@ class BasePDF:
         )
 
     def dynamic_items(self, items):
-        """Renders items in blue without bullets"""
+        """Renders dynamic items in navy blue"""
         for i in items:
             self.story.append(Paragraph(i, self.styles["DynamicContent"]))
 
