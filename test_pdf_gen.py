@@ -20,4 +20,4 @@ def test_generation(cliente_id):
 if __name__ == "__main__":
     # Ajusta el cliente_id según los datos en tu data.db
     # Si no sabes cuál usar, el 1 suele ser el de pruebas.
-    test_generation(2)
+    test_generation(1)
