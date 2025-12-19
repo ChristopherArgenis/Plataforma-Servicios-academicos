@@ -196,10 +196,13 @@ def save_relevant_articles():
     
     # Validation 1.2: Check if exactly 3
     if len(relevant_keys) == 3:
-        nrA = check_article.repeat_relevantes(relevant_keys)
+        cliente_id = session.get('userID')
+        nrA = check_article.repeat_relevantes(relevant_keys, cliente_id)
         if len(nrA) > 0:
             dataframe = articles_maganer.df_articles(array=nrA)
             try:
+                # Add cliente_id column to dataframe
+                dataframe['cliente_id'] = cliente_id
                 dataframe.to_sql('Relevantes', con=db.engine, if_exists='append', index=False)
                 flash(f"Se han guardado los {len(nrA)} artículos relevantes correctamente.", "success")
             except Exception as e:

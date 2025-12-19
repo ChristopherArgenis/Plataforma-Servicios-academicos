@@ -137,10 +137,10 @@ class Check_Article:
         return article_clean
     
     @staticmethod
-    def repeat_relevantes(send_array):
+    def repeat_relevantes(send_array, cliente_id):
         article_clean = []
         for key in send_array:
-            process_repeat = Relevantes.query.filter_by(id_Articles=key).first()
+            process_repeat = Relevantes.query.filter_by(id_Articles=key, cliente_id=cliente_id).first()
             if not process_repeat:
                 article_clean.append(key)
         return article_clean
