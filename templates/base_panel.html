@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-    <!-- HTMX Cleanup Handler - MUST load after HTMX -->
-    <script src="{{ url_for('static', filename='js/htmx-cleanup.js') }}"></script>
 </head>
 
 <body>
@@ -158,7 +156,18 @@
     </footer>
     {{ bootstrap.load_js() }}
     <script src="{{ url_for('static', filename='js/toast.js') }}"></script>
-    <!-- Scripts are now loaded dynamically in partials or not needed (sidebar.js) -->
+    <script>
+        // Centralized HTMX initialization for dynamic content
+        document.body.addEventListener('htmx:afterSwap', function(evt) {
+            if (evt.detail.target.id === 'main-content') {
+                console.log('[HTMX] Main content swapped, triggering initialization...');
+                const event = new CustomEvent('content:ready', { 
+                    detail: { container: evt.detail.target } 
+                });
+                document.dispatchEvent(event);
+            }
+        });
+    </script>
 </body>
 
 </html>

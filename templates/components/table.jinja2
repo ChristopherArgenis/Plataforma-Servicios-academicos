@@ -16,7 +16,7 @@
             <div class="row g-3 align-items-center">
                 <!-- Search Form -->
                 <div class="col-lg-8">
-                    <form method="POST" class="row g-3" role="search">
+                    <form hx-post="{{ url_for('panel.panel_post') }}" hx-target="#main-content" hx-swap="innerHTML" class="row g-3" role="search">
                         <div class="col-md-3">
                             {{ select_year(years) }}
                         </div>
