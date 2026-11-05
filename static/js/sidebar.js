@@ -1,29 +1,26 @@
-const adquisicion = document.getElementById("Adquisicion");
-const report = document.getElementById("Report");
-const settings = document.getElementById("Setting");
+// Muestra una sección del panel a la vez y la recuerda en la URL (#reporte, #cuenta).
+const links = document.querySelectorAll(".sidebar-link");
+const sections = document.querySelectorAll(".panel-section");
 
-const radio1 = document.getElementById("vbtn-radio1");
-const radio2 = document.getElementById("vbtn-radio2");
-const radio3 = document.getElementById("vbtn-radio3");
-
-function Adquisicion() {
-  adquisicion.style.display = "block";
-  report.style.display = "none";
-  settings.style.display = "none";
+function showSection(id) {
+  if (!document.getElementById(id)) id = "adquisicion";
+  sections.forEach((s) => (s.hidden = s.id !== id));
+  links.forEach((l) => l.classList.toggle("active", l.dataset.section === id));
 }
 
-function Reports() {
-  adquisicion.style.display = "none";
-  report.style.display = "block";
-  settings.style.display = "none";
-}
+links.forEach((link) =>
+  link.addEventListener("click", () => {
+    history.replaceState(null, "", "#" + link.dataset.section);
+    showSection(link.dataset.section);
+  })
+);
 
-function setting() {
-  adquisicion.style.display = "none";
-  report.style.display = "none";
-  settings.style.display = "block";
-}
+showSection(location.hash.slice(1));
 
-radio1.addEventListener("click", Adquisicion);
-radio2.addEventListener("click", Reports);
-radio3.addEventListener("click", setting);
+// "Seleccionar todos" en la tabla de artículos
+const checkAll = document.getElementById("check-all");
+if (checkAll) {
+  const rows = document.querySelectorAll(".row-check");
+  checkAll.checked = rows.length > 0 && [...rows].every((r) => r.checked);
+  checkAll.addEventListener("change", () => rows.forEach((r) => (r.checked = checkAll.checked)));
+}

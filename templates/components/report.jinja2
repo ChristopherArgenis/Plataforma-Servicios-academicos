@@ -1,128 +1,89 @@
-{% macro contentInfoGeneral() %}
-    <h6>Este es el contenido de la sección de Información General. Puedes agregar aquí los detalles que necesites mostrar.</h6>
-{% endmacro %}
-
-{% macro accordion() %}
-    <div class="container mt-5">
-        <div class="accordion" id="miAcordeon">
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingGeneral">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGeneral" aria-expanded="true" aria-controls="collapseGeneral">
-                    Información General
-                </button>
-                </h2>
-                <div id="collapseGeneral" class="accordion-collapse collapse show" aria-labelledby="headingGeneral" data-bs-parent="#miAcordeon">
-                    <div class="accordion-body">
-                        {{ contentInfoGeneral() }}
-                    </div>
-                </div>
-            </div>
-        </div>
+{% macro steps_report() %}
+<div class="step-bar mb-4 mx-auto">
+    <div class="progress-line"><div id="progress-fill" class="progress-line-fill"></div></div>
+    {% for label in ['Datos a capturar', 'Artículos', 'Firma', 'Descargar reporte'] %}
+    <div class="step" id="step-{{ loop.index }}">
+        <div class="circle">{{ loop.index }}</div>
+        <div class="label">{{ label }}</div>
     </div>
+    {% endfor %}
+</div>
 {% endmacro %}
 
 {% macro modal_pdf() %}
-    <!-- Botón para abrir modal PDF -->
-     <div class="d-flex justify-content-center my-5">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pdfModal">
-            Ver reporte
-        </button>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-xl modal-dialog-centered">
+{% set pdf = url_for('static', filename='docs/ejemplo.pdf') %}
+<div class="text-center my-4">
+    <p class="text-muted">Vista previa con un PDF de ejemplo (la generación real del reporte está pendiente).</p>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pdfModal">Ver reporte</button>
+</div>
+<div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
-          <div class="modal-header d-flex justify-content-between align-items-center w-100">
-            <div class="d-flex align-items-center gap-3">
-              <h5 class="modal-title mb-0" id="pdfModalLabel">
-                Reporte generado
-              </h5>
-              <!-- Abrir PDF en otra pestaña -->
-              <a href="{{ url_for('static', filename='docs/ejemplo.pdf') }}" target="_blank" class="btn btn-outline-secondary btn-sm">
-                Abrir en nueva pestaña
-              </a>
+            <div class="modal-header">
+                <h5 class="modal-title me-3" id="pdfModalLabel">Reporte generado</h5>
+                <a href="{{ pdf }}" target="_blank" rel="noopener" class="btn btn-outline-secondary btn-sm">Abrir en nueva pestaña</a>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-          </div>
-          <!-- Iframe PDF -->
-          <div class="modal-body p-0">
-            <iframe src="{{ url_for('static', filename='docs/ejemplo.pdf') }}" width="100%" height="600px" style="border: none"></iframe>
-          </div>
+            <div class="modal-body p-0">
+                <iframe src="{{ pdf }}" title="Reporte PDF" class="pdf-frame"></iframe>
+            </div>
         </div>
-      </div>
     </div>
+</div>
 {% endmacro %}
 
-{% macro steps_report() %}
-<!-- Barra de pasos -->
-  <div class="step-bar mb-4 mx-auto" style="max-width: 1300px;">
-    <div class="progress-line">
-      <div id="progress-fill" class="progress-line-fill"></div>
+{% macro inputs_report(user, selected_articles) %}
+<div class="steps-content mx-auto">
+    <div class="report-step card">
+        <div class="card-body">
+            <h5 class="card-title">Paso 1 · Datos a capturar</h5>
+            <dl class="row mb-0">
+                <dt class="col-sm-3">Nombre</dt><dd class="col-sm-9">{{ user.name }}</dd>
+                <dt class="col-sm-3">Correo</dt><dd class="col-sm-9">{{ user.email }}</dd>
+                <dt class="col-sm-3">Afiliación</dt><dd class="col-sm-9">{{ user.affiliations or '—' }}</dd>
+                <dt class="col-sm-3">Perfil Scholar</dt><dd class="col-sm-9">{{ user.scholar_name }} ({{ user.scholar_id }})</dd>
+                <dt class="col-sm-3">Citas totales</dt><dd class="col-sm-9">{{ user.cited_by }}</dd>
+            </dl>
+        </div>
     </div>
-    <div class="step" id="step-1">
-      <div class="circle"></div>
-      <div class="label">Datos a Capturar</div>
-    </div>
-    <div class="step" id="step-2">
-      <div class="circle"></div>
-      <div class="label">Articulos</div>
-    </div>
-    <div class="step" id="step-3">
-      <div class="circle"></div>
-      <div class="label">Firma</div>
-    </div>
-    <div class="step" id="step-4">
-      <div class="circle"></div>
-      <div class="label">Descargar Reporte</div>
-    </div>
-  </div>
-{% endmacro %}
 
-{% macro inputs_report() %}
-  <!-- Contenido de pasos -->
-<div class="steps-content mx-auto" style="max-width: 1300px;">
-  <div id="paso1">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Paso 1</h5>
-        <p class="card-text">Contenido del paso 1.</p>
-      </div>
+    <div class="report-step card" hidden>
+        <div class="card-body">
+            <h5 class="card-title">Paso 2 · Artículos seleccionados ({{ selected_articles | length }})</h5>
+            {% if selected_articles %}
+            <ul class="list-group list-group-flush">
+                {% for art in selected_articles %}
+                <li class="list-group-item d-flex justify-content-between align-items-start gap-2">
+                    <span>{{ art.title }} <span class="text-muted small">({{ art.year or 's/f' }})</span></span>
+                    <form method="POST" action="{{ url_for('panel.unselect', article_id=art.id) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button class="btn btn-sm btn-outline-danger" type="submit">Quitar</button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted mb-0">Aún no hay artículos. Márcalos en «Adquisición de artículos» y pulsa «Adquirir selección».</p>
+            {% endif %}
+        </div>
     </div>
-  </div>
 
-  <div id="paso2" style="display: none;">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Paso 2</h5>
-        <p class="card-text">Contenido del paso 2.</p>
-      </div>
+    <div class="report-step card" hidden>
+        <div class="card-body">
+            <h5 class="card-title">Paso 3 · Firma</h5>
+            <p class="card-text text-muted">Pendiente: aquí se capturará la firma del responsable.</p>
+        </div>
     </div>
-  </div>
 
-  <div id="paso3" style="display: none;">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Paso 3</h5>
-        <p class="card-text">Contenido del paso 3.</p>
-      </div>
+    <div class="report-step card" hidden>
+        <div class="card-body">{{ modal_pdf() }}</div>
     </div>
-  </div>
-
-  <div id="paso4" style="display: none;">
-    <div class="card">
-      <div class="card-body">
-        {{ modal_pdf() }}
-      </div>
-    </div>
-  </div>
 </div>
 {% endmacro %}
 
 {% macro button_report() %}
-  <!-- Botones -->
-  <div class="d-flex justify-content-center gap-3 mt-4 mx-auto" style="max-width: 1300px;">
-    <button id="btnAnterior" class="btn btn-outline-secondary">← Paso anterior</button>
-    <button id="btnSiguiente" class="btn btn-primary">Siguiente paso →</button>
-  </div>
+<div class="d-flex justify-content-center gap-3 mt-4">
+    <button id="btnAnterior" type="button" class="btn btn-outline-secondary">← Paso anterior</button>
+    <button id="btnSiguiente" type="button" class="btn btn-primary">Siguiente paso →</button>
+</div>
 {% endmacro %}

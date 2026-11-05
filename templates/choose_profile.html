@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% from 'bootstrap5/utils.html' import render_messages %}
+{% block title %}Elige tu perfil · Plataforma de Servicios Académicos{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+{% block body %}
+<main class="auth-card auth-card-wide card shadow-sm">
+    <div class="card-body p-4">
+        <h1 class="h4 mb-1">Hola, {{ name }}</h1>
+        <p class="text-muted">Elige tu perfil de Google Scholar. Se importarán sus artículos.</p>
+        {{ render_messages(dismissible=True) }}
+        <form method="POST" action="{{ url_for('auth.choose_profile') }}" id="profile-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="list-group mb-3">
+                {% for p in profiles %}
+                <label class="list-group-item d-flex gap-3 align-items-start">
+                    <input class="form-check-input mt-1" type="radio" name="author_id" value="{{ p.author_id }}" {{ 'checked' if loop.first }} required>
+                    <span>
+                        <strong>{{ p.name }}</strong><br>
+                        <span class="small text-muted">{{ p.affiliations or 'Sin afiliación' }} · {{ p.cited_by }} citas</span>
+                        {% if p.interests %}<br><span class="small">{{ p.interests | join(', ') }}</span>{% endif %}
+                    </span>
+                </label>
+                {% endfor %}
+            </div>
+            <button type="submit" class="btn btn-success w-100" id="confirm-btn">Confirmar e importar artículos</button>
+        </form>
+        <form method="POST" action="{{ url_for('auth.cancel_registration') }}" class="mt-2">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-link w-100">Cancelar</button>
+        </form>
+    </div>
+</main>
+{% endblock %}
+{% block scripts %}
+<script>
+  // La importación puede tardar unos segundos: evita doble envío
+  document.getElementById("profile-form").addEventListener("submit", () => {
+    const btn = document.getElementById("confirm-btn");
+    btn.disabled = true;
+    btn.textContent = "Importando artículos…";
+  });
+</script>
+{% endblock %}

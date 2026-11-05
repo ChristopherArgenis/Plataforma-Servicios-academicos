@@ -61,3 +61,11 @@
   width: 0;
   transition: width 0.3s;
 }
+/* El número se oculta cuando el paso está completo (se muestra ✓) */
+.step.completed .circle { font-size: 0; }
+.step.completed .circle::before { font-size: 1rem; }
+
+.step-bar, .steps-content { max-width: 900px; }
+/* Pasos de igual ancho: la línea va del centro del primero al centro del último */
+.step { flex: 1; text-align: center; }
+.progress-line { left: 12.5%; right: 12.5%; }
