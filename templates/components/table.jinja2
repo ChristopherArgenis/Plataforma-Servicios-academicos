@@ -1,64 +1,91 @@
-{% macro prueba() %}
-    <h6>Hola Estoy aqui</h6>
+{% macro search(title, year, years) %}
+<form method="GET" action="{{ url_for('panel.panel_view') }}" class="row g-2 align-items-center mb-3" role="search">
+    <div class="col-sm-auto">
+        <label class="visually-hidden" for="filtro-year">Año</label>
+        <select class="form-select" name="year" id="filtro-year">
+            <option value="">Todos los años</option>
+            {% for y in years %}
+                <option value="{{ y }}" {{ 'selected' if y == year }}>{{ y }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-sm">
+        <label class="visually-hidden" for="filtro-titulo">Título</label>
+        <input class="form-control" type="search" id="filtro-titulo" name="titulo" value="{{ title }}" placeholder="Buscar por título">
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary" type="submit">Buscar</button>
+        <a class="btn btn-outline-secondary" href="{{ url_for('panel.panel_view') }}">Limpiar</a>
+    </div>
+</form>
 {% endmacro %}
 
-{% macro select_year(years) %}
-    <select class="form-select w-auto" name="year" aria-label="Default select example">
-        <option selected disabled>Todos</option>
-        {% for year in years %}
-            <option value={{ year }}>{{year}}</option>
+{% macro pager(pagination, title, year) %}
+{% if pagination.pages > 1 %}
+<nav aria-label="Páginas de artículos">
+    <ul class="pagination pagination-sm mb-0">
+        <li class="page-item {{ 'disabled' if not pagination.has_prev }}">
+            <a class="page-link" href="{{ url_for('panel.panel_view', page=pagination.prev_num, titulo=title or None, year=year) }}">Anterior</a>
+        </li>
+        {% for p in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+            {% if p %}
+            <li class="page-item {{ 'active' if p == pagination.page }}">
+                <a class="page-link" href="{{ url_for('panel.panel_view', page=p, titulo=title or None, year=year) }}">{{ p }}</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">…</span></li>
+            {% endif %}
         {% endfor %}
-    </select>
+        <li class="page-item {{ 'disabled' if not pagination.has_next }}">
+            <a class="page-link" href="{{ url_for('panel.panel_view', page=pagination.next_num, titulo=title or None, year=year) }}">Siguiente</a>
+        </li>
+    </ul>
+</nav>
+{% endif %}
 {% endmacro %}
 
-{% macro search(years) %}
-    <nav class="navbar bg-body-tertiary">
-        <div class="container-fluid">
-            <form method="POST" class="d-flex" role="search">
-                {{ select_year(years) }}
-                <input class="form-control me-2" type="search" placeholder="Título" aria-label="Search" name="titulo">
-                <button class="btn btn-outline-success" type="submit">Buscar</button>
-            </form>
-        </div>
-        <form method="GET" action={{ url_for('panel.panel_view') }}>
-            <button class="btn btn-outline-secondary" type="submit">Reiniciar</button>
-        </form>
-        <ul></ul>
-    </nav>
-{% endmacro %}
-
-{% macro columns_Articles() %}
-    <tr>
-        <th scope="col">T&iacutetulo</th>
-        <th scope="col">A&ntildeo</th>
-        <th scope="col">☑</th>
-    </tr>
-{% endmacro %}
-
-{% macro table_articles(df, id_articles) %}
-    <form action="{{ url_for('panel.get_articles') }}" method="POST">
-        <table class="table table-striped table-hover">
+{% macro table_articles(pagination, title, year) %}
+<form action="{{ url_for('panel.acquire') }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="titulo" value="{{ title }}">
+    <input type="hidden" name="year" value="{{ year or '' }}">
+    <input type="hidden" name="page" value="{{ pagination.page }}">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle articles-table">
             <thead class="table-light">
-                {{ columns_Articles() }}
-                <tbody>
-                    {% for row in df.itertuples(index=False) %}
-                        <tr>
-                            {% for value in row %}
-                                <td>{{ value }}</td>
-                            {% endfor %}
-                            <td>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="keys[]" value="{{ id_articles[loop.index0][0] }}" id="checkDefault">
-                                </div>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
+                <tr>
+                    <th scope="col" class="col-check">
+                        <input class="form-check-input" type="checkbox" id="check-all" aria-label="Seleccionar todos">
+                    </th>
+                    <th scope="col">Título</th>
+                    <th scope="col" class="text-center">Año</th>
+                    <th scope="col" class="text-center">Citas</th>
+                </tr>
             </thead>
+            <tbody>
+                {% for art in pagination.items %}
+                <tr>
+                    <td class="col-check">
+                        <input type="hidden" name="visible_ids" value="{{ art.id }}">
+                        <input class="form-check-input row-check" type="checkbox" name="keys" value="{{ art.id }}" id="art-{{ art.id }}" {{ 'checked' if art.selected }}>
+                    </td>
+                    <td>
+                        <label for="art-{{ art.id }}" class="fw-medium">{{ art.title }}</label>
+                        <div class="small text-muted">{{ art.authors }}{% if art.publication %} · {{ art.publication }}{% endif %}</div>
+                    </td>
+                    <td class="text-center">{{ art.year or '—' }}</td>
+                    <td class="text-center">{{ art.cited_by }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4" class="text-center text-muted py-4">No hay artículos con esos filtros.</td></tr>
+                {% endfor %}
+            </tbody>
         </table>
-        <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-outline-danger">Adquirir</button>
-            <ul></ul>
-        </div>
-    </form>
+    </div>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <span class="small text-muted">{{ pagination.total }} artículo(s)</span>
+        {{ pager(pagination, title, year) }}
+        <button type="submit" class="btn btn-warning" {{ 'disabled' if not pagination.items }}>Adquirir selección</button>
+    </div>
+</form>
 {% endmacro %}

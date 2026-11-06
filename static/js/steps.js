@@ -1,56 +1,29 @@
-const pasosContenido = [
-  document.getElementById("paso1"),
-  document.getElementById("paso2"),
-  document.getElementById("paso3"),
-  document.getElementById("paso4"),
-];
-
-const pasosVisuales = [
-  document.getElementById("step-1"),
-  document.getElementById("step-2"),
-  document.getElementById("step-3"),
-  document.getElementById("step-4"),
-];
-
+// Asistente de pasos del reporte.
+const pasosContenido = document.querySelectorAll(".report-step");
+const pasosVisuales = document.querySelectorAll(".step");
 const progressFill = document.getElementById("progress-fill");
+const btnAnterior = document.getElementById("btnAnterior");
+const btnSiguiente = document.getElementById("btnSiguiente");
 let pasoActual = 0;
 
 function actualizarVista() {
-  // Mostrar contenido del paso
-  pasosContenido.forEach((paso, i) => {
-    paso.style.display = i === pasoActual ? "block" : "none";
-  });
-
-  // Actualizar barra de progreso visual
+  pasosContenido.forEach((paso, i) => (paso.hidden = i !== pasoActual));
   pasosVisuales.forEach((step, i) => {
-    step.classList.remove("active", "completed");
-    if (i < pasoActual) step.classList.add("completed");
-    else if (i === pasoActual) step.classList.add("active");
+    step.classList.toggle("completed", i < pasoActual);
+    step.classList.toggle("active", i === pasoActual);
   });
-
-  // Actualizar ancho de la línea de progreso
-  const porcentaje = (pasoActual / (pasosVisuales.length - 1)) * 100;
-  progressFill.style.width = `${porcentaje}%`;
-
-  // Habilitar/deshabilitar botones
-  document.getElementById("btnAnterior").disabled = pasoActual === 0;
-  document.getElementById("btnSiguiente").disabled =
-    pasoActual === pasosContenido.length - 1;
+  progressFill.style.width = `${(pasoActual / (pasosVisuales.length - 1)) * 100}%`;
+  btnAnterior.disabled = pasoActual === 0;
+  btnSiguiente.disabled = pasoActual === pasosContenido.length - 1;
 }
 
-document.getElementById("btnAnterior").addEventListener("click", () => {
-  if (pasoActual > 0) {
-    pasoActual--;
-    actualizarVista();
-  }
+btnAnterior.addEventListener("click", () => {
+  if (pasoActual > 0) pasoActual--;
+  actualizarVista();
+});
+btnSiguiente.addEventListener("click", () => {
+  if (pasoActual < pasosContenido.length - 1) pasoActual++;
+  actualizarVista();
 });
 
-document.getElementById("btnSiguiente").addEventListener("click", () => {
-  if (pasoActual < pasosContenido.length - 1) {
-    pasoActual++;
-    actualizarVista();
-  }
-});
-
-// Cargar vista inicial
-window.onload = actualizarVista;
+actualizarVista();

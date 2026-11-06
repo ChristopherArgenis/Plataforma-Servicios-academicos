@@ -1,21 +1,22 @@
-from flask import request, g
 import time
 
-# Function to add timing middleware to our app
+from flask import g, request
+
+
 def request_timing_logger(app):
-    # This function runs before each request
+    """Registra en el log la ruta, método, código y duración de cada petición."""
+
     @app.before_request
     def start_timer():
-        # Save the current time when the request starts
-        g.start_time = time.time()
+        g.start_time = time.perf_counter()
 
-    # This function runs after each request
     @app.after_request
     def log_request_info(response):
-        # Calculate the duration of the request
-        duration = time.time() - g.start_time
-        # Print the request details and duration to the console
-        print("-" * 60)
-        print(f"Path: {request.path} | Method: {request.method} | Duration: {duration:.4f} seconds")
-        print("-" * 60)
+        start = g.pop("start_time", None)
+        if start is not None and request.endpoint != "static":
+            app.logger.info(
+                "%s %s -> %s (%.1f ms)",
+                request.method, request.path, response.status_code,
+                (time.perf_counter() - start) * 1000,
+            )
         return response

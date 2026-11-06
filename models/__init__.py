@@ -1,4 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
+from extensions import db
+from models.user import Article, User
 
-# Create an instance of SQLAlchemy
-db = SQLAlchemy()
+__all__ = ["db", "User", "Article"]

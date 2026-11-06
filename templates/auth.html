@@ -1,30 +1,69 @@
+{% extends 'base.html' %}
 {% from 'bootstrap5/utils.html' import render_messages %}
+{% block title %}Iniciar sesión · Plataforma de Servicios Académicos{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+{% block body %}
+<main class="auth-card card shadow-sm">
+    <div class="card-body p-4">
+        <h1 class="h4 text-center mb-1">Plataforma de Servicios Académicos</h1>
+        <p class="text-center text-muted small mb-4">Reportes a partir de tu perfil de Google Scholar</p>
+        {{ render_messages(dismissible=True) }}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login / Register</title>
-    {{ bootstrap.load_css() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-<body>
-    {{ render_messages() }}
-    <br>
-    <header><h2 style="font-family:'Times New Roman', Times, serif">Login or Register</h2></header>
-    <!-- Form for registration and login -->
-    <form method="POST">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <!-- Buttons to either register or login -->
-        <button type="submit" formaction="{{ url_for('user.login') }}">Login</button>
-        <button type="submit" formaction="{{ url_for('user.register') }}">Register</button>
-    </form>
-    {{ bootstrap.load_js() }}
-</body>
-</html>
+        <ul class="nav nav-tabs mb-3" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link {{ 'active' if tab != 'register' }}" data-bs-toggle="tab" data-bs-target="#tab-login" type="button" role="tab">Iniciar sesión</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link {{ 'active' if tab == 'register' }}" data-bs-toggle="tab" data-bs-target="#tab-register" type="button" role="tab">Registrarse</button>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane fade {{ 'show active' if tab != 'register' }}" id="tab-login" role="tabpanel">
+                <form method="POST" action="{{ url_for('auth.login') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="mb-3">
+                        <label for="login-email" class="form-label">Correo</label>
+                        <input type="email" class="form-control" id="login-email" name="email" autocomplete="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="login-password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="login-password" name="password" autocomplete="current-password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                </form>
+            </div>
+
+            <div class="tab-pane fade {{ 'show active' if tab == 'register' }}" id="tab-register" role="tabpanel">
+                <form method="POST" action="{{ url_for('auth.register') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="mb-3">
+                        <label for="reg-name" class="form-label">Nombre completo</label>
+                        <input type="text" class="form-control" id="reg-name" name="name" maxlength="150" autocomplete="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="reg-scholar" class="form-label">Nombre en Google Scholar <span class="text-muted small">(si es distinto)</span></label>
+                        <input type="text" class="form-control" id="reg-scholar" name="scholar_name" maxlength="150">
+                    </div>
+                    <div class="mb-3">
+                        <label for="reg-email" class="form-label">Correo</label>
+                        <input type="email" class="form-control" id="reg-email" name="email" autocomplete="email" required>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-sm">
+                            <label for="reg-password" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="reg-password" name="password" minlength="8" autocomplete="new-password" required>
+                        </div>
+                        <div class="col-sm">
+                            <label for="reg-password2" class="form-label">Repetir contraseña</label>
+                            <input type="password" class="form-control" id="reg-password2" name="password2" minlength="8" autocomplete="new-password" required>
+                        </div>
+                    </div>
+                    <div class="form-text mb-3">Mínimo 8 caracteres. Después elegirás tu perfil de Google Scholar.</div>
+                    <button type="submit" class="btn btn-success w-100">Buscar mi perfil</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
