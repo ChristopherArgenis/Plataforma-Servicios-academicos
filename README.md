@@ -22,7 +22,25 @@ cd Plataforma-Servicios-academicos
 pip install -r requirements.txt
 ```
 
-# 3. Iniciar la aplicación ejecutando el archivo principal del proyecto.
+# 3. Configura las claves privadas (archivo `.env`)
+Copia `.env.example` como `.env` y llena los valores. Este archivo **no** se sube a GitHub.
+```bash
+cp .env.example .env        # En Windows: copy .env.example .env
+```
+- `SECRET_KEY`: genera una con `python -c "import secrets; print(secrets.token_hex(32))"`
+- `SERPAPI_KEY`: tu clave de SerpAPI
+
+La base de datos `data.db` tampoco se sube al repositorio: se queda solo en tu equipo o servidor.
+
+# 4. Iniciar la aplicación ejecutando el archivo principal del proyecto.
 ```
 python app.py
 ```
+
+El modo de depuración está apagado por defecto. Para activarlo solo en tu computadora: `FLASK_DEBUG=1 python app.py`.
+
+# Pruebas
+```bash
+pytest
+```
+Usan una base de datos temporal: no tocan tu `data.db`.
