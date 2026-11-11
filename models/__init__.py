@@ -1,4 +1,4 @@
-from extensions import db
-from models.user import Article, ReportSignature, User
+from flask_sqlalchemy import SQLAlchemy
 
-__all__ = ["db", "User", "Article", "ReportSignature"]
+# Create an instance of SQLAlchemy
+db = SQLAlchemy()

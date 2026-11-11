@@ -1,0 +1,107 @@
+{% from 'bootstrap5/utils.html' import render_messages %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Inicio de Sesión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    {{ bootstrap.load_css() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth1.css') }}">
+</head>
+
+<body>
+    <div class="text-center mt-5">
+        {{ render_messages() }}
+    </div>
+
+    <div class="card shadow-lg rounded-4">
+        <div class="tab-switch btn-group" role="group" aria-label="Toggle login and register">
+            <button type="button" class="btn btn-light active rounded-top-4" id="loginTab">Iniciar Sesión</button>
+            <button type="button" class="btn btn-light rounded-top-4" id="registerTab">Registrarse</button>
+        </div>
+
+        <!-- Formulario de inicio de sesión -->
+        <div id="loginForm">
+            <h4 class="mb-3 fw-bold text-primary">Iniciar Sesión</h4>
+            <p class="text-muted mb-4">Ingresa tus credenciales para acceder</p>
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="loginEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control rounded-3" id="loginEmail" placeholder="tu@email.com" name="email" autocomplete="username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="loginPassword" class="form-label">Contraseña</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control rounded-start-3" id="loginPassword" name="password" autocomplete="current-password">
+                        <button class="btn btn-outline-secondary rounded-end-3" type="button" id="toggleLoginPassword" aria-label="Mostrar contraseña">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="loginConfirmPassword" class="form-label">Confirmar Contraseña</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control rounded-start-3" id="loginConfirmPassword" autocomplete="off">
+                        <button class="btn btn-outline-secondary rounded-end-3" type="button" id="toggleLoginConfirmPassword" aria-label="Mostrar confirmar contraseña">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                    <small class="text-danger d-none" id="loginMismatch">Las contraseñas no coinciden</small>
+                </div>
+                
+                <div class="mb-3 text-end">
+                    <a href="#" class="text-decoration-none small">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 disabled-btn rounded-3 py-2" id="loginButton" formaction="{{ url_for('user.login') }}">
+                    <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                </button>
+            </form>
+        </div>
+
+        <!-- Formulario de registro -->
+        <div id="registerForm" style="display: none;">
+            <h4 class="mb-3 fw-bold text-success">Registrarse</h4>
+            <p class="text-muted mb-4">Crea tu cuenta ingresando la información requerida</p>
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nombre</label>
+                    <input type="text" class="form-control rounded-3" id="name" placeholder="Tu nombre" name="username" autocomplete="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="registerEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control rounded-3" id="registerEmail" placeholder="tu@email.com" name="email" autocomplete="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="registerPassword" class="form-label">Contraseña</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control rounded-start-3" id="registerPassword" name="password" autocomplete="new-password">
+                        <button class="btn btn-outline-secondary rounded-end-3" type="button" id="toggleRegisterPassword" aria-label="Mostrar contraseña">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="registerConfirmPassword" class="form-label">Confirmar Contraseña</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control rounded-start-3" id="registerConfirmPassword" autocomplete="new-password">
+                        <button class="btn btn-outline-secondary rounded-end-3" type="button" id="toggleRegisterConfirmPassword" aria-label="Mostrar confirmar contraseña">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                    <small class="text-danger d-none" id="registerMismatch">Las contraseñas no coinciden</small>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 disabled-btn rounded-3 py-2" id="registerButton" formaction="{{ url_for('user.register') }}">
+                    <i class="bi bi-person-plus"></i> Crear Cuenta
+                </button>
+            </form>
+        </div>
+    </div>
+
+    {{ bootstrap.load_js() }}
+    <script src="{{ url_for('static', filename='js/view_&_confirm_password.js') }}"></script>
+</body>
+
+</html>

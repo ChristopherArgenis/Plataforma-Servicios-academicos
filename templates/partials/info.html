@@ -1,0 +1,159 @@
+{% from 'components/info.jinja2' import selectForm %}
+
+{% if request.args.get('view') == 'form' %}
+<div class="container-fluid p-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white border-bottom-0 pt-4 ps-4">
+            <h4 class="fw-bold mb-0" style="color: #002855;">
+                <i class="bi bi-file-earmark-text me-2"></i>Informe Anual
+            </h4>
+            <p class="text-muted small mt-1">Complete la información académica correspondiente.</p>
+        </div>
+        <div class="card-body p-4">
+            <form method="POST" action="{{ url_for('information.save_info') }}">
+                <!-- 1. Nombre del Usuario -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-secondary">Nombre del Académico</label>
+                    <div class="p-3 bg-light rounded border d-flex justify-content-between align-items-center" style="border-left: 4px solid #002855 !important;">
+                        <div class="d-flex align-items-center gap-2 w-100">
+                            <i class="bi bi-person-circle me-2" style="color: #002855;"></i>
+                            <span id="userNameDisplay" class="fw-bold" style="color: #002855;">{{ user }}</span>
+                            <div id="userInputContainer" style="display: none;" class="w-100">
+                                <input type="text" class="form-control form-control-sm border-primary" id="userNameInput" value="{{ user }}">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary border-0" id="btnEditName" title="Editar Nombre">
+                             <i class="bi bi-pencil-fill"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <!-- 2. SNI -->
+                    <div class="col-md-6">
+                        <div class="card h-100 border-light shadow-sm bg-light-subtle">
+                            <div class="card-body">
+                                <h6 class="card-title fw-bold mb-3" style="color: #002855;">
+                                    <i class="bi bi-award me-2"></i>SNI
+                                </h6>
+                                <div class="d-flex flex-column gap-2">
+                                    {% set sni_options = ['Candidato', 'I', 'II', 'III'] %}
+                                    {% for option in sni_options %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="sni" value="{{ option }}"
+                                            id="sni_{{ loop.index }}">
+                                        <label class="form-check-label" for="sni_{{ loop.index }}">
+                                            {{ option }}
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. PRIDE -->
+                    <div class="col-md-6">
+                        <div class="card h-100 border-light shadow-sm bg-light-subtle">
+                            <div class="card-body">
+                                <h6 class="card-title fw-bold mb-3" style="color: #002855;">
+                                    <i class="bi bi-trophy me-2"></i>PRIDE
+                                </h6>
+                                <div class="d-flex flex-column gap-2">
+                                    {% set pride_options = ['A', 'B', 'C', 'D'] %}
+                                    {% for option in pride_options %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="pride" value="{{ option }}"
+                                            id="pride_{{ loop.index }}">
+                                        <label class="form-check-label" for="pride_{{ loop.index }}">
+                                            Nivel {{ option }}
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Departamento -->
+                    <div class="col-12">
+                        <div class="card border-light shadow-sm bg-light-subtle">
+                            <div class="card-body">
+                                <h6 class="card-title fw-bold mb-3" style="color: #002855;">
+                                    <i class="bi bi-building me-2"></i>Departamento
+                                </h6>
+                                    <div class="row g-3">
+                                        {% set deptos = [
+                                        'Biomateriales', 'Física',
+                                        'Físico-química de Nanomateriales', 'Materiales Avanzados',
+                                        'Modelación de Nanomateriales', 'Nanocatálisis', 'Nanoestructuras'
+                                        ] %}
+                                        {% for depto in deptos %}
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="departamento"
+                                                    value="{{ depto }}" id="depto_{{ loop.index }}">
+                                                <label class="form-check-label" for="depto_{{ loop.index }}">
+                                                    {{ depto }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Categoría y Nivel -->
+                    <div class="col-12">
+                        <div class="card border-light shadow-sm bg-light-subtle">
+                            <div class="card-body">
+                                <h6 class="card-title fw-bold mb-3" style="color: #002855;">
+                                    <i class="bi bi-person-badge me-2"></i>Categoría y Nivel
+                                </h6>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <h6 class="small text-muted text-uppercase fw-bold mb-2">Asociado</h6>
+                                        {% for nivel in ['A', 'B', 'C'] %}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="categoria"
+                                                value="Asociado {{ nivel }}" id="cat_asoc_{{ loop.index }}">
+                                            <label class="form-check-label" for="cat_asoc_{{ loop.index }}">
+                                                Asociado {{ nivel }}
+                                            </label>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="small text-muted text-uppercase fw-bold mb-2">Titular</h6>
+                                        {% for nivel in ['A', 'B', 'C'] %}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="categoria"
+                                                value="Titular {{ nivel }}" id="cat_tit_{{ loop.index }}">
+                                            <label class="form-check-label" for="cat_tit_{{ loop.index }}">
+                                                Titular {{ nivel }}
+                                            </label>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-end">
+                    <button type="submit" class="btn fw-bold px-4" style="background-color: #002855; color: white;">
+                        <i class="bi bi-save me-2"></i>Guardar Información
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% else %}
+<div id="Information">
+    {{ selectForm() }}
+</div>
+{% endif %}
+<script src="{{ url_for('static', filename='js/info.js') }}"></script>

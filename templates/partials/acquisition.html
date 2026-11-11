@@ -1,0 +1,10 @@
+{% from 'components/table.jinja2' import table_articles, search %}
+{% from 'components/modals.jinja2' import confirmUpdateModal %}
+
+<div id="Adquisicion">
+    {{ search(years) }}
+    {{ table_articles(df, id_articles) }}
+    {{ confirmUpdateModal() }}
+</div>
+<script src="{{ url_for('static', filename='js/selectAll.js') }}"></script>
+<script src="{{ url_for('static', filename='js/acquisition.js') }}"></script>

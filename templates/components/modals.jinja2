@@ -1,0 +1,59 @@
+{% macro confirmSaveBooksModal() %}
+<!-- Modal de Confirmación para Guardar Libros -->
+<div class="modal fade" id="confirmSaveBooksModal" tabindex="-1" aria-labelledby="confirmSaveBooksModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="confirmSaveBooksModalLabel">
+            <i class="bi bi-question-circle-fill me-2"></i> Confirmación
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body p-4 bg-light">
+        <p class="fs-5 text-center mb-0">
+            ¿Vas a guardar <span id="countBooks" class="fw-bold text-primary">0</span> libros y <span id="countChapters" class="fw-bold text-primary">0</span> capítulos?
+        </p>
+      </div>
+      <div class="modal-footer bg-white border-top-0 d-flex justify-content-center gap-3 pb-4">
+        <button type="button" class="btn btn-outline-secondary px-4 rounded-pill" data-bs-dismiss="modal">
+            Cancelar
+        </button>
+        <button type="button" class="btn btn-success px-4 rounded-pill shadow-sm" id="btnConfirmSaveBooks">
+            <i class="bi bi-check-lg me-2"></i> Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro confirmUpdateModal() %}
+<!-- Modal de Confirmación para Actualizar -->
+<div class="modal fade" id="confirmUpdateModal" tabindex="-1" aria-labelledby="confirmUpdateModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title" id="confirmUpdateModalLabel">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> Confirmar Actualización
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body p-4 bg-light">
+        <p class="fs-6 mb-0">
+            ¿Estás seguro de que deseas actualizar los datos? Esta acción descargará los artículos más recientes de Google Scholar.
+        </p>
+      </div>
+      <div class="modal-footer bg-white border-top-0 d-flex justify-content-center gap-3 pb-4">
+        <button type="button" class="btn btn-outline-secondary px-4 rounded-pill" data-bs-dismiss="modal">
+            Cancelar
+        </button>
+        <form method="POST" action="{{ url_for('panel.table_update') }}" id="formUpdateTable">
+            <button type="submit" class="btn btn-dark px-4 rounded-pill shadow-sm">
+                <i class="bi bi-cloud-arrow-down me-2"></i> Actualizar
+            </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}
