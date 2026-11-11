@@ -1,0 +1,41 @@
+{% from 'bootstrap5/utils.html' import render_messages %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clave de Google Scholar</title>
+    <!-- Enlace a Bootstrap 5 CSS -->
+    {{ bootstrap.load_css() }} 
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/accessStyle.css') }}">
+</head>
+<body class="bg-light d-flex align-items-center justify-content-center min-vh-100 p-3">
+    <div class="form-container">
+        <h2 class="text-center mb-4 text-dark fw-bold">Acceso al Panel</h2>
+        <form method="POST" action="{{ url_for('user.access_key') }}" id="scholarForm" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="scholarKey" class="form-label text-muted">Ingrese su Clave de Google Scholar</label>
+                <input
+                    type="text"
+                    class="form-control rounded-3"
+                    id="scholarKey"
+                    name="scholarKey"
+                    placeholder="Su clave de Google Scholar"
+                    required>
+                {{ render_messages() }}
+            </div>
+            <button
+                type="submit"
+                class="btn btn-primary w-100 py-2 rounded-3 shadow-sm">
+                Enviar
+            </button>
+        </form>
+    </div>
+
+    <!-- Script de Bootstrap 5 (bundle con Popper.js) -->
+    {{ bootstrap.load_js() }}
+</body>
+</html>

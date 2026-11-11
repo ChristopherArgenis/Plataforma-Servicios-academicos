@@ -1,0 +1,14 @@
+{% from 'components/report.jinja2' import accordion, steps_report, inputs_report, button_report %}
+{% from 'components/modals.jinja2' import confirmSaveBooksModal %}
+
+<div id="Report" data-cliente-id="{{ client.id if client else '' }}">
+    {{ accordion(client, user_info, academic_info) }}
+    <hr>
+    {{ steps_report() }}
+    {{ inputs_report() }}
+    {{ button_report() }}
+    {{ confirmSaveBooksModal() }}
+
+</div>
+<script src="{{ url_for('static', filename='js/steps.js') }}"></script>
+<script src="{{ url_for('static', filename='js/report.js') }}"></script>

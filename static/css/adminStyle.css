@@ -1,0 +1,41 @@
+/* Estilos generales para el body y el HTML */
+body {
+  padding: 1.5rem !important; /* Más padding para que el contenido no esté pegado a los bordes */
+  background-color: #e9ecef; /* Un gris muy claro para el fondo de la página (bg-light de Bootstrap) */
+  font-family: "Inter", sans-serif; /* Aplica la fuente Inter a todo el texto */
+}
+html {
+  background-color: #e9ecef; /* Asegura que el HTML también tenga el color base */
+}
+/* Estilo para las pestañas activas para darles un borde inferior distintivo */
+.nav-link.active {
+  border-bottom: 3px solid #0d6efd !important; /* Azul primario de Bootstrap */
+  color: #0d6efd !important; /* Color del texto a juego */
+  background-color: #f8f9fa !important; /* Blanco suave para el fondo de la pestaña activa */
+  border-color: transparent transparent #0d6efd !important; /* Solo borde inferior */
+}
+/* Estilos para las pestañas inactivas */
+.nav-link {
+  border: none; /* Elimina bordes predeterminados para un look más limpio */
+  background-color: transparent !important; /* Fondo transparente */
+  color: #495057 !important; /* Gris oscuro para texto inactivo */
+  font-weight: 500; /* Un poco más de peso para el texto */
+  transition: all 0.3s ease-in-out; /* Transición suave en hover */
+  padding: 0.75rem 1.25rem; /* Ajusta el padding de las pestañas */
+  border-radius: 0.5rem 0.5rem 0 0 !important; /* Solo redondear las esquinas superiores */
+}
+.nav-link:hover {
+  color: #0d6efd !important; /* Color de hover a juego con el activo */
+  background-color: rgba(
+    13,
+    110,
+    253,
+    0.05
+  ) !important; /* Fondo muy sutil en hover */
+}
+/* Ajuste para el texto del botón "Volver" */
+.btn-outline-secondary .material-icons {
+  vertical-align: middle; /* Alinea el icono con el texto */
+  font-size: 1.2rem; /* Tamaño del icono */
+  margin-right: 0.25rem; /* Espacio entre icono y texto */
+}

@@ -1,0 +1,57 @@
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #f0f2f5; /* Un fondo gris claro para el cuerpo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+.form-container {
+  background-color: #ffffff;
+  padding: 2.5rem; /* Aumentar el padding para más espacio */
+  border-radius: 1rem; /* Bordes más redondeados */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
+  max-width: 450px; /* Ancho máximo aumentado */
+  width: 100%;
+  /* Animación CSS para una entrada suave */
+  animation: fadeIn 0.8s ease-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.alert-message {
+  background-color: #fee2e2; /* Fondo rojo claro para el mensaje de alerta */
+  color: #ef4444; /* Texto rojo oscuro */
+  border-left: 4px solid #ef4444; /* Borde izquierdo rojo */
+}
+
+/* Estilos para el mensaje flotante (simulando un modal simple) */
+.custom-message-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050; /* Z-index de modal de Bootstrap */
+}
+.custom-message-box-content {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+}

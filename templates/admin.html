@@ -1,0 +1,49 @@
+{% from 'components/admin.jinja2' import create, update, read, delete, navbar %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración CRUD</title>
+    <!-- Bootstrap CSS -->
+    {{ bootstrap.load_css() }}
+    <!-- Google Fonts Icons CDN (para iconos como la flecha de volver) -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Google Fonts - Inter para una tipografía administrativa y moderna -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/adminStyle.css') }}">
+</head>
+<body>
+
+    <!-- CRUD Administration Screen: Main container for the application -->
+    <div id="crud-admin-screen" class="container-fluid mt-4 p-4 bg-white rounded-lg shadow-lg"> <!-- Aumentado el padding, redondeado y sombra -->
+        <!-- Header Section: Back button and Main Title -->
+        <div class="position-relative mb-5 pb-3"> <!-- Más margen inferior para separar del contenido -->
+            <a href="{{ url_for('panel.panel_get') }}" class="btn btn-outline-secondary btn-sm rounded-pill position-absolute top-0 start-0 m-4">
+                <i class="material-icons align-middle">arrow_back</i>
+            </a>
+            <h1 class="text-center pt-5 pb-3 text-dark fw-bold">Administración del {{ name }}</h1> <!-- Texto más oscuro y en negrita -->
+        </div>
+
+        <!-- Tab Navigation: Main navigation for CRUD operations -->
+        {{ navbar(rol) }}
+
+        <!-- Tab Content: Dynamic content based on selected tab -->
+        <!-- View User Section: Table displayed directly below tabs (now first) -->
+        {{ read(name, table) }}
+
+        {{ create(name) }}
+
+        <!-- Update User Section: Form for modifying existing entries -->
+        {{ update(name) }}
+
+        <!-- Delete User Section: Form for deleting entries -->
+        {{ delete(name) }}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/adminTags.js') }}"></script>
+    <!-- Bootstrap JS -->
+    {{ bootstrap.load_js() }}
+</body>
+</html>
