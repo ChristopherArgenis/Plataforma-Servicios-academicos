@@ -11,6 +11,11 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
+    if app.config.get("TRUST_PROXY"):
+        # Detrás de Nginx/Apache/IIS: respeta la IP del cliente y si la petición fue HTTPS
+        from werkzeug.middleware.proxy_fix import ProxyFix
+        app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
+
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     os.makedirs(app.instance_path, exist_ok=True)
 
@@ -36,6 +41,11 @@ def create_app(config_class=Config):
     @app.errorhandler(404)
     def not_found(_):
         return render_template("error.html", code=404, message="La página no existe."), 404
+
+    @app.errorhandler(413)
+    def too_large(_):
+        return render_template("error.html", code=413,
+                               message="El archivo es demasiado grande (máximo 2 MB)."), 413
 
     @app.errorhandler(500)
     def server_error(_):

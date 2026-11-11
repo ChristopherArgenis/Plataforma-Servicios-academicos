@@ -11,29 +11,102 @@
 {% endmacro %}
 
 {% macro modal_pdf() %}
-{% set pdf = url_for('static', filename='docs/ejemplo.pdf') %}
-<div class="text-center my-4">
-    <p class="text-muted">Vista previa con un PDF de ejemplo (la generación real del reporte está pendiente).</p>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pdfModal">Ver reporte</button>
-</div>
 <div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title me-3" id="pdfModalLabel">Reporte generado</h5>
-                <a href="{{ pdf }}" target="_blank" rel="noopener" class="btn btn-outline-secondary btn-sm">Abrir en nueva pestaña</a>
+                <h5 class="modal-title me-3" id="pdfModalLabel">Vista previa del reporte</h5>
+                <a href="{{ url_for('panel.report_pdf') }}" target="_blank" rel="noopener" class="btn btn-outline-secondary btn-sm">Abrir en nueva pestaña</a>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body p-0">
-                <iframe src="{{ pdf }}" title="Reporte PDF" class="pdf-frame"></iframe>
+                {# El PDF se genera solo al abrir la vista previa (ver steps.js) #}
+                <iframe data-src="{{ url_for('panel.report_pdf') }}" title="Reporte PDF" class="pdf-frame"></iframe>
             </div>
         </div>
     </div>
 </div>
 {% endmacro %}
 
-{% macro inputs_report(user, selected_articles) %}
-<div class="steps-content mx-auto">
+{% macro signature_step(user, signature) %}
+<h5 class="card-title">Paso 3 · Firma</h5>
+{% if signature %}
+<div class="signature-saved mb-3">
+    <img src="{{ url_for('panel.signature_image', v=signature.updated_at.timestamp() | int) }}" alt="Firma guardada" class="signature-preview">
+    <div>
+        <div class="fw-semibold">{{ signature.signer_name }}</div>
+        {% if signature.signer_title %}<div class="small text-muted">{{ signature.signer_title }}</div>{% endif %}
+        <form method="POST" action="{{ url_for('panel.delete_signature') }}" class="mt-2">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar firma</button>
+        </form>
+    </div>
+</div>
+<p class="small text-muted">Puedes cambiar el nombre o el cargo, o reemplazar la firma dibujando o subiendo una nueva.</p>
+{% else %}
+<p class="text-muted">Dibuja tu firma con el ratón, el dedo o un lápiz digital, o sube una imagen de tu firma escaneada.</p>
+{% endif %}
+
+<form method="POST" action="{{ url_for('panel.save_signature') }}" enctype="multipart/form-data" id="signature-form" data-has-signature="{{ '1' if signature else '0' }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="signature_data" id="signature-data">
+    <div class="row g-3 mb-3">
+        <div class="col-md-6">
+            <label for="signer-name" class="form-label">Nombre de quien firma</label>
+            <input type="text" class="form-control" id="signer-name" name="signer_name" maxlength="150" required value="{{ signature.signer_name if signature else user.name }}">
+        </div>
+        <div class="col-md-6">
+            <label for="signer-title" class="form-label">Cargo <span class="text-muted small">(opcional)</span></label>
+            <input type="text" class="form-control" id="signer-title" name="signer_title" maxlength="150" placeholder="Ej. Profesora investigadora" value="{{ signature.signer_title if signature else '' }}">
+        </div>
+    </div>
+
+    <ul class="nav nav-pills mb-2" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#firma-dibujar" type="button" role="tab">Dibujar</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#firma-subir" type="button" role="tab">Subir imagen</button>
+        </li>
+    </ul>
+    <div class="tab-content mb-3">
+        <div class="tab-pane fade show active" id="firma-dibujar" role="tabpanel">
+            <div class="signature-pad-wrap">
+                <canvas id="signature-pad" class="signature-pad" aria-label="Área para dibujar la firma"></canvas>
+                <span class="signature-hint">Firma aquí</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-secondary mt-2" id="signature-clear">Limpiar</button>
+        </div>
+        <div class="tab-pane fade" id="firma-subir" role="tabpanel">
+            <input class="form-control" type="file" name="signature_file" id="signature-file" accept="image/png,image/jpeg,image/webp">
+            <div class="form-text">PNG, JPG o WEBP, máximo 1 MB. El fondo blanco se vuelve transparente.</div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar firma</button>
+</form>
+{% endmacro %}
+
+{% macro download_step(selected_articles, signature) %}
+<h5 class="card-title">Paso 4 · Descargar reporte</h5>
+<ul class="list-unstyled report-checklist mb-4">
+    <li class="{{ 'ok' if selected_articles else 'missing' }}">
+        {% if selected_articles %}{{ selected_articles | length }} artículo(s) seleccionado(s){% else %}Sin artículos: selecciónalos en «Adquisición de artículos»{% endif %}
+    </li>
+    <li class="{{ 'ok' if signature else 'missing' }}">
+        {% if signature %}Firmado por {{ signature.signer_name }}{% else %}Sin firma: el PDF saldrá marcado como borrador{% endif %}
+    </li>
+</ul>
+{% if selected_articles %}
+<div class="d-flex flex-wrap gap-2">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pdfModal">Ver reporte</button>
+    <a class="btn btn-success" href="{{ url_for('panel.report_pdf', descargar=1) }}">Descargar PDF</a>
+</div>
+{{ modal_pdf() }}
+{% endif %}
+{% endmacro %}
+
+{% macro inputs_report(user, selected_articles, signature, initial_step=1) %}
+<div class="steps-content mx-auto" data-initial-step="{{ initial_step }}">
     <div class="report-step card">
         <div class="card-body">
             <h5 class="card-title">Paso 1 · Datos a capturar</h5>
@@ -69,14 +142,11 @@
     </div>
 
     <div class="report-step card" hidden>
-        <div class="card-body">
-            <h5 class="card-title">Paso 3 · Firma</h5>
-            <p class="card-text text-muted">Pendiente: aquí se capturará la firma del responsable.</p>
-        </div>
+        <div class="card-body">{{ signature_step(user, signature) }}</div>
     </div>
 
     <div class="report-step card" hidden>
-        <div class="card-body">{{ modal_pdf() }}</div>
+        <div class="card-body">{{ download_step(selected_articles, signature) }}</div>
     </div>
 </div>
 {% endmacro %}

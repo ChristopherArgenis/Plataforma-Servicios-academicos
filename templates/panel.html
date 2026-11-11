@@ -50,7 +50,7 @@
         <section id="reporte" class="panel-section" hidden>
             <h2 class="h5 mb-4">Reporte</h2>
             {{ steps_report() }}
-            {{ inputs_report(current_user, selected_articles) }}
+            {{ inputs_report(current_user, selected_articles, signature, initial_step) }}
             {{ button_report() }}
         </section>
 
@@ -69,4 +69,5 @@
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
 <script src="{{ url_for('static', filename='js/steps.js') }}"></script>
+<script src="{{ url_for('static', filename='js/signature.js') }}"></script>
 {% endblock %}

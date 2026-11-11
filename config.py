@@ -36,8 +36,12 @@ class Config:
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"
     SESSION_COOKIE_SECURE = os.environ.get("SESSION_COOKIE_SECURE") == "1"
+    TRUST_PROXY = os.environ.get("TRUST_PROXY") == "1"
 
     ARTICLES_PER_PAGE = 20
+
+    # Tamaño máximo de una petición (p. ej. la imagen de la firma)
+    MAX_CONTENT_LENGTH = 2 * 1024 * 1024
 
 
 class TestConfig(Config):

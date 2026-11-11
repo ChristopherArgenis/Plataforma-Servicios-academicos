@@ -23,6 +23,9 @@ class User(UserMixin, db.Model):
     articles = db.relationship(
         "Article", back_populates="user", cascade="all, delete-orphan", lazy="dynamic"
     )
+    signature = db.relationship(
+        "ReportSignature", back_populates="user", cascade="all, delete-orphan", uselist=False
+    )
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -48,3 +51,24 @@ class Article(db.Model):
     selected = db.Column(db.Boolean, nullable=False, default=False)
 
     user = db.relationship("User", back_populates="articles")
+
+
+def _now():
+    return datetime.now(timezone.utc)
+
+
+class ReportSignature(db.Model):
+    """Firma que se imprime en el reporte (una por usuario).
+
+    Va en su propia tabla para que db.create_all() la agregue sin migraciones
+    en instalaciones que ya tienen las tablas users y articles.
+    """
+    __tablename__ = "report_signatures"
+
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+    image = db.Column(db.LargeBinary, nullable=False)  # PNG normalizado, fondo transparente
+    signer_name = db.Column(db.String(150), nullable=False)
+    signer_title = db.Column(db.String(150), nullable=False, default="")
+    updated_at = db.Column(db.DateTime, nullable=False, default=_now, onupdate=_now)
+
+    user = db.relationship("User", back_populates="signature")

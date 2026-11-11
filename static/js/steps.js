@@ -4,7 +4,11 @@ const pasosVisuales = document.querySelectorAll(".step");
 const progressFill = document.getElementById("progress-fill");
 const btnAnterior = document.getElementById("btnAnterior");
 const btnSiguiente = document.getElementById("btnSiguiente");
-let pasoActual = 0;
+const contenedor = document.querySelector(".steps-content");
+let pasoActual = Math.min(
+  Math.max((parseInt(contenedor?.dataset.initialStep, 10) || 1) - 1, 0),
+  pasosContenido.length - 1
+);
 
 function actualizarVista() {
   pasosContenido.forEach((paso, i) => (paso.hidden = i !== pasoActual));
@@ -27,3 +31,13 @@ btnSiguiente.addEventListener("click", () => {
 });
 
 actualizarVista();
+
+// El PDF se genera solo cuando se abre la vista previa
+const pdfModal = document.getElementById("pdfModal");
+if (pdfModal) {
+  pdfModal.addEventListener("show.bs.modal", () => {
+    const frame = pdfModal.querySelector("iframe[data-src]");
+    // Cada apertura recarga el PDF para reflejar cambios recientes
+    frame.src = frame.dataset.src + "?t=" + Date.now();
+  });
+}

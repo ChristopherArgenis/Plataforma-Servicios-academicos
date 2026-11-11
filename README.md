@@ -7,7 +7,7 @@ Aplicación web para generar reportes académicos a partir del perfil de Google 
 - Registro con elección del perfil de Google Scholar e importación automática de artículos (vía SerpAPI).
 - Panel con búsqueda por título y año, paginación y estadísticas.
 - Selección de artículos («Adquirir») para el reporte.
-- Asistente de reporte en 4 pasos (la firma y la generación del PDF están pendientes).
+- Asistente de reporte en 4 pasos: datos, artículos, firma (dibujada o subida) y descarga del PDF.
 - Modo demo con datos de ejemplo, sin internet ni costo.
 
 ## Inicio rápido
@@ -28,4 +28,4 @@ python app.py                   # http://127.0.0.1:3000
 
 ## Tecnologías
 
-Flask · Flask-SQLAlchemy · Flask-Login · Flask-WTF (CSRF) · Bootstrap 5 · SQLite (o MySQL/PostgreSQL) · waitress
+Flask · Flask-SQLAlchemy · ReportLab (PDF) · Pillow · Flask-Login · Flask-WTF (CSRF) · Bootstrap 5 · SQLite (o MySQL/PostgreSQL) · waitress
