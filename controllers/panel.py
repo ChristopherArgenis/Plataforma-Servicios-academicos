@@ -13,6 +13,7 @@ from models.user import (
     Distincion, Logro, Relevantes
 )
 from services.informe_update_service import InformeUpdateService
+from middlewares.authorization import admin_required, can_manage, current_cliente
 
 table_maganer = Table_Maganer()
 articles_maganer = Articles_Maganer()
@@ -129,16 +130,16 @@ def panel_post():
     if title and year:
         try:
             year = int(year)
-            dataframe, column_art = table_maganer.filter(title, year)
-        except:
+            dataframe, column_art = table_maganer.filter(profile_id, title, year)
+        except ValueError:
             pass
     elif title:
-        dataframe, column_art = table_maganer.filter_title(title)
+        dataframe, column_art = table_maganer.filter_title(profile_id, title)
     elif year:
         try:
             year = int(year)
-            dataframe, column_art = table_maganer.filter_year(year)
-        except:
+            dataframe, column_art = table_maganer.filter_year(profile_id, year)
+        except ValueError:
             pass
 
     context = {
@@ -215,11 +216,17 @@ def save_relevant_articles():
 
     return redirect(url_for('panel.panel_get'))
 
+ADMIN_TABLES = ("Cliente", "Usuario")
+
+
 @panel_general.route('/Administracion', methods=["GET"])
+@admin_required
 def admin_read():
     named_table = request.args.get('table')
+    if named_table not in ADMIN_TABLES:
+        named_table = "Cliente"
     session['nameTable'] = named_table
-    rol = session['CustomerRol']
+    rol = current_cliente().rol
     match named_table:
         case "Cliente":
             customers = Tables_Service.getCustomer()
@@ -229,11 +236,15 @@ def admin_read():
             return render_template('admin.html', name=named_table, table=users, rol=rol)
 
 @panel_general.route('/Admin/crear', methods=["POST"])
+@admin_required
 def admin_create():
-    table = session['nameTable']
+    table = session.get('nameTable', 'Cliente')
     match table:
         case "Cliente":
             rol = request.form.get('rol')
+            if not can_manage(current_cliente(), rol):
+                flash("No puedes asignar un rol mayor al tuyo.", "danger")
+                return redirect(url_for('panel.admin_read', table=table))
             name = request.form.get('name')
             email = request.form.get('email')
             password = request.form.get('password')
@@ -260,12 +271,21 @@ def admin_create():
                 return redirect(url_for('panel.admin_read', table=table))
 
 @panel_general.route('/Admin/actualizar', methods=["POST"])
+@admin_required
 def admin_update():
-    table = session['nameTable']
+    table = session.get('nameTable', 'Cliente')
     match table:
         case "Cliente":
             id = request.form.get('update-id')
             rol = request.form.get('rol')
+            actor = current_cliente()
+            target = db.session.get(Cliente, int(id)) if id and str(id).isdigit() else None
+            if not target:
+                flash("Actualizacion de rol fallido: el cliente no existe.", "warning")
+                return redirect(url_for('panel.admin_read', table=table))
+            if not (can_manage(actor, target.rol) and can_manage(actor, rol)):
+                flash("No puedes modificar cuentas ni asignar roles mayores al tuyo.", "danger")
+                return redirect(url_for('panel.admin_read', table=table))
             updateRol = Tables_Service.updateCustomerRol(id, rol)
             if updateRol:
                 flash("Actualizacion de rol exitoso.", "success")
@@ -275,11 +295,17 @@ def admin_update():
                 return redirect(url_for('panel.admin_read', table=table))
 
 @panel_general.route('/Admin/eliminar', methods=["POST"])
+@admin_required
 def admin_delete():
     id = request.form.get('delete-id')
-    table = session['nameTable']
+    table = session.get('nameTable', 'Cliente')
     match table:
         case "Cliente":
+            actor = current_cliente()
+            target = db.session.get(Cliente, int(id)) if id and str(id).isdigit() else None
+            if target and (target.id == actor.id or not can_manage(actor, target.rol)):
+                flash("No puedes eliminar tu propia cuenta ni cuentas de rol mayor al tuyo.", "danger")
+                return redirect(url_for('panel.admin_read', table=table))
             customer = Tables_Service.deleteCustomer(id)
             if customer:
                 return redirect(url_for('panel.admin_read', table=table))
@@ -293,3 +319,5 @@ def admin_delete():
                 return redirect(url_for('panel.admin_read', table=table))
             else:
                 print("No existe el id")
+    flash("No existe el registro indicado.", "warning")
+    return redirect(url_for('panel.admin_read', table=table))

@@ -1,0 +1,17 @@
+# Secretos y entorno
+.env
+venv/
+.venv/
+
+# Base de datos con datos personales (nunca se sube al repositorio)
+*.db
+instance/
+
+# Informes generados (contienen datos personales)
+informe_cliente_*.pdf
+static/reportes/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/

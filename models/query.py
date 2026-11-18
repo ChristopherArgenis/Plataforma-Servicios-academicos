@@ -1,4 +1,14 @@
+import os
+
 from serpapi import GoogleScholarSearch
+
+
+class _ApiKey:
+    """Lee la clave de SerpAPI de la variable de entorno SERPAPI_KEY (archivo .env)."""
+
+    def __get__(self, obj, owner):
+        return os.environ.get("SERPAPI_KEY", "")
+
 
 class Query:
     """
@@ -9,7 +19,7 @@ class Query:
         engine (str): Motor de búsqueda definido para Google Scholar Author.
     """
 
-    api_key = "3f62fef4ad5848514d7e963ac925d6dafd02a1092a91dc3021f35610e2e52834"
+    api_key = _ApiKey()
     engine = "google_scholar_author"
 
     @staticmethod

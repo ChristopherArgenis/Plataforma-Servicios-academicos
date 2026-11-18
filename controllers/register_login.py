@@ -95,7 +95,7 @@ def login():
 # Route for handling logout
 @reg_log.route('/logout', methods=['POST'])
 def logout():
-    # Remove 'user_id' from session to log out the user
-    session.pop('username', None)
+    # Borra TODA la sesión (usuario, id, clave de Scholar y rol)
+    session.clear()
     # Redirect the user to the authentication page after logging out
     return redirect(url_for('user.auth_page'))
