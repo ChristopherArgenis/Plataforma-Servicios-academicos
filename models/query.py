@@ -1,13 +1,13 @@
-import os
-
 from serpapi import GoogleScholarSearch
 
 
 class _ApiKey:
-    """Lee la clave de SerpAPI de la variable de entorno SERPAPI_KEY (archivo .env)."""
+    """Clave de SerpAPI: la que guardó el Super Admin en Configuración o,
+    si no hay, SERPAPI_KEY del archivo .env (ver services/settings_service.py)."""
 
     def __get__(self, obj, owner):
-        return os.environ.get("SERPAPI_KEY", "")
+        from services.settings_service import get_serpapi_key
+        return get_serpapi_key()
 
 
 class Query:

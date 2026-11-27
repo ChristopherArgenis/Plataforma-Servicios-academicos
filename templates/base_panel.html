@@ -113,6 +113,21 @@
                             <span>Administración</span>
                         </a>
                         {% endif %}
+
+                        {% if rol == 3 %}
+                        <!-- Configuración (solo Super Admin) -->
+                        <input type="radio" class="btn-check d-none" name="vbtn-radio" id="vbtn-radio5"
+                            autocomplete="off" {% if active_page=='configuracion' %}checked{% endif %}
+                            hx-get="{{ url_for('settings.configuracion') }}"
+                            hx-target="#main-content"
+                            hx-swap="innerHTML"
+                            hx-push-url="true"
+                            hx-trigger="click">
+                        <label class="sidebar-link" for="vbtn-radio5">
+                            <i class="bi bi-gear"></i>
+                            <span>Configuración</span>
+                        </label>
+                        {% endif %}
                     </div>
                 </div>
             </aside>
