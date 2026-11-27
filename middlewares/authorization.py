@@ -12,6 +12,7 @@ from models.user import Cliente
 
 # Roles: 0 = sin acceso, 1 = investigador, 2 = administrador, 3 = super admin
 ROL_ADMIN = 2
+ROL_SUPERADMIN = 3
 
 
 def current_cliente_id():
@@ -44,6 +45,18 @@ def admin_required(view):
         cliente = current_cliente()
         if not cliente or (cliente.rol or 0) < ROL_ADMIN:
             flash("Acceso denegado: se requieren permisos de administrador.", "danger")
+            return redirect(url_for('panel.panel_get'))
+        return view(*args, **kwargs)
+    return wrapper
+
+
+def superadmin_required(view):
+    """Permite el acceso solo al Super Admin (rol 3)."""
+    @wraps(view)
+    def wrapper(*args, **kwargs):
+        cliente = current_cliente()
+        if not cliente or (cliente.rol or 0) < ROL_SUPERADMIN:
+            flash("Acceso denegado: solo el Super Admin puede cambiar la configuración.", "danger")
             return redirect(url_for('panel.panel_get'))
         return view(*args, **kwargs)
     return wrapper

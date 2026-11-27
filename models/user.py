@@ -293,3 +293,21 @@ class Logro(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     cliente_id = db.Column(db.Integer, db.ForeignKey('Cliente.id'), nullable=False)
     contenido = db.Column(db.Text, nullable=True)
+
+# -------------------------
+# CONFIGURACIÓN DEL SISTEMA
+# -------------------------
+class Configuracion(db.Model):
+    """Ajustes del sistema que administra el Super Admin desde la página.
+
+    Los valores sensibles (como la clave de SerpAPI) se guardan cifrados.
+    """
+    __tablename__ = 'Configuracion'
+
+    id = db.Column(db.Integer, primary_key=True)
+    clave = db.Column(db.String(100), unique=True, nullable=False)
+    valor = db.Column(db.Text, nullable=False)
+    actualizado_por = db.Column(db.Integer, db.ForeignKey('Cliente.id'), nullable=True)
+    actualizado_en = db.Column(db.DateTime, nullable=True)
+
+    autor = db.relationship('Cliente')

@@ -7,6 +7,7 @@ from controllers.register_login import reg_log
 from controllers.panel import panel_general
 from controllers.reports import report
 from controllers.information import information_bp
+from controllers.settings import settings_bp
 from middlewares.authentication_middleware import require_login_middleware
 from middlewares.request_timing_logger import request_timing_logger
 from models import db
@@ -43,6 +44,7 @@ app.register_blueprint(reg_log)
 app.register_blueprint(panel_general)
 app.register_blueprint(report)
 app.register_blueprint(information_bp)
+app.register_blueprint(settings_bp)
 
 if __name__ == '__main__':
     # El modo debug solo se activa explícitamente (FLASK_DEBUG=1): expone un depurador

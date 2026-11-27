@@ -28,7 +28,14 @@ Copia `.env.example` como `.env` y llena los valores. Este archivo **no** se sub
 cp .env.example .env        # En Windows: copy .env.example .env
 ```
 - `SECRET_KEY`: genera una con `python -c "import secrets; print(secrets.token_hex(32))"`
-- `SERPAPI_KEY`: tu clave de SerpAPI
+- `SERPAPI_KEY`: clave de SerpAPI de respaldo (opcional, ver abajo)
+
+### Clave de SerpAPI de la institución
+El **Super Admin** (rol 3) captura la clave de SerpAPI de la institución en
+**Panel > Configuración**. Las consultas a Google Scholar gastan búsquedas de esa cuenta.
+- La clave se prueba con SerpAPI antes de guardarse (sin gastar búsquedas) y se guarda cifrada.
+- Si no hay clave en Configuración, se usa la de `SERPAPI_KEY` del `.env`, y la página lo avisa.
+- Si cambias la `SECRET_KEY`, la clave guardada ya no se puede leer: vuelve a capturarla.
 
 La base de datos `data.db` tampoco se sube al repositorio: se queda solo en tu equipo o servidor.
 
